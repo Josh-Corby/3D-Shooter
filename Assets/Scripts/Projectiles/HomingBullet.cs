@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class HomingBullet : GameBehaviour
 {
-    public float speed;
+    public float speed = 10f;
     public GameObject target;
     private Rigidbody rb;
 
-    private float maxSpeed = 10f;
+    private float maxSpeed = 50f;
 
     private float findTargetWaitTime = 1;
     public bool searchForTarget;
 
+    private float rotationThreshold = 100f;
+    private float rotationSpeed = 100f;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -63,15 +65,20 @@ public class HomingBullet : GameBehaviour
             GetClosestEnemy();
         }
         if (target != null)
-        {// Rotate the missile towards the target
+        {
+           
+            // Rotate the missile towards the target
             transform.LookAt(target.transform);
-            if (Vector3.Distance(transform.position, target.transform.position) <= 1f)
+            Vector3 directionToTarget = target.transform.position - transform.position;
+           
+            if (Vector3.Distance(transform.position, target.transform.position) <= 10f)
             {
-                Vector3.MoveTowards(transform.position, target.transform.position, maxSpeed);
+                rb.angularVelocity = Vector3.zero;
+                rb.AddForce(directionToTarget * maxSpeed);
                 return;
             }
             // Apply the force to the missile in the direction it is facing
-            rb.AddForce(transform.forward * speed);
+            rb.AddForce(directionToTarget * speed);
         }
     }
     private void GetClosestEnemy()
@@ -93,6 +100,15 @@ public class HomingBullet : GameBehaviour
                     minDist = dist;
                 }
             }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(target!= null)
+        {
+        Gizmos.DrawLine(transform.position,target.transform.position);
+
         }
     }
 

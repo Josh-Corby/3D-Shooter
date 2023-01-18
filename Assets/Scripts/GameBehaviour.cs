@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameBehaviour : Utilities
 {
     protected static SpawnManager SM { get { return SpawnManager.INSTANCE; } }
+    protected static PlayerManager PM { get { return PlayerManager.INSTANCE; } }
 }
 public class GameBehaviour<T> : GameBehaviour where T : GameBehaviour
 {

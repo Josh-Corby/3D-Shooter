@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnManager : GameBehaviour<SpawnManager>
 {
     public Transform spawnCentre;
-    public float spawnSize;
+    public Vector3 spawnSize;
 
     public int enemiesToSpawn;
 
@@ -13,9 +13,15 @@ public class SpawnManager : GameBehaviour<SpawnManager>
 
     public GameObject enemyPrefab;
 
+    public bool spawnEnemies;
+
     private void Start()
     {
+        if (spawnEnemies)
+        {
+
         SpawnWave();
+        }
     }
 
     private void SpawnWave()
@@ -29,9 +35,15 @@ public class SpawnManager : GameBehaviour<SpawnManager>
 
     private Vector3 GetRandomSpawnPosition()
     {
-        float x = Random.Range(-spawnSize, spawnSize);
-        float y = Random.Range(-spawnSize, spawnSize);
-        Vector3 spawnPosition = new Vector3(spawnCentre.position.x + x, 10, spawnCentre.position.z + y);
+        float x = Random.Range(-spawnSize.x / 2, spawnSize.x / 2);
+        float y = Random.Range(-spawnSize.y / 2, spawnSize.y / 2);
+        float z = Random.Range(-spawnSize.z / 2, spawnSize.z / 2);
+        Vector3 spawnPosition = new Vector3(spawnCentre.position.x + x, spawnCentre.position.y + y, spawnCentre.position.z + z);
         return spawnPosition;
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(spawnCentre.position, spawnSize);
     }
 }

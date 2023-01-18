@@ -6,8 +6,8 @@ using UnityEngine;
 public class GunBase : GameBehaviour
 {
     private Camera cam;
-    private GameObject firePoint;
-    private Transform firePointTransform;
+    protected GameObject firePoint;
+    protected Transform firePointTransform;
     
 
     [Header("Firing Options")]
@@ -26,34 +26,40 @@ public class GunBase : GameBehaviour
     public bool burstFire;
     public int bulletsInBurst;
     public float timeBetweenBurstShots;
-    private bool readyToFire;
+
+    public bool readyToFire;
     private bool fireInput;
    
 
-    Vector3 targetPoint;
-    private LayerMask mask;
-    float distanceToTarget;
-    float distanceModifier = 70;
+    public Vector3 targetPoint;
+    public LayerMask mask;
+    public float distanceToTarget;
+    private float distanceModifier = 70;
 
     private void OnEnable()
     {
         InputManager.Fire += RecieveFireInput;
         InputManager.StopFiring += CancelFireInput;
     }
-    private void Awake()
+    protected virtual void Awake()
     {
         cam = Camera.main;
         firePoint = FindChildGameObjectByName("FirePoint");
         firePointTransform = firePoint.transform;
     }
-    private void Start()
+    protected void Start()
     {
         ValidateValues();
     }
-    private void Update()
+    protected virtual void Update()
     {
         LookAtScreenCentre();
 
+        CheckForShootCondition();
+    }
+
+    protected virtual void CheckForShootCondition()
+    {
         if (fireInput && readyToFire && burstFire)
         {
             StartCoroutine(BurstFire());
@@ -71,13 +77,12 @@ public class GunBase : GameBehaviour
         }
     }
 
-    private void ValidateValues()
+    protected void ValidateValues()
     {
         readyToFire = true;
-        CheckAimLayerMask();
         if (shootForce == 0)
         {
-            shootForce = 15;
+            shootForce = 200;
         }
         if (timeBetweenShots == 0)
         {
@@ -103,16 +108,13 @@ public class GunBase : GameBehaviour
             if (!useSpread)
             {
                 useSpread = true;
-                spread = 0.1f;
-                return;
             }
-            
         }
         if (useSpread)
         {
             if (spread == 0)
             {
-                spread = 0.1f;
+                spread = 0.05f;
             }
         }
     }
@@ -131,27 +133,12 @@ public class GunBase : GameBehaviour
         }
         else
         {
-            targetPoint = ray.GetPoint(50); //Just a point far away from the player
+            targetPoint = ray.GetPoint(1000); //Just a point far away from the player
         }
 
         transform.LookAt(targetPoint);
     }
-
-   
-    private void CheckAimLayerMask()
-    {
-        //add enemy layer mask
-        if (!(mask == (mask | (1 << LayerMask.NameToLayer("Enemy")))))
-        {
-            mask |= 1 << LayerMask.NameToLayer("Enemy");
-        }
-        //add ground layer mask
-        //add enemy layer mask
-        if (!(mask == (mask | (1 << LayerMask.NameToLayer("Ground")))))
-        {
-            mask |= 1 << LayerMask.NameToLayer("Ground");
-        }
-    }
+    
     private void RecieveFireInput()
     {
         fireInput = true;
@@ -162,10 +149,9 @@ public class GunBase : GameBehaviour
         fireInput = false;
     }
 
-    protected virtual void FindTarget()
+    protected void FindTarget()
     {
         readyToFire = false;
-
 
         if (shotgunFire)
         {
@@ -179,7 +165,7 @@ public class GunBase : GameBehaviour
             Shoot();
         }
     }
-    protected IEnumerator BurstFire()
+    public IEnumerator BurstFire()
     {
         for (int i = 0; i < bulletsInBurst; i++)
         {
@@ -188,14 +174,12 @@ public class GunBase : GameBehaviour
         }
         StartCoroutine(ResetShooting());
     }
-    protected virtual void Shoot()
+    public virtual void Shoot()
     {
         if (bulletToFire == null)
         {
             return;
-        }
-
-        
+        }  
 
         if (bulletToFire.GetComponent<BulletBase>().isProjectile)
         {
@@ -212,12 +196,13 @@ public class GunBase : GameBehaviour
                 float x = Random.Range(-spread, spread) * distanceToTarget;
                 float y = Random.Range(-spread, spread) * distanceToTarget;
                 float z = Random.Range(-spread, spread) * distanceToTarget;
-
                 //apply random rotation
                 Quaternion spreadRotation = Quaternion.Euler(x, y, z);
 
                 //apply random direction
                 Vector3 spreadDirection = new Vector3(x, y, z);
+
+                //Debug.Log(spreadDirection);
 
                 //add random direcion
                 Vector3 targetSpreadOffset = targetPoint + spreadDirection;

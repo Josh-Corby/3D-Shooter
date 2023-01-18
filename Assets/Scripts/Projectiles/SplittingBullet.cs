@@ -48,7 +48,7 @@ public class SplittingBullet : BulletBase
         base.ValidateValues();
         if(splitForce == 0)
         {
-            splitForce = 20;
+            splitForce = 10;
         }
 
         if(spread == 0)
@@ -68,10 +68,10 @@ public class SplittingBullet : BulletBase
             float x = Random.Range(-spread, spread);
             float y = Random.Range(-spread, spread);
             Vector3 spreadDirection = new Vector3(x, y, 0);
-            Vector3 directionWithSpread = CardinalDirections[i] + spreadDirection;
+            Vector3 directionWithSpread = (CardinalDirections[i] + spreadDirection);
             GameObject splitBullet = Instantiate(bulletToSplitInto, transform.position, Quaternion.identity);
             splitBullet.GetComponent<BulletBase>().isSpawnedProjectile = true;
-            splitBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread * splitForce, ForceMode.Impulse);
+            splitBullet.GetComponent<Rigidbody>().AddForce((directionWithSpread * splitForce), ForceMode.Impulse);
             splitBullet.GetComponent<BulletBase>().damage = (damage / 2);
             if (isHoming)
             {

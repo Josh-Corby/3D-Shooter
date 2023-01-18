@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 662549396922824868}
   - component: {fileID: 5756405216897060145}
   - component: {fileID: 5703146580103465473}
-  - component: {fileID: -7432005838228774800}
+  - component: {fileID: 1382850569530298823}
   m_Layer: 7
-  m_Name: SplittingBullet
+  m_Name: PlayerBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,9 +28,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4634416032413322246}
-  m_LocalRotation: {x: 0.04111248, y: 0.88198215, z: 0.07833237, w: -0.4629053}
+  m_LocalRotation: {x: -0.070962384, y: 0.92845184, z: 0.27436262, w: 0.24013896}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.51386, y: 0.51386, z: 0.51386}
+  m_LocalScale: {x: 0.895401, y: 0.895401, z: 0.895401}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -115,7 +115,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &-7432005838228774800
+--- !u!114 &1382850569530298823
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,14 +124,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4634416032413322246}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92d981f92f8baed47b35acd8cfc565be, type: 3}
+  m_Script: {fileID: 11500000, guid: cb9ef9958fe22c541b8be3babba41a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
+  damage: 2
   isProjectile: 1
   isSpawnedProjectile: 0
-  bulletToSplitInto: {fileID: 4634416032413322246, guid: bd61a8f56397f50468c257811306654d, type: 3}
-  splitForce: 0
-  spread: 0
-  waitTime: 0
-  isHoming: 1
