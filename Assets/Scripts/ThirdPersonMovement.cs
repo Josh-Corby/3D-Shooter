@@ -6,7 +6,10 @@ public class ThirdPersonMovement : MonoBehaviour
 {
     public CharacterController controller;
     public Transform cam;
-    public float speed = 6f;
+    private bool isSprinting;
+    public float currentMoveSpeed;
+    public float walkSpeed = 6f;
+    public float sprintSpeed = 10;
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
     public Transform groundCheck;
@@ -21,7 +24,9 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void Start()
     {
+        currentMoveSpeed = walkSpeed;
         InputManager.Jump += Jump;
+        InputManager.ToggleSprint += ToggleSprint;
     }
     private void Update()
     {
@@ -36,18 +41,24 @@ public class ThirdPersonMovement : MonoBehaviour
         {
             velocity.y = -2f;
         }
+
         if (movementVector.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(movementVector.x, movementVector.y) * Mathf.Rad2Deg + cam.eulerAngles.y;           
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            controller.Move(moveDir.normalized * speed * Time.deltaTime);
+            controller.Move(moveDir.normalized * currentMoveSpeed * Time.deltaTime);
 
         }
-
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }
 
+    private void ToggleSprint()
+    {
+        isSprinting = !isSprinting;
+        currentMoveSpeed = isSprinting ? sprintSpeed : walkSpeed;
+    }
+    
     private void LookFoward()
     {
         transform.rotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);

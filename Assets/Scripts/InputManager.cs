@@ -7,7 +7,7 @@ public class InputManager : MonoBehaviour
     public static event Action Jump = null;
     public static event Action Fire = null;
     public static event Action StopFiring = null;
-
+    public static event Action ToggleSprint = null;
     ThirdPersonMovement movement;
     PlayerInput controls;
     PlayerInput.InputActions inputActions;
@@ -25,6 +25,8 @@ public class InputManager : MonoBehaviour
             EnableControls();
             controls.Input.Movement.performed += i => Move(i.ReadValue<Vector2>());
             controls.Input.Jump.performed += i => Jump?.Invoke();
+            controls.Input.Sprint.performed += i => ToggleSprint?.Invoke();
+            controls.Input.Sprint.canceled += i => ToggleSprint?.Invoke();
 
             controls.Input.Fire.performed += i => Fire?.Invoke();
             controls.Input.Fire.canceled += i => StopFiring?.Invoke();
