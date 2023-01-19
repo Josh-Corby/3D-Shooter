@@ -53,7 +53,7 @@ public class GunBase : GameBehaviour
     }
     protected virtual void Update()
     {
-        LookAtScreenCentre();
+        FindTarget();
 
         CheckForShootCondition();
     }
@@ -67,7 +67,7 @@ public class GunBase : GameBehaviour
 
         else if (fireInput && readyToFire)
         {
-            FindTarget();
+            CheckFireType();
             StartCoroutine(ResetShooting());
 
             if (!holdToFire)
@@ -119,7 +119,7 @@ public class GunBase : GameBehaviour
         }
     }
 
-    private void LookAtScreenCentre()
+    protected virtual void FindTarget()
     {
         //Find the exact hit position using a raycast
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Just a ray through the middle of your current view
@@ -149,7 +149,7 @@ public class GunBase : GameBehaviour
         fireInput = false;
     }
 
-    protected void FindTarget()
+    protected void CheckFireType()
     {
         readyToFire = false;
 
@@ -169,7 +169,7 @@ public class GunBase : GameBehaviour
     {
         for (int i = 0; i < bulletsInBurst; i++)
         {
-            FindTarget();
+            CheckFireType();
             yield return new WaitForSeconds(timeBetweenBurstShots);
         }
         StartCoroutine(ResetShooting());

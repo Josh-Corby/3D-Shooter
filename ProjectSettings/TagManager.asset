@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ledge
   - Enemy
+  - EnemyAttack
   layers:
   - Default
   - TransparentFX
@@ -17,8 +18,8 @@ TagManager:
   - Bullet
   - Player
   - Enemy
-  - 
-  - 
+  - EnemyAttack
+  - PlayerTrigger
   - 
   - 
   - 

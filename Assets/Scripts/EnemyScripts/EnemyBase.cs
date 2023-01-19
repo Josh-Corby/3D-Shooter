@@ -2,30 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : GameBehaviour
+public class EnemyBase : GameBehaviour
 {
-    private float maxHealth = 10;
-    [SerializeField]
-    private float currentHealth;
-
-    [SerializeField]
-    private GameObject gunObject;
-    private GunBase gun;
-    [SerializeField]
-    private float fireRange;
-    [SerializeField]
-    private float detectionRange;
-
-    private GameObject player;
-
-    public bool playerDetected;
-    public bool playerInRange;
-
-    private void Awake()
+    private enum MovementTypes
     {
-        gun = gunObject.GetComponent<GunBase>();
-        player = PM.gameObject;
+        None,MoveTowardsPlayer,Spin,SpinTowardsPlayer
     }
+    [SerializeField]
+    private MovementTypes moveType;
+
+    private float maxHealth = 10;
+    [SerializeField] private float currentHealth;
+    [SerializeField] private float fireRange;
+    [SerializeField] private float detectionRange;
+    public bool playerDetected;
+    public bool playerInFireRange;
+    [SerializeField] private bool lookAtPlayer;
+
     private void Start()
     {
         currentHealth = maxHealth;
@@ -33,21 +26,35 @@ public class Enemy : GameBehaviour
 
     private void Update()
     {
+        EnemyMovement();
 
-        Vector3 distanceToPlayer = (gun.targetPoint - player.transform.position);
+
+        Vector3 distanceToPlayer = (transform.position - PM.gameObject.transform.position);
         float sqrLen = distanceToPlayer.sqrMagnitude;
-
 
         if(sqrLen < detectionRange * detectionRange)
         {
             playerDetected = true;
-            transform.LookAt(player.transform.position);
+
+            if(lookAtPlayer)
+                transform.LookAt(PM.gameObject.transform.position);
         }
-        if (sqrLen < fireRange * fireRange && gun.readyToFire)
+        if (sqrLen < fireRange * fireRange)
         {
-            playerInRange = true;
-            gun.targetPoint = player.transform.position;
+            playerInFireRange = true;
+            
         }
+    }
+
+    private void EnemyMovement()
+    {
+        switch (moveType)
+        {
+            case (MovementTypes.Spin):
+                transform.Rotate(0, 1, 0, Space.Self);
+                break;
+        }
+
     }
     public void Damage(float damage)
     {

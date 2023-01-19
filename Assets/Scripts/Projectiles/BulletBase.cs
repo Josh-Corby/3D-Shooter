@@ -45,7 +45,7 @@ public class BulletBase : GameBehaviour
     }
     protected void DamageEnemy(GameObject enemy)
     {
-        enemy.GetComponent<Enemy>().Damage(damage);
+        enemy.GetComponent<EnemyBase>().Damage(damage);
         Destroy(gameObject);
     }
 

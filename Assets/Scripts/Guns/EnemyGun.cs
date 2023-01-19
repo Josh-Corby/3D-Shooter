@@ -4,27 +4,56 @@ using UnityEngine;
 
 public class EnemyGun : GunBase
 {
-    private Enemy enemy;
+    private EnemyBase enemy;
+
+    [SerializeField]
+    private bool shootAtPlayer;
 
     protected override void Awake()
     {
         base.Awake();
-        enemy = GetComponentInParent<Enemy>();
+        enemy = GetComponentInParent<EnemyBase>();
     }
+
     protected override void Update()
     {
         if (enemy.playerDetected)
         {
-            transform.LookAt(PM.gameObject.transform);
-            CheckForShootCondition();
+            if (shootAtPlayer)
+            {
+                transform.LookAt(PM.gameObject.transform);
+            }
+            FindTarget();
         }
 
-        if (enemy.playerInRange)
+        if (enemy.playerInFireRange)
         {
-            CheckForShootCondition();
+            CheckForShootCondition();         
         }
     }
 
+    protected override void FindTarget()
+    {
+        if (shootAtPlayer)
+        {
+            targetPoint = PM.gameObject.transform.position;
+        }
+
+        if (!shootAtPlayer)
+        {
+            Ray ray = new Ray(firePointTransform.position, transform.forward);
+            //check if ray hits something
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
+            {
+                distanceToTarget = hit.distance;
+                targetPoint = hit.point;
+            }
+            else
+            {
+                targetPoint = ray.GetPoint(1000);
+            }
+        }
+    }
     protected override void CheckForShootCondition()
     {
         if (readyToFire && burstFire)
@@ -34,7 +63,7 @@ public class EnemyGun : GunBase
 
         else if (readyToFire)
         {
-            FindTarget();
+            CheckFireType();
             StartCoroutine(ResetShooting());
         }
     }
