@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 26889584}
   - component: {fileID: 26889587}
   - component: {fileID: 26889586}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 26889583}
   m_LocalRotation: {x: -0, y: -0.3826846, z: -0, w: -0.9238791}
   m_LocalPosition: {x: -0.70710653, y: 0, z: -0.7071068}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.27522, y: 0.27522, z: 0.27522}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1600312306874204618}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 965105272}
   - component: {fileID: 965105275}
   - component: {fileID: 965105274}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,7 +111,7 @@ Transform:
   m_GameObject: {fileID: 965105271}
   m_LocalRotation: {x: -0, y: -0.9238796, z: -0, w: -0.3826834}
   m_LocalPosition: {x: -0.70710677, y: 0, z: 0.7071067}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.27522, y: 0.27522, z: 0.27522}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1600312305622731996}
@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 1804887197}
   - component: {fileID: 1804887200}
   - component: {fileID: 1804887199}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +195,7 @@ Transform:
   m_GameObject: {fileID: 1804887196}
   m_LocalRotation: {x: -0, y: -0.92387927, z: -0, w: 0.38268417}
   m_LocalPosition: {x: 0.70710677, y: 0, z: 0.70710695}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.27522, y: 0.27522, z: 0.27522}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1600312305246030409}
@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 2016580780}
   - component: {fileID: 2016580783}
   - component: {fileID: 2016580782}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -279,7 +279,7 @@ Transform:
   m_GameObject: {fileID: 2016580779}
   m_LocalRotation: {x: -0, y: -0.3826823, z: -0, w: 0.92388}
   m_LocalPosition: {x: 0.707107, y: 0, z: -0.7071066}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.27522, y: 0.27522, z: 0.27522}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1600312306218321736}
@@ -347,7 +347,7 @@ GameObject:
   - component: {fileID: 589271227419296114}
   - component: {fileID: 6292935112109396194}
   - component: {fileID: 8866688184948258799}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -363,7 +363,7 @@ Transform:
   m_GameObject: {fileID: 1255815444609233944}
   m_LocalRotation: {x: -0, y: -0.0000014901159, z: -0, w: -1}
   m_LocalPosition: {x: 0, y: 0, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.27522, y: 0.27522, z: 0.27522}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5158512284126087146}
@@ -431,7 +431,7 @@ GameObject:
   - component: {fileID: 2235879782357889424}
   - component: {fileID: 2792757934051205929}
   - component: {fileID: 9107361817658933500}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -447,7 +447,7 @@ Transform:
   m_GameObject: {fileID: 2525335790753207016}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.0000010877848}
   m_LocalPosition: {x: 0, y: 0, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.27522, y: 0.27522, z: 0.27522}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3144212629209552427}
@@ -515,7 +515,7 @@ GameObject:
   - component: {fileID: 4200321763212695080}
   - component: {fileID: 8077936409522585106}
   - component: {fileID: 8196030266231750099}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -531,7 +531,7 @@ Transform:
   m_GameObject: {fileID: 4470980814160184520}
   m_LocalRotation: {x: -0, y: -0.70710707, z: -0, w: -0.7071066}
   m_LocalPosition: {x: -1, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.27522, y: 0.27522, z: 0.27522}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3004720099290391492}
@@ -601,9 +601,9 @@ GameObject:
   - component: {fileID: 6130545692690402306}
   - component: {fileID: 6130545692690402307}
   - component: {fileID: 6130545692690402304}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SpinningEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -707,6 +707,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveType: 2
+  type: 0
   currentHealth: 0
   fireRange: 100
   detectionRange: 100
@@ -724,7 +725,7 @@ GameObject:
   - component: {fileID: 6130545692872972162}
   - component: {fileID: 6130545692872972167}
   - component: {fileID: 6130545692872972164}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -740,7 +741,7 @@ Transform:
   m_GameObject: {fileID: 6130545692872972163}
   m_LocalRotation: {x: -0, y: -0.70710576, z: -0, w: 0.70710784}
   m_LocalPosition: {x: 1, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.27522, y: 0.27522, z: 0.27522}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4837254419354903448}
@@ -808,6 +809,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyBaseGun
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312305343098016, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1600312305343098017, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -852,6 +857,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312306216259981, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: burstFire
       value: 0
@@ -875,6 +884,10 @@ PrefabInstance:
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: timeBetweenBurstShots
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879054436336547843, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e362a895119233418b82df4590135de, type: 3}
@@ -894,6 +907,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyBaseGun
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312305343098016, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1600312305343098017, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -938,6 +955,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312306216259981, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: burstFire
       value: 0
@@ -961,6 +982,10 @@ PrefabInstance:
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: timeBetweenBurstShots
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879054436336547843, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e362a895119233418b82df4590135de, type: 3}
@@ -980,6 +1005,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyBaseGun
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312305343098016, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1600312305343098017, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1024,6 +1053,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312306216259981, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: burstFire
       value: 0
@@ -1047,6 +1080,10 @@ PrefabInstance:
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: timeBetweenBurstShots
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879054436336547843, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e362a895119233418b82df4590135de, type: 3}
@@ -1066,6 +1103,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyBaseGun
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312305343098016, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1600312305343098017, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1110,6 +1151,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312306216259981, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: burstFire
       value: 0
@@ -1133,6 +1178,10 @@ PrefabInstance:
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: timeBetweenBurstShots
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879054436336547843, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e362a895119233418b82df4590135de, type: 3}
@@ -1152,6 +1201,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyBaseGun
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312305343098016, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1600312305343098017, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1196,6 +1249,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312306216259981, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: burstFire
       value: 0
@@ -1219,6 +1276,10 @@ PrefabInstance:
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: timeBetweenBurstShots
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879054436336547843, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e362a895119233418b82df4590135de, type: 3}
@@ -1238,6 +1299,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyBaseGun
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312305343098016, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1600312305343098017, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1282,6 +1347,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312306216259981, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: burstFire
       value: 0
@@ -1305,6 +1374,10 @@ PrefabInstance:
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: timeBetweenBurstShots
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879054436336547843, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e362a895119233418b82df4590135de, type: 3}
@@ -1324,6 +1397,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyBaseGun
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312305343098016, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1600312305343098017, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1368,6 +1445,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312306216259981, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: burstFire
       value: 0
@@ -1391,6 +1472,10 @@ PrefabInstance:
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: timeBetweenBurstShots
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879054436336547843, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e362a895119233418b82df4590135de, type: 3}
@@ -1410,6 +1495,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyBaseGun
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312305343098016, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1600312305343098017, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1454,6 +1543,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1600312306216259981, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: burstFire
       value: 0
@@ -1477,6 +1570,10 @@ PrefabInstance:
     - target: {fileID: 7826362595480960545, guid: 7e362a895119233418b82df4590135de, type: 3}
       propertyPath: timeBetweenBurstShots
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8879054436336547843, guid: 7e362a895119233418b82df4590135de, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e362a895119233418b82df4590135de, type: 3}

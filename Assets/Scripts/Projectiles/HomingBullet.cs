@@ -7,19 +7,14 @@ public class HomingBullet : GameBehaviour
     public float speed = 10f;
     public GameObject target;
     private Rigidbody rb;
-
     private float maxSpeed = 50f;
-
     private float findTargetWaitTime = 1;
     public bool searchForTarget;
 
-    private float rotationThreshold = 100f;
-    private float rotationSpeed = 100f;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
-
 
     private void Start()
     {
@@ -84,9 +79,7 @@ public class HomingBullet : GameBehaviour
     private void GetClosestEnemy()
     {
         target = null;
-
         float minDist = Mathf.Infinity;
-
 
         if (SM.enemiesAlive.Count > 0)
         {
@@ -102,14 +95,11 @@ public class HomingBullet : GameBehaviour
             }
         }
     }
-
     private void OnDrawGizmos()
     {
         if(target!= null)
         {
-        Gizmos.DrawLine(transform.position,target.transform.position);
-
+            Gizmos.DrawLine(transform.position,target.transform.position);
         }
     }
-
 }

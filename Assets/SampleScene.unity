@@ -2416,10 +2416,16 @@ MonoBehaviour:
   dontDestroy: 0
   spawnCentre: {fileID: 1275771307}
   spawnSize: {x: 70, y: 10, z: 70}
-  enemiesToSpawn: 10
+  enemiesToSpawn: 20
   enemiesAlive: []
-  enemyPrefab: {fileID: 192268635620225891, guid: 5281ac58dea82954f8532c60564fee0c, type: 3}
+  enemyPrefabs:
+  - {fileID: 192268635620225891, guid: 5281ac58dea82954f8532c60564fee0c, type: 3}
+  - {fileID: 8961877767169908587, guid: 704956cd337488d40aebafd10425062f, type: 3}
+  - {fileID: 6130545692690402305, guid: 71275133d6ae2824193e453b07736003, type: 3}
   spawnEnemies: 1
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!4 &1991324556
 Transform:
   m_ObjectHideFlags: 0

@@ -6,10 +6,17 @@ public class EnemyBase : GameBehaviour
 {
     private enum MovementTypes
     {
-        None,MoveTowardsPlayer,Spin,SpinTowardsPlayer
+        None, MoveTowardsPlayer, Spin, SpinTowardsPlayer
+    }
+
+    public enum EnemyType
+    {
+        Grounded,
+        Flying
     }
     [SerializeField]
     private MovementTypes moveType;
+    public EnemyType type;
 
     private float maxHealth = 10;
     [SerializeField] private float currentHealth;
@@ -28,25 +35,23 @@ public class EnemyBase : GameBehaviour
     {
         EnemyMovement();
 
-
         Vector3 distanceToPlayer = (transform.position - PM.gameObject.transform.position);
         float sqrLen = distanceToPlayer.sqrMagnitude;
 
-        if(sqrLen < detectionRange * detectionRange)
+        if (sqrLen < detectionRange * detectionRange)
         {
             playerDetected = true;
 
-            if(lookAtPlayer)
+            if (lookAtPlayer)
                 transform.LookAt(PM.gameObject.transform.position);
         }
         if (sqrLen < fireRange * fireRange)
         {
             playerInFireRange = true;
-            
         }
     }
 
-    private void EnemyMovement()
+    protected void EnemyMovement()
     {
         switch (moveType)
         {
@@ -60,15 +65,18 @@ public class EnemyBase : GameBehaviour
     {
         currentHealth -= damage;
 
-        if(currentHealth <= 0)
+        if (currentHealth <= 0)
         {
             Die();
         }
     }
 
-    private void Die()
+    public void Die()
     {
-        SM.enemiesAlive.Remove(gameObject);
+        if (SM.enemiesAlive.Contains(gameObject))
+        {
+            SM.enemiesAlive.Remove(gameObject);
+        }
         Destroy(gameObject);
     }
 

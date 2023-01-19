@@ -6,7 +6,7 @@ public class BulletBase : GameBehaviour
 {
     public float damage;
 
-    public bool isProjectile;
+    public bool hasRigidbody;
 
     public bool isSpawnedProjectile;
 
@@ -26,9 +26,9 @@ public class BulletBase : GameBehaviour
             damage = 2;
         }
 
-        if(isProjectile == false)
+        if(hasRigidbody == false)
         {
-            isProjectile = true;
+            hasRigidbody = true;
         }
     }
     protected virtual void OnCollisionEnter(Collision collision)

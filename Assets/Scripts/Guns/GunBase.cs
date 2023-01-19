@@ -181,7 +181,7 @@ public class GunBase : GameBehaviour
             return;
         }  
 
-        if (bulletToFire.GetComponent<BulletBase>().isProjectile)
+        if (bulletToFire.GetComponent<BulletBase>().hasRigidbody)
         {
             if (!useSpread)
             {
@@ -189,7 +189,6 @@ public class GunBase : GameBehaviour
                 GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, firePointTransform.rotation);
                 bulletGO.GetComponent<Rigidbody>().AddForce(directionWithoutSpread * shootForce, ForceMode.Impulse);
             }
-
             if (useSpread)
             {
                 //Calculate spread
@@ -212,7 +211,10 @@ public class GunBase : GameBehaviour
                 GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, firePointTransform.rotation * spreadRotation);
                 bulletGO.GetComponent<Rigidbody>().AddForce(directionWithSpread * shootForce, ForceMode.Impulse);
             }
-          
+        }
+        else
+        {
+            GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, firePointTransform.rotation);
         }
         firePointTransform.DetachChildren();
     }

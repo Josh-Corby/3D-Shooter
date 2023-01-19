@@ -6,7 +6,7 @@ public class ShockwaveAttack : GameBehaviour
 {
     private LineRenderer line;
     private MeshCollider col;
-    [SerializeField] private int segments;
+    private int segments = 100;
     private float radius;
     [SerializeField] private int maxRadius = 20;
     [SerializeField] private float expandRate;
@@ -41,17 +41,17 @@ public class ShockwaveAttack : GameBehaviour
         if (attackFinished)
         {
             attackCooldown -= Time.deltaTime;
-            if(attackCooldown <= 0)
+            if (attackCooldown <= 0)
             {
                 StartCoroutine(StartAttack());
             }
         }
     }
     private IEnumerator StartAttack()
-    {     
+    {
         expanding = true;
         attackFinished = false;
-        
+
         radius = 0;
         attackCooldown = attackCooldownMax;
 
@@ -65,7 +65,7 @@ public class ShockwaveAttack : GameBehaviour
         expanding = false;
         attackFinished = true;
         line.enabled = false;
-        col.enabled = false;        
+        col.enabled = false;
     }
 
     private void CreatePoints()

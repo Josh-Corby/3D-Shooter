@@ -112,6 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveType: 0
+  type: 1
   currentHealth: 0
   fireRange: 40
   detectionRange: 80

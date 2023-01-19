@@ -16,17 +16,14 @@ public class PlayerManager : GameBehaviour<PlayerManager>
     {
         if (other.CompareTag("EnemyAttack"))
         {
-            Debug.Log(other.name);
             StartCoroutine(IFrames());
         }
     }
 
     private IEnumerator IFrames()
     {
-        Debug.Log("iframes start");
         col.enabled = false;
         yield return new WaitForSeconds(iFramesTime);
-        Debug.Log("iframes end");
         col.enabled = true;
     }
 }
