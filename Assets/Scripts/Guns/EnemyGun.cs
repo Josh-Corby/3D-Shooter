@@ -19,10 +19,6 @@ public class EnemyGun : GunBase
     {
         if (enemy.playerDetected)
         {
-            if (shootAtPlayer)
-            {
-                transform.LookAt(PM.gameObject.transform);
-            }
             FindTarget();
         }
 
