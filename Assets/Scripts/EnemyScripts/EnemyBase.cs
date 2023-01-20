@@ -62,9 +62,9 @@ public class EnemyBase : GameBehaviour
 
     protected void CollisionAvoidance()
     {
-        Vector3 separationForce = Vector3.zero;
         if (objectsToAvoid != null)
         {
+            Vector3 separationForce = Vector3.zero;
             foreach (GameObject objectToAvoid in objectsToAvoid)
             {
                 Vector3 distance = transform.position - objectToAvoid.transform.position;

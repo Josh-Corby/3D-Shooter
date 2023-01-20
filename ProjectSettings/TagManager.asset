@@ -7,6 +7,8 @@ TagManager:
   - Ledge
   - Enemy
   - EnemyAttack
+  - PlayerAttack
+  - Mechanics
   layers:
   - Default
   - TransparentFX

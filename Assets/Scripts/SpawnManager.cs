@@ -45,7 +45,7 @@ public class SpawnManager : GameBehaviour<SpawnManager>
         float z = Random.Range(-spawnSize.z / 2, spawnSize.z / 2);
         Vector3 spawnPosition = new Vector3(spawnCentre.position.x + x, spawnCentre.position.y + y, spawnCentre.position.z + z);
 
-        if(!enemy.flying)
+        if (enemy.flying == false)
         {
             Ray ray = new Ray(spawnPosition, Vector3.down);
             if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundMask))
