@@ -44,8 +44,6 @@ public class EnemyBase : GameBehaviour
         sqrLenToPlayer = dstToPlayer.sqrMagnitude;
         verticalDstToPlayer = transform.position.y - PM.gameObject.transform.position.y;
         EnemyMovement();
-        
-
 
         if (sqrLenToPlayer < sqrDetectionRange)
         {
@@ -91,8 +89,6 @@ public class EnemyBase : GameBehaviour
                 Vector3 targetPosition = new Vector3(transform.position.x, transform.position.y + verticalDstToMove, transform.position.z);
                 float interpolationFactor = Mathf.Abs(verticalDstToMove / verticalDstToPlayer);
                 transform.position = Vector3.Lerp(transform.position, targetPosition, interpolationFactor / 100);
-
-
             }
             //movetowards player
             if (sqrLenToPlayer > sqrDstToMaintain)
@@ -121,12 +117,12 @@ public class EnemyBase : GameBehaviour
     }
 
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(transform.position, PM.gameObject.transform.position);
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, fireRange);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.DrawLine(transform.position, PM.gameObject.transform.position);
+    //    Gizmos.color = Color.green;
+    //    Gizmos.DrawWireSphere(transform.position, detectionRange);
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, fireRange);
+    //}
 }
