@@ -8,7 +8,6 @@ public class GunBase : GameBehaviour
     private Camera cam;
     protected GameObject firePoint;
     protected Transform firePointTransform;
-    
 
     [Header("Firing Options")]
     [SerializeField]
@@ -34,7 +33,6 @@ public class GunBase : GameBehaviour
     public Vector3 targetPoint;
     public LayerMask mask;
     public float distanceToTarget;
-    private float distanceModifier = 70;
 
     private void OnEnable()
     {
