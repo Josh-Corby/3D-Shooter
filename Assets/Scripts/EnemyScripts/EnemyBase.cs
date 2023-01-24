@@ -30,8 +30,18 @@ public class EnemyBase : GameBehaviour
     public List<GameObject> objectsToAvoid = new List<GameObject>();
     [SerializeField] private float separationStrength = 1f;
 
+    private PathfindingUnit pathfinding;
+    public LayerMask detecionMask;
+    private bool canSeePlayer;
+
+
+    private void Awake()
+    {
+        pathfinding = GetComponent<PathfindingUnit>();
+    }
     private void Start()
     {
+        //pathfinding.speed = moveSpeed;
         currentHealth = maxHealth;
         sqrFireRange = fireRange * fireRange;
         sqrDetectionRange = detectionRange * detectionRange;
@@ -73,6 +83,24 @@ public class EnemyBase : GameBehaviour
         }
     }
 
+    private bool CanSeePlayer()
+    {
+        Vector3 dirToPlayer = PM.gameObject.transform.position - transform.position;
+        Ray ray = new Ray(transform.position, dirToPlayer);
+        if(Physics.Raycast(ray, out RaycastHit hit, detectionRange, detecionMask))
+        {
+            if (hit.collider.CompareTag("Player"))
+            {
+                canSeePlayer = true;
+            }
+            else
+            {
+                canSeePlayer = false;
+            }
+        }
+        Debug.Log(canSeePlayer);
+        return canSeePlayer;
+    }
     protected void EnemyMovement()
     {
         if (spin)
@@ -82,21 +110,33 @@ public class EnemyBase : GameBehaviour
         if (moveTowardsPlayer)
         {
             CollisionAvoidance();
-            if (flying)
-            {
-                //maintain vertical distance to player
-                float verticalDstToMove = verticalDstToMaintain - verticalDstToPlayer;
-                Vector3 targetPosition = new Vector3(transform.position.x, transform.position.y + verticalDstToMove, transform.position.z);
-                float interpolationFactor = Mathf.Abs(verticalDstToMove / verticalDstToPlayer);
-                transform.position = Vector3.Lerp(transform.position, targetPosition, interpolationFactor / 100);
-            }
-            //movetowards player
-            if (sqrLenToPlayer > sqrDstToMaintain)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, new Vector3(PM.transform.position.x, transform.position.y, PM.transform.position.z), Time.deltaTime * moveSpeed);
-            }
-        }
 
+            if (playerDetected)
+            {
+                if (CanSeePlayer())
+                {
+                    if(pathfinding.path!= null)
+                    {
+                        Debug.Log("Pathfinding stopped");
+                        StopCoroutine(pathfinding.FollowPath());
+                    }
+                    if (flying)
+                    {
+                        //maintain vertical distance to player
+                        float verticalDstToMove = verticalDstToMaintain - verticalDstToPlayer;
+                        Vector3 targetPosition = new Vector3(transform.position.x, transform.position.y + verticalDstToMove, transform.position.z);
+                        float interpolationFactor = Mathf.Abs(verticalDstToMove / verticalDstToPlayer);
+                        transform.position = Vector3.Lerp(transform.position, targetPosition, interpolationFactor / 100);
+                    }
+                    //movetowards player
+                    if (sqrLenToPlayer > sqrDstToMaintain)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, new Vector3(PM.transform.position.x, transform.position.y, PM.transform.position.z), Time.deltaTime * moveSpeed);
+                    }
+                }
+
+            }        
+        }
     }
     public void Damage(float damage)
     {
@@ -117,12 +157,11 @@ public class EnemyBase : GameBehaviour
     }
 
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.DrawLine(transform.position, PM.gameObject.transform.position);
-    //    Gizmos.color = Color.green;
-    //    Gizmos.DrawWireSphere(transform.position, detectionRange);
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawWireSphere(transform.position, fireRange);
-    //}
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, fireRange);
+    }
 }

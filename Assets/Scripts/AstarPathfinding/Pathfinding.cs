@@ -4,10 +4,9 @@ using UnityEngine;
 using System.Diagnostics;
 using System;
 
-[RequireComponent(typeof(Grid), typeof(PathRequestManager))]
+[RequireComponent(typeof(Grid))]
 public class Pathfinding : GameBehaviour
 {
-    PathRequestManager requestManager;
     private Grid grid;
     private int horizontalDistance;
     private int verticalDistance;
@@ -15,16 +14,10 @@ public class Pathfinding : GameBehaviour
 
     private void Awake()
     {
-        requestManager = GetComponent<PathRequestManager>();
         grid = GetComponent<Grid>();
     }
 
-    public void StartFindPath(Vector3 startPos, Vector3 targetPos)
-    {
-        StartCoroutine(FindPath(startPos, targetPos));
-    }
-
-    IEnumerator FindPath(Vector3 startPos, Vector3 targetPos)
+    public void FindPath(PathRequest request, Action<PathResult> callback)
     {
         Stopwatch sw = new Stopwatch();
         sw.Start();
@@ -33,10 +26,10 @@ public class Pathfinding : GameBehaviour
         bool pathSuccess = false;
 
         //find respective nodes of start and end positions
-        Node startNode = grid.GetNodeFromWorldPoint(startPos);
-        Node targetNode = grid.GetNodeFromWorldPoint(targetPos);
+        Node startNode = grid.GetNodeFromWorldPoint(request.pathStart);
+        Node targetNode = grid.GetNodeFromWorldPoint(request.pathEnd);
 
-        if(startNode.walkable && targetNode.walkable)
+        if (startNode.walkable && targetNode.walkable)
         {
             Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
             HashSet<Node> closedSet = new HashSet<Node>();
@@ -80,13 +73,13 @@ public class Pathfinding : GameBehaviour
                     }
                 }
             }
-        }    
-        yield return null;
+        }
         if (pathSuccess)
         {
             waypoints = RetracePath(startNode, targetNode);
+            pathSuccess = waypoints.Length > 0;
         }
-        requestManager.FinishedProcessingPath(waypoints, pathSuccess);
+        callback(new PathResult(waypoints, pathSuccess, request.callback));
     }
 
     private Vector3[] RetracePath(Node startNode, Node endNode)
@@ -111,7 +104,7 @@ public class Pathfinding : GameBehaviour
         for (int i = 1; i < path.Count; i++)
         {
             Vector3 directionNew = new Vector3(path[i - 1].gridX - path[i].gridX, path[i - 1].gridY - path[i].gridY, path[i - 1].gridZ - path[i].gridZ);
-            if(directionNew != directionOld)
+            if (directionNew != directionOld)
             {
                 waypoints.Add(path[i].worldPosition);
             }
