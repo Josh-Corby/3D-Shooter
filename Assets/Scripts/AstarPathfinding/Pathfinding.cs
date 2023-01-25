@@ -4,18 +4,11 @@ using UnityEngine;
 using System.Diagnostics;
 using System;
 
-[RequireComponent(typeof(Grid))]
 public class Pathfinding : GameBehaviour
 {
-    private Grid grid;
     private int horizontalDistance;
     private int verticalDistance;
     private int totalDistance;
-
-    private void Awake()
-    {
-        grid = GetComponent<Grid>();
-    }
 
     public void FindPath(PathRequest request, Action<PathResult> callback)
     {
@@ -26,12 +19,12 @@ public class Pathfinding : GameBehaviour
         bool pathSuccess = false;
 
         //find respective nodes of start and end positions
-        Node startNode = grid.GetNodeFromWorldPoint(request.pathStart);
-        Node targetNode = grid.GetNodeFromWorldPoint(request.pathEnd);
+        Node startNode = request.grid.GetNodeFromWorldPoint(request.pathStart);
+        Node targetNode = request.grid.GetNodeFromWorldPoint(request.pathEnd);
 
         if (startNode.walkable && targetNode.walkable)
         {
-            Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
+            Heap<Node> openSet = new Heap<Node>(request.grid.MaxSize);
             HashSet<Node> closedSet = new HashSet<Node>();
             openSet.Add(startNode);
 
@@ -49,7 +42,7 @@ public class Pathfinding : GameBehaviour
                     break;
                 }
 
-                foreach (Node neighbour in grid.GetNeighbours(currentNode))
+                foreach (Node neighbour in request.grid.GetNeighbours(currentNode))
                 {
                     if (!neighbour.walkable || closedSet.Contains(neighbour))
                     {

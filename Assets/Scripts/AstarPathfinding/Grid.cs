@@ -78,7 +78,7 @@ public class Grid : MonoBehaviour
                 }
             }
         }
-        BlurPenaltyMap(2);
+        BlurPenaltyMap(3);
     }
 
     private void BlurPenaltyMap(int blurSize)

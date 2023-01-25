@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PathfindingUnit : GameBehaviour
 {
+    [SerializeField]
+    private EnemyBase unit;
     const float minPathUpdateTime = 0.5f;
     const float pathUpdateMoveThreshold = 0.5f;
 
@@ -16,14 +18,12 @@ public class PathfindingUnit : GameBehaviour
     //public Path path;
     public Vector3[] path;
     int targetIndex;
-
     public bool followingPath;
     public float distanceToWaypoint;
     public Vector3 currentWaypoint;
-
     public Coroutine updatePath;
     private Coroutine followPath;
-
+    public Grid currentGrid;
 
 
     public void StartUpdatingPath()
@@ -42,7 +42,7 @@ public class PathfindingUnit : GameBehaviour
     public void ResetPathFinding()
     {
         StopUpdatingPath();
-        StartUpdatingPath();      
+        StartUpdatingPath();
     }
 
     public void StopFollowingPath()
@@ -66,23 +66,25 @@ public class PathfindingUnit : GameBehaviour
 
     public IEnumerator UpdatePath()
     {
-
-        if (Time.timeSinceLevelLoad < 0.3f)
+        if (currentGrid != null)
         {
-            yield return new WaitForSeconds(0.3f);
-        }
-        PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
-
-        float sqrMoveThreshold = pathUpdateMoveThreshold * pathUpdateMoveThreshold;
-        Vector3 targetPosOld = target.position;
-
-        while (true)
-        {
-            yield return new WaitForSeconds(minPathUpdateTime);
-            if ((target.position - targetPosOld).sqrMagnitude > sqrMoveThreshold)
+            if (Time.timeSinceLevelLoad < 0.3f)
             {
-                PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
-                targetPosOld = target.position;
+                yield return new WaitForSeconds(0.3f);
+            }
+            PathRequestManager.RequestPath(new PathRequest(currentGrid, unit.transform.position, target.position, OnPathFound));
+
+            float sqrMoveThreshold = pathUpdateMoveThreshold * pathUpdateMoveThreshold;
+            Vector3 targetPosOld = target.position;
+
+            while (true)
+            {
+                yield return new WaitForSeconds(minPathUpdateTime);
+                if ((target.position - targetPosOld).sqrMagnitude > sqrMoveThreshold)
+                {
+                    PathRequestManager.RequestPath(new PathRequest(currentGrid, unit.transform.position, target.position, OnPathFound));
+                    targetPosOld = target.position;
+                }
             }
         }
     }
@@ -94,7 +96,7 @@ public class PathfindingUnit : GameBehaviour
 
         while (followingPath)
         {
-            if (transform.position == currentWaypoint)
+            if (unit.transform.position == currentWaypoint)
             {
                 targetIndex++;
                 if (targetIndex >= path.Length)
@@ -111,11 +113,30 @@ public class PathfindingUnit : GameBehaviour
                 //transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
                 //transform.Translate(Vector3.forward * Time.deltaTime * speed);
 
-                transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
-                transform.LookAt(currentWaypoint);
+                unit.transform.position = Vector3.MoveTowards(unit.transform.position, currentWaypoint, speed * Time.deltaTime);
+                unit.transform.LookAt(currentWaypoint);
             }
             yield return null;
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Grid"))
+        {
+            currentGrid = other.GetComponent<Grid>();
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Grid"))
+        {
+            if (other.TryGetComponent<Grid>(out _) == currentGrid)
+            {
+                currentGrid = null;
+            }
+        }
+
     }
     private void OnDrawGizmos()
     {

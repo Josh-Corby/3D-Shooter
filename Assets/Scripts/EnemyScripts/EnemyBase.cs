@@ -39,7 +39,7 @@ public class EnemyBase : GameBehaviour
 
     private void Awake()
     {
-        pathfinding = GetComponent<PathfindingUnit>();
+        pathfinding = GetComponentInChildren<PathfindingUnit>();
     }
     private void Start()
     {
@@ -90,7 +90,7 @@ public class EnemyBase : GameBehaviour
     {
         Vector3 dirToPlayer = PM.gameObject.transform.position - transform.position;
         Ray ray = new Ray(transform.position, dirToPlayer);
-        if(Physics.Raycast(ray, out RaycastHit hit, detectionRange, detecionMask))
+        if(Physics.SphereCast(transform.position,1,dirToPlayer, out RaycastHit hit, detecionMask, detecionMask))
         {
             if (hit.collider.CompareTag("Player"))
             {
@@ -123,7 +123,6 @@ public class EnemyBase : GameBehaviour
                 {
                     if(pathfinding.path.Length >0)
                     {
-                        Debug.Log("Pathfinding stopped");
                         pathfinding.StopUpdatingPath();
                         pathfinding.StopFollowingPath();
                         isPathfinding = false;

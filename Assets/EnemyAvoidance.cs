@@ -17,7 +17,7 @@ public class EnemyAvoidance : MonoBehaviour
             return;
         }
 
-        if (other.gameObject.CompareTag("PlayerAttack") || other.gameObject.CompareTag("EnemyAttack") || other.CompareTag("Mechanics"))
+        if (other.gameObject.CompareTag("PlayerAttack") || other.gameObject.CompareTag("EnemyAttack") || other.CompareTag("Mechanics") || other.CompareTag("Grid"))
         {
             return;
         }
