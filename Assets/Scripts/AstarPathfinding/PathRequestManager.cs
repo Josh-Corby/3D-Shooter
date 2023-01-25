@@ -19,7 +19,7 @@ public class PathRequestManager : MonoBehaviour
 
     private void Update()
     {
-     if(results.Count > 0)
+        if (results.Count > 0)
         {
             int itemsInQueue = results.Count;
             lock (results)
@@ -30,7 +30,7 @@ public class PathRequestManager : MonoBehaviour
                     result.callback(result.path, result.success);
                 }
             }
-        }   
+        }
     }
 
     public static void RequestPath(PathRequest request)
@@ -48,7 +48,7 @@ public class PathRequestManager : MonoBehaviour
         {
             results.Enqueue(result);
         }
-    }   
+    }
 }
 public struct PathRequest
 {

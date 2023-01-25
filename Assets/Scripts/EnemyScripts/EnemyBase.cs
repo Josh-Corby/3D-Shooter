@@ -33,6 +33,7 @@ public class EnemyBase : GameBehaviour
     private PathfindingUnit pathfinding;
     public LayerMask detecionMask;
     private bool canSeePlayer;
+    private bool isPathfinding;
 
 
     private void Awake()
@@ -41,7 +42,7 @@ public class EnemyBase : GameBehaviour
     }
     private void Start()
     {
-        //pathfinding.speed = moveSpeed;
+        isPathfinding = false;
         currentHealth = maxHealth;
         sqrFireRange = fireRange * fireRange;
         sqrDetectionRange = detectionRange * detectionRange;
@@ -98,7 +99,7 @@ public class EnemyBase : GameBehaviour
                 canSeePlayer = false;
             }
         }
-        Debug.Log(canSeePlayer);
+        //Debug.Log(canSeePlayer);
         return canSeePlayer;
     }
     protected void EnemyMovement()
@@ -109,16 +110,17 @@ public class EnemyBase : GameBehaviour
         }
         if (moveTowardsPlayer)
         {
-            CollisionAvoidance();
+            //CollisionAvoidance();
 
             if (playerDetected)
             {
                 if (CanSeePlayer())
                 {
-                    if(pathfinding.path!= null)
+                    if(pathfinding.path.Length >0)
                     {
                         Debug.Log("Pathfinding stopped");
-                        StopCoroutine(pathfinding.FollowPath());
+                        StopCoroutine(pathfinding.UpdatePath());
+                        isPathfinding = false;
                     }
                     if (flying)
                     {
@@ -132,6 +134,15 @@ public class EnemyBase : GameBehaviour
                     if (sqrLenToPlayer > sqrDstToMaintain)
                     {
                         transform.position = Vector3.MoveTowards(transform.position, new Vector3(PM.transform.position.x, transform.position.y, PM.transform.position.z), Time.deltaTime * moveSpeed);
+                    }
+                }
+                else
+                {
+                    if (!isPathfinding)
+                    {
+                        StopCoroutine(pathfinding.UpdatePath());
+                        StartCoroutine(pathfinding.UpdatePath());
+                        isPathfinding = true;
                     }
                 }
 
