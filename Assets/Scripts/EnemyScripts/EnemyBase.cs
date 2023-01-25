@@ -119,7 +119,7 @@ public class EnemyBase : GameBehaviour
 
             if (playerDetected)
             {
-                if (CanSeePlayer())
+                if (CanSeePlayer() || pathfinding.currentGrid != PM.lastGrid)
                 {
                     if(pathfinding.path.Length >0)
                     {

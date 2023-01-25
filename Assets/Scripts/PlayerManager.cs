@@ -8,6 +8,8 @@ public class PlayerManager : GameBehaviour<PlayerManager>
     [SerializeField]
     private float iFramesTime;
 
+    public Grid lastGrid;
+
     private void Awake()
     {
         col = GetComponent<CapsuleCollider>();
@@ -18,6 +20,11 @@ public class PlayerManager : GameBehaviour<PlayerManager>
         {
             StartCoroutine(IFrames());
         }
+
+        if (other.CompareTag("Grid"))
+        {
+            lastGrid = other.GetComponent<Grid>();
+        }
     }
 
     private IEnumerator IFrames()
@@ -26,4 +33,5 @@ public class PlayerManager : GameBehaviour<PlayerManager>
         yield return new WaitForSeconds(iFramesTime);
         col.enabled = true;
     }
+
 }

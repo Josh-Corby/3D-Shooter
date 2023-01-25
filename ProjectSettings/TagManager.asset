@@ -9,6 +9,7 @@ TagManager:
   - EnemyAttack
   - PlayerAttack
   - Mechanics
+  - Grid
   layers:
   - Default
   - TransparentFX

@@ -66,7 +66,7 @@ public class PathfindingUnit : GameBehaviour
 
     public IEnumerator UpdatePath()
     {
-        if (currentGrid != null)
+        if (currentGrid != null && currentGrid == PM.lastGrid)
         {
             if (Time.timeSinceLevelLoad < 0.3f)
             {
