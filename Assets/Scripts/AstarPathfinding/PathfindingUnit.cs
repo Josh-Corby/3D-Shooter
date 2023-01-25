@@ -21,26 +21,46 @@ public class PathfindingUnit : GameBehaviour
     public float distanceToWaypoint;
     public Vector3 currentWaypoint;
 
-    private Coroutine routine;
+    public Coroutine updatePath;
+    private Coroutine followPath;
 
-    private void Start()
+
+
+    public void StartUpdatingPath()
     {
-        StartCoroutine(UpdatePath());
+        updatePath = StartCoroutine(UpdatePath());
     }
 
+    public void StopUpdatingPath()
+    {
+        if (updatePath != null)
+        {
+            StopCoroutine(updatePath);
+        }
+    }
 
+    public void ResetPathFinding()
+    {
+        StopUpdatingPath();
+        StartUpdatingPath();      
+    }
+
+    public void StopFollowingPath()
+    {
+        if (followPath != null)
+        {
+            StopCoroutine(followPath);
+
+        }
+    }
     public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
     {
         if (pathSuccessful)
         {
             //path = new Path(waypoints, transform.position, turnDst, stoppingDst);
-            if (routine != null)
-            {
-                StopCoroutine(routine);
-
-            }
+            StopFollowingPath();
             path = waypoints;
-            routine = StartCoroutine(FollowPath());
+            followPath = StartCoroutine(FollowPath());
         }
     }
 

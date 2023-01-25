@@ -33,6 +33,7 @@ public class EnemyBase : GameBehaviour
     private PathfindingUnit pathfinding;
     public LayerMask detecionMask;
     private bool canSeePlayer;
+    [SerializeField]
     private bool isPathfinding;
 
 
@@ -51,7 +52,8 @@ public class EnemyBase : GameBehaviour
 
     private void Update()
     {
-        dstToPlayer = (transform.position - PM.gameObject.transform.position);
+
+        dstToPlayer = transform.position - PM.gameObject.transform.position;
         sqrLenToPlayer = dstToPlayer.sqrMagnitude;
         verticalDstToPlayer = transform.position.y - PM.gameObject.transform.position.y;
         EnemyMovement();
@@ -110,7 +112,10 @@ public class EnemyBase : GameBehaviour
         }
         if (moveTowardsPlayer)
         {
-            //CollisionAvoidance();
+            if (!isPathfinding)
+            {
+                CollisionAvoidance();
+            }
 
             if (playerDetected)
             {
@@ -119,7 +124,8 @@ public class EnemyBase : GameBehaviour
                     if(pathfinding.path.Length >0)
                     {
                         Debug.Log("Pathfinding stopped");
-                        StopCoroutine(pathfinding.UpdatePath());
+                        pathfinding.StopUpdatingPath();
+                        pathfinding.StopFollowingPath();
                         isPathfinding = false;
                     }
                     if (flying)
@@ -140,8 +146,7 @@ public class EnemyBase : GameBehaviour
                 {
                     if (!isPathfinding)
                     {
-                        StopCoroutine(pathfinding.UpdatePath());
-                        StartCoroutine(pathfinding.UpdatePath());
+                        pathfinding.ResetPathFinding();
                         isPathfinding = true;
                     }
                 }
