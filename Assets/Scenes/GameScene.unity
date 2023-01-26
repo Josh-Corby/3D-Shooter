@@ -750,7 +750,7 @@ Transform:
   - {fileID: 1031552255}
   - {fileID: 1300081901}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &830654954
 GameObject:
@@ -1506,6 +1506,7 @@ Transform:
   m_Children:
   - {fileID: 1991324556}
   - {fileID: 1037373614}
+  - {fileID: 1260027735}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1999,6 +2000,11 @@ LightingSettings:
   m_PVRFilteringAtrousPositionSigmaIndirect: 2
   m_PVRFilteringAtrousPositionSigmaAO: 1
   m_PVRTiledBaking: 0
+--- !u!4 &1260027735 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4295516096495265472, guid: 9b4171ed57250f74e800297c5da54271, type: 3}
+  m_PrefabInstance: {fileID: 1761623555}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1275771306
 GameObject:
   m_ObjectHideFlags: 0
@@ -2383,11 +2389,11 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1043656755}
     m_Modifications:
     - target: {fileID: 4295516096495265472, guid: 9b4171ed57250f74e800297c5da54271, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4295516096495265472, guid: 9b4171ed57250f74e800297c5da54271, type: 3}
       propertyPath: m_LocalScale.x
@@ -2616,7 +2622,7 @@ Transform:
   - {fileID: 1765215282}
   - {fileID: 441830613}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1834350067
 MonoBehaviour:
@@ -2755,7 +2761,7 @@ MonoBehaviour:
   enemiesAlive: []
   enemyPrefabs:
   - {fileID: 192268635620225891, guid: 5281ac58dea82954f8532c60564fee0c, type: 3}
-  spawnEnemies: 1
+  spawnEnemies: 0
   groundMask:
     serializedVersion: 2
     m_Bits: 65
@@ -2960,8 +2966,28 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8525242616588711898, guid: 84ece78c3b1047444b42c96efa9c8a8e, type: 3}
+      propertyPath: burstFire
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8525242616588711898, guid: 84ece78c3b1047444b42c96efa9c8a8e, type: 3}
+      propertyPath: useSpread
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8525242616588711898, guid: 84ece78c3b1047444b42c96efa9c8a8e, type: 3}
+      propertyPath: holdToFire
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8525242616588711898, guid: 84ece78c3b1047444b42c96efa9c8a8e, type: 3}
       propertyPath: mask.m_Bits
       value: 577
       objectReference: {fileID: 0}
+    - target: {fileID: 8525242616588711898, guid: 84ece78c3b1047444b42c96efa9c8a8e, type: 3}
+      propertyPath: shotgunFire
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8525242616588711898, guid: 84ece78c3b1047444b42c96efa9c8a8e, type: 3}
+      propertyPath: bulletToFire
+      value: 
+      objectReference: {fileID: 4634416032413322246, guid: bd61a8f56397f50468c257811306654d, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84ece78c3b1047444b42c96efa9c8a8e, type: 3}

@@ -54,8 +54,8 @@ public class BulletEditor : Editor
             EditorGUILayout.PropertyField(splitSpread);
         }
         
-
         EditorGUILayout.Space(7);
+
         EditorGUILayout.PropertyField(homingProjectile);
         if (bullet.homingProjectile)
         {
