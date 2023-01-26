@@ -25,23 +25,26 @@ public class PathfindingUnit : GameBehaviour
     private Coroutine followPath;
     public Grid currentGrid;
 
+    public List<GameObject> wallsToPlayer = new List<GameObject>();
+    public LayerMask groundMask;
 
     public void StartUpdatingPath()
     {
         updatePath = StartCoroutine(UpdatePath());
     }
 
-    public void StopUpdatingPath()
+    public void StopPathfinding()
     {
         if (updatePath != null)
         {
             StopCoroutine(updatePath);
         }
+        StopFollowingPath();
     }
 
     public void ResetPathFinding()
     {
-        StopUpdatingPath();
+        StopPathfinding();
         StartUpdatingPath();
     }
 
@@ -53,6 +56,7 @@ public class PathfindingUnit : GameBehaviour
 
         }
     }
+
     public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
     {
         if (pathSuccessful)
@@ -66,24 +70,26 @@ public class PathfindingUnit : GameBehaviour
 
     public IEnumerator UpdatePath()
     {
-        if (currentGrid != null && currentGrid == PM.lastGrid)
+        if (Time.timeSinceLevelLoad < 0.3f)
         {
-            if (Time.timeSinceLevelLoad < 0.3f)
-            {
-                yield return new WaitForSeconds(0.3f);
-            }
+            yield return new WaitForSeconds(0.3f);
+        }
+        if (currentGrid != null)
+        {
             PathRequestManager.RequestPath(new PathRequest(currentGrid, unit.transform.position, target.position, OnPathFound));
-
             float sqrMoveThreshold = pathUpdateMoveThreshold * pathUpdateMoveThreshold;
             Vector3 targetPosOld = target.position;
 
             while (true)
             {
                 yield return new WaitForSeconds(minPathUpdateTime);
-                if ((target.position - targetPosOld).sqrMagnitude > sqrMoveThreshold)
+                if (currentGrid != null)
                 {
-                    PathRequestManager.RequestPath(new PathRequest(currentGrid, unit.transform.position, target.position, OnPathFound));
-                    targetPosOld = target.position;
+                    if ((target.position - targetPosOld).sqrMagnitude > sqrMoveThreshold)
+                    {
+                        PathRequestManager.RequestPath(new PathRequest(currentGrid, unit.transform.position, target.position, OnPathFound));
+                        targetPosOld = target.position;
+                    }
                 }
             }
         }
@@ -96,12 +102,13 @@ public class PathfindingUnit : GameBehaviour
 
         while (followingPath)
         {
-            if (unit.transform.position == currentWaypoint)
+            if (Vector3.Distance(unit.transform.position, currentWaypoint) < 2)
             {
                 targetIndex++;
-                if (targetIndex >= path.Length)
+                if (targetIndex >= path.Length || currentGrid != PM.lastGrid)
                 {
                     followingPath = false;
+                    CheckWallsToPlayer();
                     break;
                 }
                 currentWaypoint = path[targetIndex];
@@ -120,6 +127,28 @@ public class PathfindingUnit : GameBehaviour
         }
     }
 
+    private void CheckWallsToPlayer()
+    {
+        wallsToPlayer.Clear();
+
+        Ray ray = new Ray(transform.position, PM.gameObject.transform.position);
+        if (Physics.Raycast(ray, out RaycastHit hit, unit.sqrDetectionRange, groundMask))
+        {
+            wallsToPlayer.Add(hit.collider.gameObject);
+        }
+
+        if (wallsToPlayer.Count == 1)
+        {
+            currentGrid = wallsToPlayer[0].GetComponentInChildren<Grid>();
+        }
+        else if (wallsToPlayer.Count == 0)
+        {
+            unit.isPathfinding = false;
+            StopPathfinding();
+            currentGrid = null;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Grid"))
@@ -131,12 +160,11 @@ public class PathfindingUnit : GameBehaviour
     {
         if (other.CompareTag("Grid"))
         {
-            if (other.TryGetComponent<Grid>(out _) == currentGrid)
+            if (currentGrid == other.GetComponent<Grid>())
             {
                 currentGrid = null;
             }
         }
-
     }
     private void OnDrawGizmos()
     {

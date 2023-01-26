@@ -55,7 +55,7 @@ public class SpawnManager : GameBehaviour<SpawnManager>
         }
         return spawnPosition;
     }
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(spawnCentre.position, spawnSize);

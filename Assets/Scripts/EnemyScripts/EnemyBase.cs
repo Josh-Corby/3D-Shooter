@@ -9,7 +9,8 @@ public class EnemyBase : GameBehaviour
     [SerializeField] private float fireRange;
     private float sqrFireRange;
     [SerializeField] private float detectionRange;
-    private float sqrDetectionRange;
+    [HideInInspector]
+    public float sqrDetectionRange;
     public bool playerDetected;
     public bool playerInFireRange;
     [SerializeField] private bool lookAtPlayer;
@@ -33,8 +34,7 @@ public class EnemyBase : GameBehaviour
     private PathfindingUnit pathfinding;
     public LayerMask detecionMask;
     private bool canSeePlayer;
-    [SerializeField]
-    private bool isPathfinding;
+    public bool isPathfinding;
 
 
     private void Awake()
@@ -76,21 +76,28 @@ public class EnemyBase : GameBehaviour
         if (objectsToAvoid != null)
         {
             Vector3 separationForce = Vector3.zero;
-            foreach (GameObject objectToAvoid in objectsToAvoid)
+            for (int i = 0; i < objectsToAvoid.Count; i++)
             {
-                Vector3 distance = transform.position - objectToAvoid.transform.position;
+                if (objectsToAvoid[i] == null)
+                {
+                    objectsToAvoid.Remove(objectsToAvoid[i]);
+                    continue;
+                }
+                Vector3 distance = transform.position - objectsToAvoid[i].transform.position;
                 separationForce += distance.normalized / distance.magnitude;
             }
             separationForce = separationForce.normalized * separationStrength;
             transform.position += separationForce * Time.deltaTime * moveSpeed;
         }
+
+        
     }
 
     private bool CanSeePlayer()
     {
         Vector3 dirToPlayer = PM.gameObject.transform.position - transform.position;
         Ray ray = new Ray(transform.position, dirToPlayer);
-        if(Physics.SphereCast(transform.position,1,dirToPlayer, out RaycastHit hit, detecionMask, detecionMask))
+        if (Physics.SphereCast(transform.position, 1, dirToPlayer, out RaycastHit hit, detecionMask, detecionMask))
         {
             if (hit.collider.CompareTag("Player"))
             {
@@ -112,19 +119,15 @@ public class EnemyBase : GameBehaviour
         }
         if (moveTowardsPlayer)
         {
-            if (!isPathfinding)
-            {
-                CollisionAvoidance();
-            }
+            CollisionAvoidance();
 
             if (playerDetected)
             {
-                if (CanSeePlayer() || pathfinding.currentGrid != PM.lastGrid)
+                if (CanSeePlayer() || pathfinding.currentGrid == null)
                 {
-                    if(pathfinding.path.Length >0)
+                    if (pathfinding.path.Length > 1)
                     {
-                        pathfinding.StopUpdatingPath();
-                        pathfinding.StopFollowingPath();
+                        pathfinding.StopPathfinding(); ;
                         isPathfinding = false;
                     }
                     if (flying)
@@ -150,7 +153,7 @@ public class EnemyBase : GameBehaviour
                     }
                 }
 
-            }        
+            }
         }
     }
     public void Damage(float damage)
@@ -172,11 +175,11 @@ public class EnemyBase : GameBehaviour
     }
 
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, fireRange);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.green;
+    //    Gizmos.DrawWireSphere(transform.position, detectionRange);
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, fireRange);
+    //}
 }

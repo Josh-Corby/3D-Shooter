@@ -5,12 +5,13 @@ using UnityEngine;
 public class BulletBase : GameBehaviour
 {
     public float damage;
-
+    public float speed;
     public bool hasRigidbody;
-
     public bool isSpawnedProjectile;
 
-    private void Start()
+    public Vector3 target { get; set; }
+
+    public virtual void Start()
     {
         ValidateValues();
         if (isSpawnedProjectile)
@@ -19,16 +20,15 @@ public class BulletBase : GameBehaviour
         }
     }
 
+    public virtual void Update()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+    }
     public virtual void ValidateValues()
     {
         if(damage == 0)
         {
             damage = 2;
-        }
-
-        if(hasRigidbody == false)
-        {
-            hasRigidbody = true;
         }
     }
     protected virtual void OnCollisionEnter(Collision collision)
@@ -49,7 +49,7 @@ public class BulletBase : GameBehaviour
         Destroy(gameObject);
     }
 
-    private IEnumerator ColliderActivateTimer()
+    public IEnumerator ColliderActivateTimer()
     {
         SphereCollider collider = GetComponent<SphereCollider>();
         collider.enabled = false;

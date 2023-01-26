@@ -130,8 +130,8 @@ MonoBehaviour:
   damage: 0
   hasRigidbody: 1
   isSpawnedProjectile: 0
-  bulletToSplitInto: {fileID: 4634416032413322246, guid: bd61a8f56397f50468c257811306654d, type: 3}
-  splitForce: 0
-  spread: 0
-  waitTime: 0
-  isHoming: 1
+  bulletToSplitInto: {fileID: 4634416032413322246, guid: b2c95565aa5341f41b83a022275c159c, type: 3}
+  splitForce: 10
+  spread: 5
+  waitTime: 1
+  isHoming: 0

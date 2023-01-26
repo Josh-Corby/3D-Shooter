@@ -5,46 +5,55 @@ using UnityEngine;
 
 public class GunBase : GameBehaviour
 {
+
+    [SerializeField]
+    protected GunSO gun;
     private Camera cam;
     protected GameObject firePoint;
     protected Transform firePointTransform;
-
-    [Header("Firing Options")]
-    [SerializeField]
-    private GameObject bulletToFire;
-    [SerializeField]
-    private float shootForce;
-    [SerializeField]
-    private bool useSpread;
-    [SerializeField]
-    private float spread;
-    public float timeBetweenShots;
-    public bool holdToFire;
-    public bool shotgunFire;
-    public int shotsInShotgunFire;
-    public bool burstFire;
-    public int bulletsInBurst;
-    public float timeBetweenBurstShots;
-
-    public bool readyToFire;
+    protected bool readyToFire;
     private bool fireInput;
-   
 
+    [HideInInspector]
     public Vector3 targetPoint;
     public LayerMask mask;
+    [HideInInspector]
     public float distanceToTarget;
 
-    private void OnEnable()
-    {
-        InputManager.Fire += RecieveFireInput;
-        InputManager.StopFiring += CancelFireInput;
-    }
+    #region GunStats
+    private GameObject bulletToFire;
+    [Header("Firing Options")]
+    private float shootForce;
+    private float timeBetweenShots;
+    private bool holdToFire;
+    [Header("Spread Options")]
+    private bool useSpread;
+    private float spread;
+
+    [Header("Shotgun Options")]
+    private bool shotgunFire;
+    private int shotsInShotgunFire;
+
+    [Header("BurstFire Options")]
+    protected bool burstFire;
+    private int bulletsInBurst;
+    private float timeBetweenBurstShots;
+    #endregion
+
     protected virtual void Awake()
     {
         cam = Camera.main;
         firePoint = FindChildGameObjectByName("FirePoint");
         firePointTransform = firePoint.transform;
+
+        AssignValues();
     }
+    private void OnEnable()
+    {
+        InputManager.Fire += RecieveFireInput;
+        InputManager.StopFiring += CancelFireInput;
+    }
+
     protected void Start()
     {
         ValidateValues();
@@ -52,10 +61,23 @@ public class GunBase : GameBehaviour
     protected virtual void Update()
     {
         FindTarget();
-
         CheckForShootCondition();
     }
 
+    protected void AssignValues()
+    {
+        bulletToFire = gun.bulletToFire;
+        shootForce = gun.shootForce;
+        timeBetweenShots = gun.timeBetweenShots;
+        holdToFire = gun.holdToFire;
+        useSpread = gun.useSpread;
+        spread = gun.spread;
+        shotgunFire = gun.shotgunFire;
+        shotsInShotgunFire = gun.shotsInShotgunFire;
+        burstFire = gun.burstFire;
+        bulletsInBurst = gun.bulletsInBurst;
+        timeBetweenBurstShots = gun.timeBetweenBurstShots;
+    }
     protected virtual void CheckForShootCondition()
     {
         if (fireInput && readyToFire && burstFire)
@@ -80,7 +102,7 @@ public class GunBase : GameBehaviour
         readyToFire = true;
         if (shootForce == 0)
         {
-            shootForce = 200;
+            shootForce = 100;
         }
         if (timeBetweenShots == 0)
         {
@@ -121,12 +143,11 @@ public class GunBase : GameBehaviour
     {
         //Find the exact hit position using a raycast
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Just a ray through the middle of your current view
-
         //check if ray hits something
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
         {
             distanceToTarget = hit.distance;
-            //Debug.Log(hit.collider.gameObject);
+            Debug.Log(hit.collider.gameObject);
             targetPoint = hit.point;
         }
         else
@@ -136,7 +157,7 @@ public class GunBase : GameBehaviour
 
         transform.LookAt(targetPoint);
     }
-    
+
     private void RecieveFireInput()
     {
         fireInput = true;
@@ -177,7 +198,7 @@ public class GunBase : GameBehaviour
         if (bulletToFire == null)
         {
             return;
-        }  
+        }
 
         if (bulletToFire.GetComponent<BulletBase>().hasRigidbody)
         {
@@ -213,6 +234,7 @@ public class GunBase : GameBehaviour
         else
         {
             GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, firePointTransform.rotation);
+            bulletGO.GetComponent<BulletBase>().target = targetPoint;
         }
         firePointTransform.DetachChildren();
     }

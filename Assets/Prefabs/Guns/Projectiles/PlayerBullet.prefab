@@ -128,5 +128,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 2
+  speed: 100
   hasRigidbody: 0
   isSpawnedProjectile: 0

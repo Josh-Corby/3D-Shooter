@@ -2,27 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HomingBullet : GameBehaviour
+public class HomingBullet : BulletBase
 {
-    public float speed = 10f;
-    public GameObject target;
     private Rigidbody rb;
-    private float maxSpeed = 50f;
+    private readonly float maxSpeed = 50f;
     private float findTargetWaitTime = 1;
     public bool searchForTarget;
-
+    private GameObject targetObject;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    private void Start()
+    public override void Start()
     {
         findTargetWaitTime = Mathf.Clamp(findTargetWaitTime, 0, findTargetWaitTime);
         ValidateValues();
+        base.Start();
+        targetObject = null;
 
     }
-    private void Update()
+    public override void Update()
     {
         findTargetWaitTime -= Time.deltaTime;
 
@@ -36,14 +36,14 @@ public class HomingBullet : GameBehaviour
         }
         ClampSpeed();
     }
-    private void ValidateValues()
+    public override void ValidateValues()
     {
         searchForTarget = false;
         if (speed == 0)
         {
-            speed = 100;
+            speed = 10;
         }
-        target = null;
+        base.ValidateValues();
     }
     private void ClampSpeed()
     {
@@ -55,18 +55,18 @@ public class HomingBullet : GameBehaviour
 
     void MoveTowardsTarget()
     {
-        if (target == null)
+        if (targetObject == null)
         {
             GetClosestEnemy();
         }
-        if (target != null)
+        if (targetObject != null)
         {
            
             // Rotate the missile towards the target
-            transform.LookAt(target.transform);
-            Vector3 directionToTarget = target.transform.position - transform.position;
+            transform.LookAt(target);
+            Vector3 directionToTarget = targetObject.transform.position - transform.position;
            
-            if (Vector3.Distance(transform.position, target.transform.position) <= 10f)
+            if (Vector3.Distance(transform.position, targetObject.transform.position) <= 30f)
             {
                 rb.angularVelocity = Vector3.zero;
                 rb.AddForce(directionToTarget * maxSpeed);
@@ -78,7 +78,6 @@ public class HomingBullet : GameBehaviour
     }
     private void GetClosestEnemy()
     {
-        target = null;
         float minDist = Mathf.Infinity;
 
         if (SM.enemiesAlive.Count > 0)
@@ -89,7 +88,7 @@ public class HomingBullet : GameBehaviour
                 float dist = Vector3.Distance(enemy.transform.position, transform.position);
                 if (dist < minDist)
                 {
-                    target = enemy;
+                    targetObject = enemy;
                     minDist = dist;
                 }
             }
@@ -97,9 +96,9 @@ public class HomingBullet : GameBehaviour
     }
     private void OnDrawGizmos()
     {
-        if(target!= null)
+        if(targetObject != null)
         {
-            Gizmos.DrawLine(transform.position,target.transform.position);
+            Gizmos.DrawLine(transform.position, targetObject.transform.position);
         }
     }
 }
