@@ -21,14 +21,14 @@ public class GunBase : GameBehaviour
     public float distanceToTarget;
 
     #region GunStats
-    private GameObject bulletToFire;
+    [SerializeField] private GameObject bulletToFire;
     [Header("Firing Options")]
     private float shootForce;
     private float timeBetweenShots;
     private bool holdToFire;
     [Header("Spread Options")]
     private bool useSpread;
-    private float spread;
+    private float spreadAmount;
 
     [Header("Shotgun Options")]
     private bool shotgunFire;
@@ -71,7 +71,7 @@ public class GunBase : GameBehaviour
         timeBetweenShots = gun.timeBetweenShots;
         holdToFire = gun.holdToFire;
         useSpread = gun.useSpread;
-        spread = gun.spread;
+        spreadAmount = gun.spreadAmount;
         shotgunFire = gun.shotgunFire;
         shotsInShotgunFire = gun.shotsInShotgunFire;
         burstFire = gun.burstFire;
@@ -132,9 +132,9 @@ public class GunBase : GameBehaviour
         }
         if (useSpread)
         {
-            if (spread == 0)
+            if (spreadAmount == 0)
             {
-                spread = 0.05f;
+                spreadAmount = 0.05f;
             }
         }
     }
@@ -205,15 +205,15 @@ public class GunBase : GameBehaviour
             if (!useSpread)
             {
                 Vector3 directionWithoutSpread = (targetPoint - firePointTransform.position).normalized;
-                GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, firePointTransform.rotation);
+                GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePoint.transform.position,Vector3.up));
                 bulletGO.GetComponent<Rigidbody>().AddForce(directionWithoutSpread * shootForce, ForceMode.Impulse);
             }
             if (useSpread)
             {
                 //Calculate spread
-                float x = Random.Range(-spread, spread) * distanceToTarget;
-                float y = Random.Range(-spread, spread) * distanceToTarget;
-                float z = Random.Range(-spread, spread) * distanceToTarget;
+                float x = Random.Range(-spreadAmount, spreadAmount) * distanceToTarget;
+                float y = Random.Range(-spreadAmount, spreadAmount) * distanceToTarget;
+                float z = Random.Range(-spreadAmount, spreadAmount) * distanceToTarget;
                 //apply random rotation
                 Quaternion spreadRotation = Quaternion.Euler(x, y, z);
 
@@ -233,8 +233,7 @@ public class GunBase : GameBehaviour
         }
         else
         {
-            GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, firePointTransform.rotation);
-            bulletGO.GetComponent<BulletBase>().target = targetPoint;
+            GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePointTransform.position,Vector3.up));
         }
         firePointTransform.DetachChildren();
     }

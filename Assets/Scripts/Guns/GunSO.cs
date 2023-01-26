@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Gun")]
+[CreateAssetMenu(fileName = "Gun",menuName = "New Gun")]
 public class GunSO : ScriptableObject
 {
     public GameObject bulletToFire;
@@ -13,7 +13,7 @@ public class GunSO : ScriptableObject
     public bool holdToFire;
     [Header("Spread Options")]
     public bool useSpread;
-    public float spread;
+    public float spreadAmount;
 
     [Header("Shotgun Options")]
     public bool shotgunFire;

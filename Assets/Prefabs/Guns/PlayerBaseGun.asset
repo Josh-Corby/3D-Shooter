@@ -20,6 +20,6 @@ MonoBehaviour:
   spread: 0
   shotgunFire: 0
   shotsInShotgunFire: 0
-  burstFire: 0
-  bulletsInBurst: 0
-  timeBetweenBurstShots: 0
+  burstFire: 1
+  bulletsInBurst: 3
+  timeBetweenBurstShots: 0.1

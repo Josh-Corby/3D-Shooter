@@ -21,12 +21,7 @@ public class SplittingBullet : BulletBase
     private float splitForce;
 
     [SerializeField]
-    private float spread;
-
-    [SerializeField]
-    private float waitTime;
-
-    public bool isHoming;
+    private float splitSpread;
 
     protected override void OnCollisionEnter(Collision collision)
     {
@@ -51,23 +46,19 @@ public class SplittingBullet : BulletBase
             splitForce = 10;
         }
 
-        if(spread == 0)
+        if(splitSpread == 0)
         {
-            spread = 5;
+            splitSpread = 5;
         }
 
-        if(waitTime == 0)
-        {
-            waitTime = 1;
-        }
     }
     private void Split()
     {
         for (int i = 0; i < CardinalDirections.Length-1; i++)
         {
             Debug.Log("Split");
-            float x = Random.Range(-spread, spread);
-            float y = Random.Range(-spread, spread);
+            float x = Random.Range(-splitSpread, splitSpread);
+            float y = Random.Range(-splitSpread, splitSpread);
             Vector3 spreadDirection = new Vector3(x, y, 0);
             Vector3 directionWithSpread = (CardinalDirections[i] + spreadDirection);
             GameObject splitBullet = Instantiate(bulletToSplitInto, transform.position, Quaternion.identity);

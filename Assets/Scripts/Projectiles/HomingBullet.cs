@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class HomingBullet : BulletBase
 {
+    public float speed = 10f;
+    public GameObject target;
     private Rigidbody rb;
     private readonly float maxSpeed = 50f;
     private float findTargetWaitTime = 1;
     public bool searchForTarget;
-    private GameObject targetObject;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -19,10 +21,9 @@ public class HomingBullet : BulletBase
         findTargetWaitTime = Mathf.Clamp(findTargetWaitTime, 0, findTargetWaitTime);
         ValidateValues();
         base.Start();
-        targetObject = null;
 
     }
-    public override void Update()
+    private void Update()
     {
         findTargetWaitTime -= Time.deltaTime;
 
@@ -43,6 +44,7 @@ public class HomingBullet : BulletBase
         {
             speed = 10;
         }
+        target = null;
         base.ValidateValues();
     }
     private void ClampSpeed()
@@ -55,18 +57,18 @@ public class HomingBullet : BulletBase
 
     void MoveTowardsTarget()
     {
-        if (targetObject == null)
+        if (target == null)
         {
             GetClosestEnemy();
         }
-        if (targetObject != null)
+        if (target != null)
         {
            
             // Rotate the missile towards the target
-            transform.LookAt(target);
-            Vector3 directionToTarget = targetObject.transform.position - transform.position;
+            transform.LookAt(target.transform);
+            Vector3 directionToTarget = target.transform.position - transform.position;
            
-            if (Vector3.Distance(transform.position, targetObject.transform.position) <= 30f)
+            if (Vector3.Distance(transform.position, target.transform.position) <= 30f)
             {
                 rb.angularVelocity = Vector3.zero;
                 rb.AddForce(directionToTarget * maxSpeed);
@@ -78,6 +80,7 @@ public class HomingBullet : BulletBase
     }
     private void GetClosestEnemy()
     {
+        target = null;
         float minDist = Mathf.Infinity;
 
         if (SM.enemiesAlive.Count > 0)
@@ -88,7 +91,7 @@ public class HomingBullet : BulletBase
                 float dist = Vector3.Distance(enemy.transform.position, transform.position);
                 if (dist < minDist)
                 {
-                    targetObject = enemy;
+                    target = enemy;
                     minDist = dist;
                 }
             }
@@ -96,9 +99,9 @@ public class HomingBullet : BulletBase
     }
     private void OnDrawGizmos()
     {
-        if(targetObject != null)
+        if(target!= null)
         {
-            Gizmos.DrawLine(transform.position, targetObject.transform.position);
+            Gizmos.DrawLine(transform.position,target.transform.position);
         }
     }
 }

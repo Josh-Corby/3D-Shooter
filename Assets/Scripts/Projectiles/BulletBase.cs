@@ -5,11 +5,8 @@ using UnityEngine;
 public class BulletBase : GameBehaviour
 {
     public float damage;
-    public float speed;
     public bool hasRigidbody;
     public bool isSpawnedProjectile;
-
-    public Vector3 target { get; set; }
 
     public virtual void Start()
     {
@@ -20,10 +17,6 @@ public class BulletBase : GameBehaviour
         }
     }
 
-    public virtual void Update()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
-    }
     public virtual void ValidateValues()
     {
         if(damage == 0)
