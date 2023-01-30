@@ -11,17 +11,19 @@ public class ThirdPersonMovement : MonoBehaviour
     public float walkSpeed = 6f;
     public float sprintSpeed = 10;
     public float gravity = -9.81f;
+
     public float jumpHeight = 3f;
+    public int midAirJumpCount;
+    public int midAirJumpsLeft;
+
+    private float coyoteTime = 0.5f;
+    public float coyoteTimeCounter;
+
     public Transform groundCheck;
-    public float groundDistance = 0.4f;
+    private float groundDistance = 0.4f;
     public LayerMask groundMask;
-    public bool isGrounded;
-    Vector3 velocity;
+    private Vector3 velocity;
     private Vector2 movementVector;
-
-    public float turnSmoothTime = 0.1f;
-    float turnSmoothVelocity;
-
     private void Start()
     {
         currentMoveSpeed = walkSpeed;
@@ -36,10 +38,19 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void PlayerMove()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if (isGrounded && velocity.y < 0)
+        if (IsGrounded())
         {
-            velocity.y = -2f;
+            ResetMidairJumps();
+            coyoteTimeCounter = coyoteTime;
+
+            if(velocity.y < 0)
+            {
+                velocity.y = -2f;
+            }
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
         }
 
         if (movementVector.magnitude >= 0.1f)
@@ -47,10 +58,14 @@ public class ThirdPersonMovement : MonoBehaviour
             float targetAngle = Mathf.Atan2(movementVector.x, movementVector.y) * Mathf.Rad2Deg + cam.eulerAngles.y;           
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             controller.Move(moveDir.normalized * currentMoveSpeed * Time.deltaTime);
-
         }
+
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+    }
+    private bool IsGrounded()
+    {
+        return Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
     }
 
     private void ToggleSprint()
@@ -66,10 +81,34 @@ public class ThirdPersonMovement : MonoBehaviour
     }
     public void Jump()
     {
-        if (isGrounded)
+        if (coyoteTimeCounter > 0f)
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                JumpForce();         
         }
+        else
+        {
+            if (midAirJumpsLeft > 0)
+            {
+                midAirJumpsLeft -= 1;
+                JumpForce();
+            }
+        }
+    }
+
+    private void JumpForce()
+    {
+        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        ResetCoyoteTimer();
+    }
+
+    private void ResetCoyoteTimer()
+    {
+        coyoteTimeCounter = 0;
+    }
+
+    private void ResetMidairJumps()
+    {
+        midAirJumpsLeft = midAirJumpCount;    
     }
     public void RecieveInput(Vector2 input)
     {

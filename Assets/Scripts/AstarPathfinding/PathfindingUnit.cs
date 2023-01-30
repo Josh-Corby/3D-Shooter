@@ -28,6 +28,10 @@ public class PathfindingUnit : GameBehaviour
     public List<GameObject> wallsToPlayer = new List<GameObject>();
     public LayerMask groundMask;
 
+    private void Awake()
+    {
+        target = PM.gameObject.transform;
+    }
     public void StartUpdatingPath()
     {
         updatePath = StartCoroutine(UpdatePath());

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 
-public class InputManager : MonoBehaviour
+public class InputManager : GameBehaviour<InputManager>
 {
     public static event Action Jump = null;
     public static event Action Fire = null;
@@ -11,7 +11,7 @@ public class InputManager : MonoBehaviour
     ThirdPersonMovement movement;
     PlayerInput controls;
     PlayerInput.InputActions inputActions;
-    public Vector2 movementVector;
+    public Vector2 movementVector, cameraInput;
 
     private void OnEnable()
     {
@@ -22,16 +22,20 @@ public class InputManager : MonoBehaviour
         if (controls == null)
         {
             controls = new PlayerInput();
-            EnableControls();
+
             controls.Input.Movement.performed += i => Move(i.ReadValue<Vector2>());
-            controls.Input.Look.performed += i => Look(i.ReadValue<Vector2>());
+            controls.Input.Look.performed += i => cameraInput = i.ReadValue<Vector2>();
+
             controls.Input.Jump.performed += i => Jump?.Invoke();
+
             controls.Input.Sprint.performed += i => ToggleSprint?.Invoke();
             controls.Input.Sprint.canceled += i => ToggleSprint?.Invoke();
 
             controls.Input.Fire.performed += i => Fire?.Invoke();
             controls.Input.Fire.canceled += i => StopFiring?.Invoke();
 
+            EnableControls();
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
@@ -39,10 +43,7 @@ public class InputManager : MonoBehaviour
     {
         movement.RecieveInput(direction);
     }
-    void Look(Vector2 direction)
-    {
-        
-    }
+
     private void OnDisable()
     {
         DisableControls();

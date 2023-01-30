@@ -21,7 +21,7 @@ public class GunBase : GameBehaviour
     public float distanceToTarget;
 
     #region GunStats
-    [SerializeField] private GameObject bulletToFire;
+    private GameObject bulletToFire;
     [Header("Firing Options")]
     private float shootForce;
     private float timeBetweenShots;
@@ -147,7 +147,7 @@ public class GunBase : GameBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, mask))
         {
             distanceToTarget = hit.distance;
-            Debug.Log(hit.collider.gameObject);
+            //Debug.Log(hit.collider.gameObject);
             targetPoint = hit.point;
         }
         else

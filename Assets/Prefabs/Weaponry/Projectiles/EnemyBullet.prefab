@@ -111,9 +111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb9ef9958fe22c541b8be3babba41a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 2
+  bulletInfo: {fileID: 11400000, guid: ee77f947084373e43a2b6397e8fbf072, type: 2}
   hasRigidbody: 1
-  isSpawnedProjectile: 0
 --- !u!54 &-4381053921171328540
 Rigidbody:
   m_ObjectHideFlags: 0
