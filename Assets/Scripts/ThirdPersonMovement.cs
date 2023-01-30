@@ -16,7 +16,7 @@ public class ThirdPersonMovement : MonoBehaviour
     public int midAirJumpCount;
     public int midAirJumpsLeft;
 
-    private float coyoteTime = 0.5f;
+    private float coyoteTime = 0.1f;
     public float coyoteTimeCounter;
 
     public Transform groundCheck;
@@ -77,7 +77,6 @@ public class ThirdPersonMovement : MonoBehaviour
     private void LookFoward()
     {
         transform.rotation = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0);
-
     }
     public void Jump()
     {
@@ -97,14 +96,11 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void JumpForce()
     {
-        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        ResetCoyoteTimer();
+        coyoteTimeCounter = 0f;
+        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);   
     }
 
-    private void ResetCoyoteTimer()
-    {
-        coyoteTimeCounter = 0;
-    }
+
 
     private void ResetMidairJumps()
     {

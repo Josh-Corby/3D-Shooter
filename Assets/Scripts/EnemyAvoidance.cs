@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class EnemyAvoidance : MonoBehaviour
 {
-    private EnemyBase unit;
+    private PathfindingUnit unit;
     private void Awake()
     {
-        unit = GetComponentInParent<EnemyBase>();
+        unit = GetComponentInParent<PathfindingUnit>();
     }
 
     private void OnTriggerEnter(Collider other)

@@ -88,7 +88,6 @@ public class Grid : MonoBehaviour
 
         int[,,] penaltiesXPass = new int[gridSizeX, gridSizeY, gridSizeZ];
         int[,,] penaltiesZPass = new int[gridSizeX, gridSizeY, gridSizeZ];
-        int[,,] penaltiesYPass = new int[gridSizeX, gridSizeY, gridSizeZ];
 
         //Y axis blur pass (first blur pass)
         for (int y = 0; y < gridSizeY; y++)
@@ -134,45 +133,6 @@ public class Grid : MonoBehaviour
             }
         }
 
-        ////X axis blur pass(second pass)
-        //for (int x = 0; x < gridSizeX; x++)
-        //{
-        //    for (int z = 0; z < gridSizeZ; z++)
-        //    {
-        //        for (int y = -kernalExtents; y < kernalExtents; y++)
-        //        {
-        //            int sampleY = Mathf.Clamp(y, 0, kernalExtents);
-        //            penaltiesXPass[x, 0, z] += grid[x, sampleY, z].movementPenalty;
-        //        }
-
-        //        for (int y = 1; y < gridSizeY; y++)
-        //        {
-        //            int removeIndex = Mathf.Clamp(y - kernalExtents - 1, 0, gridSizeY);
-        //            int addIndex = Mathf.Clamp(y + kernalExtents, 0, gridSizeY - 1);
-
-        //            penaltiesXPass[x, y, z] = penaltiesXPass[x, y - 1, z] - grid[x, removeIndex, z].movementPenalty + grid[x, addIndex, z].movementPenalty;
-        //        }
-        //    }
-
-        //    for (int y = 0; y < gridSizeY; y++)
-        //    {
-        //        for (int z = -kernalExtents; z < kernalExtents; z++)
-        //        {
-        //            int sampleZ = Mathf.Clamp(z, 0, kernalExtents);
-        //            penaltiesZPass[x, y, 0] += penaltiesXPass[x, y, sampleZ];
-        //        }
-
-        //        for (int z = 1; z < gridSizeZ; z++)
-        //        {
-        //            int removeIndex = Mathf.Clamp(z - kernalExtents - 1, 0, gridSizeZ);
-        //            int addIndex = Mathf.Clamp(z + kernalExtents, 0, gridSizeZ - 1);
-
-        //            penaltiesZPass[x, y, z] = penaltiesZPass[x, y, z - 1] - penaltiesXPass[x, y, removeIndex] + penaltiesXPass[x, y, addIndex];
-        //            int blurredPenalty = Mathf.RoundToInt((float)penaltiesZPass[x, y, z] / kernalSize * kernalSize);
-        //            grid[x, y, z].movementPenalty = blurredPenalty;
-        //        }
-        //    }
-        //}
     }
 
     public List<Node> GetNeighbours(Node node)

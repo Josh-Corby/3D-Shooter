@@ -10,7 +10,6 @@ public class PathfindingUnit : GameBehaviour
     const float pathUpdateMoveThreshold = 0.5f;
 
     public Transform target;
-    public float speed;
     public float turnDst = 5;
     public float turnSpeed = 3;
     public float stoppingDst = 10;
@@ -25,6 +24,13 @@ public class PathfindingUnit : GameBehaviour
     private Coroutine followPath;
     public Grid currentGrid;
 
+    [Header("Movement Options")]
+    [SerializeField] private bool moveTowardsPlayer;
+    [SerializeField] private bool spin;
+    [SerializeField] private int verticalDstToMaintain;
+
+    [SerializeField] private float separationStrength = 1f;
+    public List<GameObject> objectsToAvoid = new List<GameObject>();
     public List<GameObject> wallsToPlayer = new List<GameObject>();
     public LayerMask groundMask;
 
@@ -57,10 +63,21 @@ public class PathfindingUnit : GameBehaviour
         if (followPath != null)
         {
             StopCoroutine(followPath);
-
         }
     }
 
+    public void CheckPath()
+    {
+        if (path.Length > 1)
+        {
+            StopPathfinding();
+        }
+    }
+
+    private void Update()
+    {
+        PathfindingMovement();
+    }
     public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
     {
         if (pathSuccessful)
@@ -98,7 +115,7 @@ public class PathfindingUnit : GameBehaviour
             }
         }
     }
-    IEnumerator FollowPath()
+    private IEnumerator FollowPath()
     {
         targetIndex = 0;
         followingPath = true;
@@ -124,7 +141,7 @@ public class PathfindingUnit : GameBehaviour
                 //transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
                 //transform.Translate(Vector3.forward * Time.deltaTime * speed);
 
-                unit.transform.position = Vector3.MoveTowards(unit.transform.position, currentWaypoint, speed * Time.deltaTime);
+                unit.transform.position = Vector3.MoveTowards(unit.transform.position, currentWaypoint, unit.moveSpeed * Time.deltaTime);
                 unit.transform.LookAt(currentWaypoint);
             }
             yield return null;
@@ -147,9 +164,69 @@ public class PathfindingUnit : GameBehaviour
         }
         else if (wallsToPlayer.Count == 0)
         {
-            unit.isPathfinding = false;
             StopPathfinding();
             currentGrid = null;
+        }
+    }
+
+    private void CollisionAvoidance()
+    {
+        if (objectsToAvoid != null)
+        {
+            Vector3 separationForce = Vector3.zero;
+            for (int i = 0; i < objectsToAvoid.Count; i++)
+            {
+                if (objectsToAvoid[i] == null)
+                {
+                    objectsToAvoid.Remove(objectsToAvoid[i]);
+                    continue;
+                }
+                Vector3 distance = transform.position - objectsToAvoid[i].transform.position;
+                separationForce += distance.normalized / distance.magnitude;
+            }
+            separationForce = separationForce.normalized * separationStrength;
+            unit.transform.position += separationForce * Time.deltaTime * unit.moveSpeed;
+        }
+    }
+
+    private void PathfindingMovement()
+    {
+        if (spin)
+        {
+            unit.transform.Rotate(0, 1, 0, Space.Self);
+        }
+        if (moveTowardsPlayer)
+        {
+            CollisionAvoidance();
+
+            if (unit.playerDetected)
+            {
+                if (unit.CanSeePlayer() || currentGrid == null)
+                {
+                    CheckPath();
+                    if (unit.flying)
+                    {
+                        if(verticalDstToMaintain < unit.verticalDstToPlayer)
+                        {
+                            //maintain vertical distance to player
+                            float verticalDstToMove = verticalDstToMaintain - unit.verticalDstToPlayer;
+                            Vector3 targetPosition = new Vector3(transform.position.x, transform.position.y + verticalDstToMove, transform.position.z);
+                            unit.transform.position = Vector3.MoveTowards(transform.position, targetPosition, unit.verticalMoveSpeed * Time.deltaTime);
+                        }          
+                    }
+                    //movetowards player
+                    if (unit.sqrLenToPlayer > unit.sqrDstToMaintain)
+                    {
+                        unit.transform.position = Vector3.MoveTowards(transform.position, new Vector3(PM.transform.position.x, transform.position.y, PM.transform.position.z), Time.deltaTime * unit.moveSpeed);
+                    }
+                }
+                else
+                {
+                    ResetPathFinding();
+
+                }
+
+            }
         }
     }
 

@@ -8,6 +8,7 @@ public class InputManager : GameBehaviour<InputManager>
     public static event Action Fire = null;
     public static event Action StopFiring = null;
     public static event Action ToggleSprint = null;
+
     ThirdPersonMovement movement;
     PlayerInput controls;
     PlayerInput.InputActions inputActions;
@@ -27,6 +28,7 @@ public class InputManager : GameBehaviour<InputManager>
             controls.Input.Look.performed += i => cameraInput = i.ReadValue<Vector2>();
 
             controls.Input.Jump.performed += i => Jump?.Invoke();
+
 
             controls.Input.Sprint.performed += i => ToggleSprint?.Invoke();
             controls.Input.Sprint.canceled += i => ToggleSprint?.Invoke();
