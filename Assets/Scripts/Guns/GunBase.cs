@@ -54,6 +54,11 @@ public class GunBase : GameBehaviour
         InputManager.StopFiring += CancelFireInput;
     }
 
+    private void OnDisable()
+    {
+        InputManager.Fire -= RecieveFireInput;
+        InputManager.StopFiring -= CancelFireInput;
+    }
     protected virtual void Update()
     {
         FindTarget();

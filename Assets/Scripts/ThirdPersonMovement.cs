@@ -26,9 +26,21 @@ public class ThirdPersonMovement : MonoBehaviour
     private Vector2 movementVector;
     private void Start()
     {
-        currentMoveSpeed = walkSpeed;
+        currentMoveSpeed = walkSpeed;      
+    }
+
+    private void OnEnable()
+    {
         InputManager.Jump += Jump;
         InputManager.ToggleSprint += ToggleSprint;
+        InputManager.Move += RecieveInput;
+    }
+
+    private void OnDisable()
+    {
+        InputManager.Jump -= Jump;
+        InputManager.ToggleSprint -= ToggleSprint;
+        InputManager.Move -= RecieveInput;
     }
     private void Update()
     {

@@ -71,6 +71,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeWeapon"",
+                    ""type"": ""Value"",
+                    ""id"": ""dd9fc4f7-e142-4bea-a05b-ec5e53e92b7e"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -260,6 +269,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e1433bf-9332-4cac-8522-0a1171236066"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -290,6 +310,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_Input_Fire = m_Input.FindAction("Fire", throwIfNotFound: true);
         m_Input_Sprint = m_Input.FindAction("Sprint", throwIfNotFound: true);
         m_Input_Look = m_Input.FindAction("Look", throwIfNotFound: true);
+        m_Input_ChangeWeapon = m_Input.FindAction("ChangeWeapon", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -354,6 +375,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_Input_Fire;
     private readonly InputAction m_Input_Sprint;
     private readonly InputAction m_Input_Look;
+    private readonly InputAction m_Input_ChangeWeapon;
     public struct InputActions
     {
         private @PlayerInput m_Wrapper;
@@ -363,6 +385,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Input_Fire;
         public InputAction @Sprint => m_Wrapper.m_Input_Sprint;
         public InputAction @Look => m_Wrapper.m_Input_Look;
+        public InputAction @ChangeWeapon => m_Wrapper.m_Input_ChangeWeapon;
         public InputActionMap Get() { return m_Wrapper.m_Input; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -387,6 +410,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Look.started -= m_Wrapper.m_InputActionsCallbackInterface.OnLook;
                 @Look.performed -= m_Wrapper.m_InputActionsCallbackInterface.OnLook;
                 @Look.canceled -= m_Wrapper.m_InputActionsCallbackInterface.OnLook;
+                @ChangeWeapon.started -= m_Wrapper.m_InputActionsCallbackInterface.OnChangeWeapon;
+                @ChangeWeapon.performed -= m_Wrapper.m_InputActionsCallbackInterface.OnChangeWeapon;
+                @ChangeWeapon.canceled -= m_Wrapper.m_InputActionsCallbackInterface.OnChangeWeapon;
             }
             m_Wrapper.m_InputActionsCallbackInterface = instance;
             if (instance != null)
@@ -406,6 +432,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
+                @ChangeWeapon.started += instance.OnChangeWeapon;
+                @ChangeWeapon.performed += instance.OnChangeWeapon;
+                @ChangeWeapon.canceled += instance.OnChangeWeapon;
             }
         }
     }
@@ -426,5 +455,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
+        void OnChangeWeapon(InputAction.CallbackContext context);
     }
 }

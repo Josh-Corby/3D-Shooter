@@ -10,6 +10,8 @@ public class CameraTransform : GameBehaviour
     [HideInInspector]
     public Cinemachine3rdPersonFollow CamFollow;
 
+    private Vector2 input;
+
     [Range(1, 10)]
     public float Sensitivity;
 
@@ -31,6 +33,16 @@ public class CameraTransform : GameBehaviour
     private void Awake()
     {
         CamFollow = _vcam.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+    }
+
+    private void OnEnable()
+    {
+        InputManager.Look += RecieveInput;
+    }
+
+    private void OnDisable()
+    {
+        InputManager.Look -= RecieveInput;
     }
 
     private void Start()
@@ -55,6 +67,10 @@ public class CameraTransform : GameBehaviour
         _vcam.LookAt = gameObject.transform;
     }
 
+    private void RecieveInput(Vector2 _input)
+    {
+        input = _input;
+    }
 
 
     private void CameraRotation()
@@ -62,13 +78,13 @@ public class CameraTransform : GameBehaviour
 
         if (gameObject == null) return;
         // if there is an input and camera position is not fixed
-        if (IM.cameraInput.sqrMagnitude >= _threshold && !LockCameraPosition)
+        if (input.sqrMagnitude >= _threshold && !LockCameraPosition)
         {
             //Don't multiply mouse input by Time.deltaTime;
             float deltaTimeMultiplier = 0.1f;
 
-            _cinemachineTargetYaw += IM.cameraInput.x * deltaTimeMultiplier / _sensitivityDamp * Sensitivity;
-            _cinemachineTargetPitch += -IM.cameraInput.y * deltaTimeMultiplier / _sensitivityDamp * Sensitivity;
+            _cinemachineTargetYaw += input.x * deltaTimeMultiplier / _sensitivityDamp * Sensitivity;
+            _cinemachineTargetPitch += -input.y * deltaTimeMultiplier / _sensitivityDamp * Sensitivity;
         }
 
         // clamp our rotations so our values are limited 360 degrees

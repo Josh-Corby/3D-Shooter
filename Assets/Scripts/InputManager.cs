@@ -8,43 +8,38 @@ public class InputManager : GameBehaviour<InputManager>
     public static event Action Fire = null;
     public static event Action StopFiring = null;
     public static event Action ToggleSprint = null;
+    public static event Action<Vector2> Move = null;
+    public static event Action<Vector2> Scroll = null;
+    public static event Action<Vector2> Look = null;
 
-    ThirdPersonMovement movement;
     PlayerInput controls;
-    PlayerInput.InputActions inputActions;
-    public Vector2 movementVector, cameraInput;
+    public Vector2 scrollInput;
 
     private void OnEnable()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        movement = GetComponent<ThirdPersonMovement>();
         if (controls == null)
         {
             controls = new PlayerInput();
 
             controls.Input.Movement.performed += i => Move(i.ReadValue<Vector2>());
-            controls.Input.Look.performed += i => cameraInput = i.ReadValue<Vector2>();
-
+            controls.Input.Look.performed += i => Look(i.ReadValue<Vector2>());
             controls.Input.Jump.performed += i => Jump?.Invoke();
-
-
             controls.Input.Sprint.performed += i => ToggleSprint?.Invoke();
             controls.Input.Sprint.canceled += i => ToggleSprint?.Invoke();
 
             controls.Input.Fire.performed += i => Fire?.Invoke();
             controls.Input.Fire.canceled += i => StopFiring?.Invoke();
+            controls.Input.ChangeWeapon.performed += i => scrollInput = i.ReadValue<Vector2>() / 120;
 
             EnableControls();
             Cursor.lockState = CursorLockMode.Locked;
         }
     }
 
-    void Move(Vector2 direction)
-    {
-        movement.RecieveInput(direction);
-    }
+
 
     private void OnDisable()
     {
