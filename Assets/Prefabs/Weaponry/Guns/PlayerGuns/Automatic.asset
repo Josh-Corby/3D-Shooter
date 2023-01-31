@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65a998cd2b631a94baf00f143d308369, type: 3}
   m_Name: Automatic
   m_EditorClassIdentifier: 
-  bulletToFire: {fileID: 4634416032413322246, guid: bd61a8f56397f50468c257811306654d, type: 3}
+  bulletToFire: {fileID: 4634416032413322246, guid: e39652e178838184b8d6854111654751, type: 3}
   shootForce: 350
-  timeBetweenShots: 0.1
+  timeBetweenShots: 0.15
   holdToFire: 1
   useSpread: 0
   spreadAmount: 0

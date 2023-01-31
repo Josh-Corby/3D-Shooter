@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBase : GameBehaviour
+public class EnemyBase : GameBehaviour, IDamagable
 {
-    private float maxHealth = 10;
+    public float maxHealth = 10;
     [SerializeField] private float currentHealth;
+    [SerializeField] private EnemyHealthBar healthBar;
+
     [SerializeField] private float fireRange;
     private float sqrFireRange;
     [SerializeField] private float detectionRange;
@@ -22,12 +24,17 @@ public class EnemyBase : GameBehaviour
     [HideInInspector] public float sqrLenToPlayer;
     [HideInInspector] public float verticalDstToPlayer;
 
+    private Vector3 playerPosition;
+
     public bool flying;
 
     public LayerMask detectionMask;
-    private bool canSeePlayer;
+    public bool canSeePlayer;
 
-
+    private void Awake()
+    {
+        healthBar = GetComponentInChildren<EnemyHealthBar>();
+    }
     private void Start()
     {
         currentHealth = maxHealth;
@@ -38,16 +45,27 @@ public class EnemyBase : GameBehaviour
 
     private void Update()
     {
-        dstToPlayer = transform.position - PM.gameObject.transform.position;
+        playerPosition = PM.gameObject.transform.position;
+        dstToPlayer = transform.position - playerPosition;
         sqrLenToPlayer = dstToPlayer.sqrMagnitude;
-        verticalDstToPlayer = transform.position.y - PM.gameObject.transform.position.y;
+        verticalDstToPlayer = transform.position.y - playerPosition.y;
 
         if (sqrLenToPlayer < sqrDetectionRange)
         {
             playerDetected = true;
 
             if (lookAtPlayer)
-                transform.LookAt(PM.gameObject.transform.position);
+            {
+                if (flying)
+                {
+                    transform.LookAt(playerPosition);
+                }
+                else
+                {
+                    Vector3 targetPosition = new Vector3(playerPosition.x, transform.position.y, playerPosition.z);
+                    transform.LookAt(targetPosition);
+                }          
+            }
         }
 
         if (sqrLenToPlayer < sqrFireRange)
@@ -74,14 +92,19 @@ public class EnemyBase : GameBehaviour
         //Debug.Log(canSeePlayer);
         return canSeePlayer;
     }
-    
+
+
     public void Damage(float damage)
     {
         currentHealth -= damage;
-
+        Debug.Log("Enemy hit");
         if (currentHealth <= 0)
         {
             Die();
+        }
+        else
+        {
+            healthBar.SetHP(currentHealth);
         }
     }
     public void Die()
@@ -92,5 +115,4 @@ public class EnemyBase : GameBehaviour
         }
         Destroy(gameObject);
     }
-
 }

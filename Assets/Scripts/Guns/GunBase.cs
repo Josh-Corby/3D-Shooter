@@ -54,10 +54,6 @@ public class GunBase : GameBehaviour
         InputManager.StopFiring += CancelFireInput;
     }
 
-    protected void Start()
-    {
-        ValidateValues();
-    }
     protected virtual void Update()
     {
         FindTarget();
@@ -77,6 +73,7 @@ public class GunBase : GameBehaviour
         burstFire = gun.burstFire;
         bulletsInBurst = gun.bulletsInBurst;
         timeBetweenBurstShots = gun.timeBetweenBurstShots;
+        readyToFire = true;
     }
     protected virtual void CheckForShootCondition()
     {
@@ -97,47 +94,6 @@ public class GunBase : GameBehaviour
         }
     }
 
-    protected void ValidateValues()
-    {
-        readyToFire = true;
-        if (shootForce == 0)
-        {
-            shootForce = 100;
-        }
-        if (timeBetweenShots == 0)
-        {
-            timeBetweenShots = 0.2f;
-        }
-
-        if (burstFire)
-        {
-            if (bulletsInBurst == 0)
-            {
-                bulletsInBurst = 3;
-            }
-
-            if (timeBetweenBurstShots == 0)
-            {
-                timeBetweenBurstShots = 0.1f;
-            }
-        }
-        if (shotgunFire)
-        {
-            shotsInShotgunFire = 5;
-
-            if (!useSpread)
-            {
-                useSpread = true;
-            }
-        }
-        if (useSpread)
-        {
-            if (spreadAmount == 0)
-            {
-                spreadAmount = 0.05f;
-            }
-        }
-    }
 
     protected virtual void FindTarget()
     {
@@ -207,6 +163,7 @@ public class GunBase : GameBehaviour
                 Vector3 directionWithoutSpread = (targetPoint - firePointTransform.position).normalized;
                 GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePoint.transform.position,Vector3.up));
                 bulletGO.GetComponent<Rigidbody>().AddForce(directionWithoutSpread * shootForce, ForceMode.Impulse);
+                bulletGO.transform.forward = directionWithoutSpread;
             }
             if (useSpread)
             {

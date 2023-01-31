@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 662549396922824868}
   - component: {fileID: 5756405216897060145}
   - component: {fileID: 5703146580103465473}
-  - component: {fileID: 6694458844804432800}
+  - component: {fileID: 3429444967919349884}
   m_Layer: 7
   m_Name: HomingBullet
   m_TagString: PlayerAttack
@@ -94,7 +94,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4634416032413322246}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -115,7 +115,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &6694458844804432800
+--- !u!114 &3429444967919349884
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,12 +124,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4634416032413322246}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c75834fa65f75746ae090b76a5b57a4, type: 3}
+  m_Script: {fileID: 11500000, guid: cb9ef9958fe22c541b8be3babba41a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 2
-  hasRigidbody: 1
-  isSpawnedProjectile: 1
-  speed: 10
-  target: {fileID: 0}
-  searchForTarget: 0
+  bulletInfo: {fileID: 0}
+  hasRigidbody: 0

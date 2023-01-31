@@ -6,10 +6,12 @@ public class SpawnManager : GameBehaviour<SpawnManager>
 {
     public Transform spawnCentre;
     public Vector3 spawnSize;
-    public int enemiesToSpawn;
-    public List<GameObject> enemiesAlive = new List<GameObject>();
-    public GameObject[] enemyPrefabs;
+
     public bool spawnEnemies;
+    public int enemiesToSpawn;
+    public GameObject[] enemyPrefabs;
+
+    public List<GameObject> enemiesAlive = new List<GameObject>();
 
     [SerializeField] private LayerMask groundMask;
 

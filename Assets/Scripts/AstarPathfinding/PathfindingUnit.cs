@@ -223,7 +223,14 @@ public class PathfindingUnit : GameBehaviour
                 else
                 {
                     ResetPathFinding();
-
+                }
+                if(!unit.CanSeePlayer() && currentGrid == null)
+                {
+                    //movetowards player
+                    if (unit.sqrLenToPlayer > unit.sqrDstToMaintain)
+                    {
+                        unit.transform.position = Vector3.MoveTowards(transform.position, new Vector3(PM.transform.position.x, transform.position.y, PM.transform.position.z), Time.deltaTime * unit.moveSpeed);
+                    }
                 }
 
             }

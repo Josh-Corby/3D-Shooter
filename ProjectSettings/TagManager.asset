@@ -14,18 +14,18 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Camera
   - Water
   - UI
   - Ground
-  - Bullet
+  - 
   - Player
   - Enemy
   - EnemyAttack
   - PlayerTrigger
   - Unwalkable
   - Smoke
-  - 
+  - PlayerAttack
   - 
   - 
   - 

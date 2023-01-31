@@ -20,7 +20,7 @@ public class CircleAttack : BulletBase
         col = GetComponent<MeshCollider>();
     }
 
-    private void Start()
+    public override void Start()
     {
         CreatePoints();
     }

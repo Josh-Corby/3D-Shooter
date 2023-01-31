@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: EnemyBaseGun
   m_EditorClassIdentifier: 
   bulletToFire: {fileID: 4634416032413322246, guid: 13933afab28d43440b854b31714ef1b9, type: 3}
-  shootForce: 0
-  timeBetweenShots: 0
+  shootForce: 50
+  timeBetweenShots: 1
   holdToFire: 0
   useSpread: 0
-  spread: 0
+  spreadAmount: 0
   shotgunFire: 0
   shotsInShotgunFire: 0
   burstFire: 0

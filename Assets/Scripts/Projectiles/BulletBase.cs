@@ -34,12 +34,17 @@ public class BulletBase : GameBehaviour
     private GameObject homingtarget;
     private bool searchForTarget;
 
+    private Vector3 lastPosition;
+
+    [SerializeField] private LayerMask collisionMask;
+
     private void Awake()
     {
         AssignValues();
     }
     public virtual void Start()
     {
+        lastPosition = transform.position;
         if (isSpawnedProjectile)
         {
             StartCoroutine(ColliderActivateTimer());
@@ -52,6 +57,9 @@ public class BulletBase : GameBehaviour
         {
             HomingCountDown();
         }
+        RaycastToLastPosition();
+
+        lastPosition = transform.position;
     }
     private void AssignValues()
     {
@@ -81,36 +89,34 @@ public class BulletBase : GameBehaviour
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
         }
     }
-    private void OnCollisionEnter(Collision collision)
+    private void RaycastToLastPosition()
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        RaycastHit[] hits = Physics.RaycastAll(new Ray( transform.position, (transform.position - lastPosition).normalized), (transform.position - lastPosition).magnitude, collisionMask);
+
+        if(hits.Length > 1)
         {
-            if (splittingProjectile)
+            GameObject closestUnit = null;
+            float closestHit = float.MaxValue;
+            for (int i = 0; i < hits.Length; i++)
             {
-                Split();
+                Debug.Log(hits[i].collider.gameObject.name);
+                float distanceToLastPosition = (hits[i].transform.position - lastPosition).magnitude;
+                if (distanceToLastPosition < closestHit)
+                {
+                    closestHit = distanceToLastPosition;
+                    closestUnit = hits[i].collider.gameObject;
+                }
             }
-            DamageEnemy(collision.gameObject);
+
+            ProcessCollision(closestUnit);
         }
-        else
+        if (hits.Length == 1)
         {
-            Destroy(gameObject);
+            //Debug.Log(hits[0].collider.gameObject.name);
+            ProcessCollision(hits[0].collider.gameObject);
         }
+        
     }
-    protected void DamageEnemy(GameObject enemy)
-    {
-        enemy.GetComponent<EnemyBase>().Damage(damage);
-        Destroy(gameObject);
-    }
-
-    public IEnumerator ColliderActivateTimer()
-    {
-        SphereCollider collider = GetComponent<SphereCollider>();
-        collider.enabled = false;
-        yield return new WaitForSeconds(0.5f);
-        collider.enabled = true;
-    }
-
-
     private void MoveTowardsTarget()
     {
         if (homingtarget == null)
@@ -181,5 +187,41 @@ public class BulletBase : GameBehaviour
             spawnedBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread * splitForce, ForceMode.Impulse);
             spawnedBullet.GetComponent<BulletBase>().damage = (damage / 2);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        ProcessCollision(other.gameObject);
+    }
+
+    private void ProcessCollision(GameObject collider)
+    {
+        if (!collider.TryGetComponent<IDamagable>(out var interactable))
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        interactable.Damage(damage);
+
+        BulletEffects();
+        Destroy(gameObject);
+    }
+
+    private void BulletEffects()
+    {
+        if (splittingProjectile)
+        {
+            Split();
+        }
+
+    }
+
+    public IEnumerator ColliderActivateTimer()
+    {
+        SphereCollider collider = GetComponent<SphereCollider>();
+        collider.enabled = false;
+        yield return new WaitForSeconds(0.5f);
+        collider.enabled = true;
     }
 }

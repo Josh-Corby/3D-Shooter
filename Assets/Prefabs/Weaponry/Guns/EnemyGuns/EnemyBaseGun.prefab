@@ -46,18 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d9c938cc13efee469b7bde6a66a3210, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletToFire: {fileID: 4634416032413322246, guid: 13933afab28d43440b854b31714ef1b9, type: 3}
-  shootForce: 40
-  useSpread: 0
-  spread: 0
-  timeBetweenShots: 0.5
-  holdToFire: 0
-  shotgunFire: 0
-  shotsInShotgunFire: 0
-  burstFire: 0
-  bulletsInBurst: 0
-  timeBetweenBurstShots: 0
-  readyToFire: 0
+  gun: {fileID: 11400000, guid: 5ff9699ae6c5c6d4bb8b4f08d0ab25ec, type: 2}
   targetPoint: {x: 0, y: 0, z: 0}
   mask:
     serializedVersion: 2
