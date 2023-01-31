@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class GunBase : GameBehaviour
 {
+    public bool playerWeapon;
+
 
     [SerializeField]
     protected GunSO gun;
@@ -50,14 +52,20 @@ public class GunBase : GameBehaviour
     }
     private void OnEnable()
     {
-        InputManager.Fire += RecieveFireInput;
-        InputManager.StopFiring += CancelFireInput;
+        if (playerWeapon)
+        {
+            InputManager.Fire += RecieveFireInput;
+            InputManager.StopFiring += CancelFireInput;
+        }    
     }
 
     private void OnDisable()
     {
-        InputManager.Fire -= RecieveFireInput;
-        InputManager.StopFiring -= CancelFireInput;
+        if(playerWeapon)
+        {
+            InputManager.Fire -= RecieveFireInput;
+            InputManager.StopFiring -= CancelFireInput;
+        }     
     }
     protected virtual void Update()
     {

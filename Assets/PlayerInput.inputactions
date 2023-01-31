@@ -54,7 +54,7 @@
                     "name": "ChangeWeapon",
                     "type": "Value",
                     "id": "dd9fc4f7-e142-4bea-a05b-ec5e53e92b7e",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -250,8 +250,8 @@
                 },
                 {
                     "name": "",
-                    "id": "6e1433bf-9332-4cac-8522-0a1171236066",
-                    "path": "<Mouse>/scroll",
+                    "id": "fce49e57-69bd-4c53-a33a-d7f70eeef433",
+                    "path": "<Mouse>/scroll/y",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -10,10 +10,14 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
     private CapsuleCollider col;
     [SerializeField]
     private float iFramesTime;
-    private MeshRenderer renderer;
+    new private MeshRenderer renderer;
     private Color baseColor;
 
     public Grid lastGrid;
+
+    private GameObject currentWeapon;
+    public GameObject[] playerWeapons;
+    private int currentWeaponIndex;
 
     new private void Awake()
     {
@@ -22,10 +26,32 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
         baseColor = renderer.material.color;
     }
 
+    private void OnEnable()
+    {
+        InputManager.Scroll += ChangeWeapons;
+    }
+    private void OnDisable()
+    {
+        InputManager.Scroll -= ChangeWeapons;
+    }
     private void Start()
     {
+        InitializeWeapons();
+
         currentHealth = maxHealth;
     }
+
+    private void InitializeWeapons()
+    {
+        currentWeaponIndex = 0;
+        for (int i = 0; i < playerWeapons.Length-1; i++)
+        {
+            playerWeapons[i].SetActive(false);
+        }
+        currentWeapon = playerWeapons[0];
+        currentWeapon.SetActive(true);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Grid"))
@@ -47,5 +73,36 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
         yield return new WaitForSeconds(iFramesTime);
         col.enabled = true;
         renderer.material.color = baseColor;
+    }
+
+    private void ChangeWeapons(float _input)
+    {
+        if (_input > 0)
+        {
+            currentWeaponIndex -= 1;
+
+            if (currentWeaponIndex < 0)
+            {
+                currentWeaponIndex = playerWeapons.Length - 1;
+            }
+
+            Debug.Log("scroll up");
+        }
+
+        if (_input < 0)
+        {
+            currentWeaponIndex += 1;
+
+            if (currentWeaponIndex > playerWeapons.Length - 1)
+            {
+                currentWeaponIndex = 0;
+            }
+
+            Debug.Log("scroll down");
+        }
+
+        currentWeapon.SetActive(false);
+        currentWeapon = playerWeapons[currentWeaponIndex];
+        currentWeapon.SetActive(true);
     }
 }

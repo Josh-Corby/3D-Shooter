@@ -9,7 +9,7 @@ public class InputManager : GameBehaviour<InputManager>
     public static event Action StopFiring = null;
     public static event Action ToggleSprint = null;
     public static event Action<Vector2> Move = null;
-    public static event Action<Vector2> Scroll = null;
+    public static event Action<float> Scroll = null;
     public static event Action<Vector2> Look = null;
 
     PlayerInput controls;
@@ -32,7 +32,8 @@ public class InputManager : GameBehaviour<InputManager>
 
             controls.Input.Fire.performed += i => Fire?.Invoke();
             controls.Input.Fire.canceled += i => StopFiring?.Invoke();
-            controls.Input.ChangeWeapon.performed += i => scrollInput = i.ReadValue<Vector2>() / 120;
+            controls.Input.ChangeWeapon.performed += i => Scroll(i.ReadValue<float>());
+            //controls.Input.ChangeWeapon.performed += i => scrollInput = i.ReadValue<Vector2>() / 120;
 
             EnableControls();
             Cursor.lockState = CursorLockMode.Locked;
