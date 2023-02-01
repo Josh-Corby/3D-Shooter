@@ -8,6 +8,9 @@ public class GunSO : ScriptableObject
     public GameObject bulletToFire;
     public float damage;
 
+    public int maxAmmo;
+    public int clipSize;
+
     [Header("Firing Options")]
     public float shootForce;
     public float timeBetweenShots;

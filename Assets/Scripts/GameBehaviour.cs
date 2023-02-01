@@ -7,6 +7,7 @@ public class GameBehaviour : Utilities
     protected static SpawnManager SM { get { return SpawnManager.INSTANCE; } }
     protected static PlayerManager PM { get { return PlayerManager.INSTANCE; } }
     protected static InputManager IM { get { return InputManager.INSTANCE; } }
+    protected static UIManager UI { get { return UIManager.INSTANCE; } }
 }
 public class GameBehaviour<T> : GameBehaviour where T : GameBehaviour
 {

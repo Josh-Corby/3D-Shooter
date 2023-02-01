@@ -50,6 +50,7 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
         }
         currentWeapon = playerWeapons[0];
         currentWeapon.SetActive(true);
+        UI.ChangeGunsText(currentWeapon.GetComponent<GunBase>());
     }
 
     private void OnTriggerEnter(Collider other)
@@ -85,8 +86,6 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
             {
                 currentWeaponIndex = playerWeapons.Length - 1;
             }
-
-            //Debug.Log("scroll up");
         }
 
         if (_input < 0)
@@ -97,12 +96,12 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
             {
                 currentWeaponIndex = 0;
             }
-
-            //Debug.Log("scroll down");
         }
 
         currentWeapon.SetActive(false);
         currentWeapon = playerWeapons[currentWeaponIndex];
         currentWeapon.SetActive(true);
+
+        UI.ChangeGunsText(currentWeapon.GetComponent<GunBase>());
     }
 }

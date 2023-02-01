@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletToFire: {fileID: 4634416032413322246, guid: e39652e178838184b8d6854111654751, type: 3}
   damage: 1.5
+  maxAmmo: 50
+  clipSize: 50
   shootForce: 350
   timeBetweenShots: 0.5
   holdToFire: 0

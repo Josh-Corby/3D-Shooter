@@ -7,6 +7,9 @@ public class GunEditor : Editor
     SerializedProperty bulletToFire;
     SerializedProperty damage;
 
+    SerializedProperty maxAmmo;
+    SerializedProperty clipSize;
+
     SerializedProperty shootForce;
     SerializedProperty timeBetweenShots;
     SerializedProperty holdToFire;
@@ -26,6 +29,9 @@ public class GunEditor : Editor
     {
         bulletToFire = serializedObject.FindProperty(nameof(bulletToFire));
         damage = serializedObject.FindProperty(nameof(damage));
+
+        maxAmmo = serializedObject.FindProperty(nameof(maxAmmo));
+        clipSize = serializedObject.FindProperty(nameof(clipSize));
 
         shootForce = serializedObject.FindProperty(nameof(shootForce));
         timeBetweenShots = serializedObject.FindProperty(nameof(timeBetweenShots));
@@ -49,6 +55,9 @@ public class GunEditor : Editor
 
         EditorGUILayout.PropertyField(bulletToFire);
         EditorGUILayout.PropertyField(damage);
+
+        EditorGUILayout.PropertyField(maxAmmo);
+        EditorGUILayout.PropertyField(clipSize);
 
         EditorGUILayout.PropertyField(shootForce);
         EditorGUILayout.PropertyField(timeBetweenShots);

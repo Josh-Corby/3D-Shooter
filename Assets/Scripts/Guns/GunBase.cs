@@ -1,13 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 
 public class GunBase : GameBehaviour
 {
+
     public bool playerWeapon;
-
-
     [SerializeField]
     protected GunSO gun;
     private Camera cam;
@@ -25,10 +22,17 @@ public class GunBase : GameBehaviour
     #region GunStats
     private float damage;
     private GameObject bulletToFire;
+
+    private int maxAmmo;
+    [HideInInspector] public int ammoLeft;
+    [HideInInspector] public int clipSize;
+    [HideInInspector] public int bulletsRemainingInClip;
+
     [Header("Firing Options")]
     private float shootForce;
     private float timeBetweenShots;
     private bool holdToFire;
+
     [Header("Spread Options")]
     private bool useSpread;
     private float spreadAmount;
@@ -57,17 +61,33 @@ public class GunBase : GameBehaviour
         {
             InputManager.Fire += RecieveFireInput;
             InputManager.StopFiring += CancelFireInput;
-        }    
+
+            UI.ChangeGunsText(this);
+        }
     }
 
     private void OnDisable()
     {
-        if(playerWeapon)
+        if (playerWeapon)
         {
             InputManager.Fire -= RecieveFireInput;
             InputManager.StopFiring -= CancelFireInput;
-        }     
+        }
     }
+
+    private void Start()
+    {
+        if (ammoLeft < clipSize)
+        {
+            bulletsRemainingInClip = ammoLeft;
+        }
+        else
+        {
+            bulletsRemainingInClip = clipSize;
+
+        }
+    }
+
     protected virtual void Update()
     {
         FindTarget();
@@ -76,40 +96,83 @@ public class GunBase : GameBehaviour
 
     protected void AssignValues()
     {
+        readyToFire = true;
+
         bulletToFire = gun.bulletToFire;
         damage = gun.damage;
+        maxAmmo = gun.maxAmmo;
+        clipSize = gun.clipSize;
+
         shootForce = gun.shootForce;
         timeBetweenShots = gun.timeBetweenShots;
         holdToFire = gun.holdToFire;
+
         useSpread = gun.useSpread;
         spreadAmount = gun.spreadAmount;
+
         shotgunFire = gun.shotgunFire;
         shotsInShotgunFire = gun.shotsInShotgunFire;
+
         burstFire = gun.burstFire;
         bulletsInBurst = gun.bulletsInBurst;
         timeBetweenBurstShots = gun.timeBetweenBurstShots;
-        readyToFire = true;
+
+        ammoLeft = maxAmmo;
+    }
+    public void LoadGun()
+    {
+        if (ammoLeft > 0)
+        {
+            if (bulletsRemainingInClip > 0)
+            {
+                ammoLeft -= (clipSize - bulletsRemainingInClip);
+            }
+            else
+            {
+                ammoLeft -= clipSize;
+            }
+
+            if (ammoLeft > clipSize)
+            {
+                bulletsRemainingInClip = clipSize;
+            }
+            else
+            {
+                bulletsRemainingInClip = ammoLeft;
+            }
+
+            UI.UpdateGunAmmoText(this);
+        }
+        //if ammo left is greater than 0
+        //take clip size amount of bullets from ammo left
+        //if clip size is larget than ammo left load ammo left bullets
+        //subtract bullets loaded from ammo left
     }
     protected virtual void CheckForShootCondition()
     {
-        if (fireInput && readyToFire && burstFire)
+        if (bulletsRemainingInClip > 0)
         {
-            StartCoroutine(BurstFire());
-        }
-
-        else if (fireInput && readyToFire)
-        {
-            CheckFireType();
-            StartCoroutine(ResetShooting());
-
-            if (!holdToFire)
+            if (fireInput && readyToFire && burstFire)
             {
-                CancelFireInput();
+                StartCoroutine(BurstFire());
+            }
+
+            else if (fireInput && readyToFire)
+            {
+                CheckFireType();
+                StartCoroutine(ResetShooting());
+
+                if (!holdToFire)
+                {
+                    CancelFireInput();
+                }
             }
         }
+        else
+        {
+            return;
+        }
     }
-
-
     protected virtual void FindTarget()
     {
         //Find the exact hit position using a raycast
@@ -128,20 +191,18 @@ public class GunBase : GameBehaviour
 
         transform.LookAt(targetPoint);
     }
-
     private void RecieveFireInput()
     {
         fireInput = true;
     }
-
     private void CancelFireInput()
     {
         fireInput = false;
     }
-
     protected void CheckFireType()
     {
         readyToFire = false;
+        ReduceAmmo();
 
         if (shotgunFire)
         {
@@ -159,8 +220,11 @@ public class GunBase : GameBehaviour
     {
         for (int i = 0; i < bulletsInBurst; i++)
         {
-            CheckFireType();
-            yield return new WaitForSeconds(timeBetweenBurstShots);
+            if (bulletsRemainingInClip > 0)
+            {
+                CheckFireType();
+                yield return new WaitForSeconds(timeBetweenBurstShots);
+            }
         }
         StartCoroutine(ResetShooting());
     }
@@ -176,8 +240,8 @@ public class GunBase : GameBehaviour
             if (!useSpread)
             {
                 Vector3 directionWithoutSpread = (targetPoint - firePointTransform.position).normalized;
-                GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePoint.transform.position,Vector3.up));
-                bulletGO.GetComponent<Rigidbody>().AddForce(directionWithoutSpread * shootForce, ForceMode.Impulse);              
+                GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePoint.transform.position, Vector3.up));
+                bulletGO.GetComponent<Rigidbody>().AddForce(directionWithoutSpread * shootForce, ForceMode.Impulse);
                 bulletGO.transform.forward = directionWithoutSpread;
                 bulletGO.GetComponent<BulletBase>().damage = damage;
             }
@@ -207,7 +271,7 @@ public class GunBase : GameBehaviour
         }
         else
         {
-            GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePointTransform.position,Vector3.up));
+            GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePointTransform.position, Vector3.up));
             bulletGO.GetComponent<BulletBase>().damage = damage;
         }
         firePointTransform.DetachChildren();
@@ -216,5 +280,14 @@ public class GunBase : GameBehaviour
     {
         yield return new WaitForSeconds(timeBetweenShots);
         readyToFire = true;
+    }
+    private void ReduceAmmo()
+    {
+        bulletsRemainingInClip -= 1;
+
+        if (playerWeapon)
+        {
+            UI.UpdateGunAmmoText(this);
+        }
     }
 }
