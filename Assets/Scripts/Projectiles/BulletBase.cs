@@ -7,7 +7,8 @@ public class BulletBase : GameBehaviour
     public BulletSO bulletInfo;
 
     private Rigidbody rb;
-    private float damage;
+    [HideInInspector]
+    public float damage;
     [HideInInspector]
     public bool hasRigidbody;
     private bool isSpawnedProjectile;
@@ -28,11 +29,17 @@ public class BulletBase : GameBehaviour
    };
     [Header("Homing Options")]
     private bool homingProjectile;
+    private float maxHomingDistance;
     private float homingSpeed = 10;
     private float maxSpeed = 50;
     private float findTargetWaitTime = 1;
     private GameObject homingtarget;
     private bool searchForTarget;
+
+    [Header("Explosive Options")]
+    private bool explodingProjectile;
+    private float explosionRadius;
+    private float explosionDamage;
 
     private Vector3 lastPosition;
 
@@ -56,6 +63,7 @@ public class BulletBase : GameBehaviour
         if (homingProjectile)
         {
             HomingCountDown();
+            ClampSpeed();
         }
         RaycastToLastPosition();
 
@@ -63,16 +71,23 @@ public class BulletBase : GameBehaviour
     }
     private void AssignValues()
     {
-        damage = bulletInfo.damage;
         hasRigidbody = bulletInfo.hasRigidBody;
+
         splittingProjectile = bulletInfo.splittingProjectile;
         splitBullet = bulletInfo.splitBullet;
         splitForce = bulletInfo.splitForce;
         splitSpread = bulletInfo.splitSpread;
+
         homingProjectile = bulletInfo.homingProjectile;
+        maxHomingDistance = bulletInfo.maxHomingDistance;
         homingSpeed = bulletInfo.homingSpeed;
         maxSpeed = bulletInfo.maxSpeed;
         findTargetWaitTime = bulletInfo.findTargetWaitTime;
+
+        explodingProjectile = bulletInfo.explodingProjectile;
+        explosionRadius = bulletInfo.explosionRadius;
+        explosionDamage = bulletInfo.explosionDamage;
+
         rb = GetComponent<Rigidbody>();
 
 
@@ -91,9 +106,9 @@ public class BulletBase : GameBehaviour
     }
     private void RaycastToLastPosition()
     {
-        RaycastHit[] hits = Physics.RaycastAll(new Ray( transform.position, (transform.position - lastPosition).normalized), (transform.position - lastPosition).magnitude, collisionMask);
+        RaycastHit[] hits = Physics.RaycastAll(new Ray(transform.position, (transform.position - lastPosition).normalized), (transform.position - lastPosition).magnitude, collisionMask);
 
-        if(hits.Length > 1)
+        if (hits.Length > 1)
         {
             GameObject closestUnit = null;
             float closestHit = float.MaxValue;
@@ -115,7 +130,7 @@ public class BulletBase : GameBehaviour
             //Debug.Log(hits[0].collider.gameObject.name);
             ProcessCollision(hits[0].collider.gameObject);
         }
-        
+
     }
     private void MoveTowardsTarget()
     {
@@ -130,10 +145,10 @@ public class BulletBase : GameBehaviour
             transform.LookAt(homingtarget.transform);
             Vector3 directionToTarget = homingtarget.transform.position - transform.position;
 
-            if (Vector3.Distance(transform.position, homingtarget.transform.position) <= 30f)
+            if (Vector3.Distance(transform.position, homingtarget.transform.position) <= 15f)
             {
                 rb.angularVelocity = Vector3.zero;
-                rb.AddForce(directionToTarget * maxSpeed);
+                rb.AddForce(directionToTarget * homingSpeed);
                 return;
             }
             // Apply the force to the missile in the direction it is facing
@@ -143,7 +158,7 @@ public class BulletBase : GameBehaviour
     private void GetClosestEnemy()
     {
         homingtarget = null;
-        float minDist = Mathf.Infinity;
+        float minDist = maxHomingDistance;
 
         if (SM.enemiesAlive.Count > 0)
         {
@@ -171,7 +186,7 @@ public class BulletBase : GameBehaviour
         {
             MoveTowardsTarget();
         }
-        ClampSpeed();
+
     }
     private void Split()
     {
@@ -189,6 +204,20 @@ public class BulletBase : GameBehaviour
         }
     }
 
+    private void Explode()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius, collisionMask);
+        foreach (Collider collider in colliders)
+        {
+            Debug.Log(collider.gameObject.name);
+            if (!collider.TryGetComponent<IDamagable>(out var interactable))
+            {
+                continue;
+            }
+            interactable.Damage(explosionDamage);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         ProcessCollision(other.gameObject);
@@ -196,13 +225,15 @@ public class BulletBase : GameBehaviour
 
     private void ProcessCollision(GameObject collider)
     {
-        if (!collider.TryGetComponent<IDamagable>(out var interactable))
+        if (!explodingProjectile)
         {
-            Destroy(gameObject);
-            return;
+            if (!collider.TryGetComponent<IDamagable>(out var interactable))
+            {
+                Destroy(gameObject);
+                return;
+            }
+            interactable.Damage(damage);
         }
-
-        interactable.Damage(damage);
 
         BulletEffects();
         Destroy(gameObject);
@@ -215,6 +246,10 @@ public class BulletBase : GameBehaviour
             Split();
         }
 
+        if (explodingProjectile)
+        {
+            Explode();
+        }
     }
 
     public IEnumerator ColliderActivateTimer()

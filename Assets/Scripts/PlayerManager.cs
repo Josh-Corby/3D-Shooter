@@ -44,7 +44,7 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
     private void InitializeWeapons()
     {
         currentWeaponIndex = 0;
-        for (int i = 0; i < playerWeapons.Length-1; i++)
+        for (int i = 0; i < playerWeapons.Length; i++)
         {
             playerWeapons[i].SetActive(false);
         }
@@ -86,7 +86,7 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
                 currentWeaponIndex = playerWeapons.Length - 1;
             }
 
-            Debug.Log("scroll up");
+            //Debug.Log("scroll up");
         }
 
         if (_input < 0)
@@ -98,7 +98,7 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
                 currentWeaponIndex = 0;
             }
 
-            Debug.Log("scroll down");
+            //Debug.Log("scroll down");
         }
 
         currentWeapon.SetActive(false);

@@ -6,6 +6,7 @@ using UnityEngine;
 public class GunSO : ScriptableObject
 {
     public GameObject bulletToFire;
+    public float damage;
 
     [Header("Firing Options")]
     public float shootForce;

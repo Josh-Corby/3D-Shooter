@@ -97,7 +97,7 @@ public class EnemyBase : GameBehaviour, IDamagable
     public void Damage(float damage)
     {
         currentHealth -= damage;
-        Debug.Log("Enemy hit");
+        //Debug.Log("Enemy hit");
         if (currentHealth <= 0)
         {
             Die();

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5703146580103465473}
   - component: {fileID: 1382850569530298823}
   m_Layer: 14
-  m_Name: Automatic
+  m_Name: PlayerRigidBodyBullet
   m_TagString: PlayerAttack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

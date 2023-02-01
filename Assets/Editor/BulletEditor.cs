@@ -5,7 +5,6 @@ public class BulletEditor : Editor
 {
     #region SerializedProperties
 
-    SerializedProperty damage;
     SerializedProperty hasRigidBody;
 
     SerializedProperty splittingProjectile;
@@ -14,25 +13,35 @@ public class BulletEditor : Editor
     SerializedProperty splitSpread;
 
     SerializedProperty homingProjectile;
+    SerializedProperty maxHomingDistance;
     SerializedProperty homingSpeed;
     SerializedProperty maxSpeed;
     SerializedProperty findTargetWaitTime;
+
+    SerializedProperty explodingProjectile;
+    SerializedProperty explosionRadius;
+    SerializedProperty explosionDamage;
     #endregion
 
+    private int UISpace = 7;
     private void OnEnable()
     {
-        damage = serializedObject.FindProperty("damage");
-        hasRigidBody = serializedObject.FindProperty("hasRigidBody");
+        hasRigidBody = serializedObject.FindProperty(nameof(hasRigidBody));
 
-        splittingProjectile = serializedObject.FindProperty("splittingProjectile");
-        splitBullet = serializedObject.FindProperty("splitBullet");
-        splitForce = serializedObject.FindProperty("splitForce");
-        splitSpread = serializedObject.FindProperty("splitSpread");
+        splittingProjectile = serializedObject.FindProperty(nameof(splittingProjectile));
+        splitBullet = serializedObject.FindProperty(nameof(splitBullet));
+        splitForce = serializedObject.FindProperty(nameof(splitForce));
+        splitSpread = serializedObject.FindProperty(nameof(splitSpread));
 
-        homingProjectile = serializedObject.FindProperty("homingProjectile");
-        homingSpeed = serializedObject.FindProperty("homingSpeed");
-        maxSpeed = serializedObject.FindProperty("maxSpeed");
-        findTargetWaitTime = serializedObject.FindProperty("findTargetWaitTime");
+        homingProjectile = serializedObject.FindProperty(nameof(homingProjectile));
+        maxHomingDistance = serializedObject.FindProperty(nameof(maxHomingDistance));
+        homingSpeed = serializedObject.FindProperty(nameof(homingSpeed));
+        maxSpeed = serializedObject.FindProperty(nameof(maxSpeed));
+        findTargetWaitTime = serializedObject.FindProperty(nameof(findTargetWaitTime));
+
+        explodingProjectile = serializedObject.FindProperty(nameof(explodingProjectile));
+        explosionRadius = serializedObject.FindProperty(nameof(explosionRadius));
+        explosionDamage = serializedObject.FindProperty(nameof(explosionDamage));
     }
 
     public override void OnInspectorGUI()
@@ -41,10 +50,9 @@ public class BulletEditor : Editor
 
         serializedObject.Update();
 
-        EditorGUILayout.PropertyField(damage);
         EditorGUILayout.PropertyField(hasRigidBody);
 
-        EditorGUILayout.Space(7);
+        EditorGUILayout.Space(UISpace);
 
         EditorGUILayout.PropertyField(splittingProjectile);
         if (bullet.splittingProjectile)
@@ -53,17 +61,28 @@ public class BulletEditor : Editor
             EditorGUILayout.PropertyField(splitForce);
             EditorGUILayout.PropertyField(splitSpread);
         }
-        
-        EditorGUILayout.Space(7);
+
+        EditorGUILayout.Space(UISpace);
 
         EditorGUILayout.PropertyField(homingProjectile);
         if (bullet.homingProjectile)
         {
             bullet.hasRigidBody = true;
+            EditorGUILayout.PropertyField(maxHomingDistance);
             EditorGUILayout.PropertyField(homingSpeed);
             EditorGUILayout.PropertyField(maxSpeed);
             EditorGUILayout.PropertyField(findTargetWaitTime);
         }
+
+        EditorGUILayout.Space(UISpace);
+
+        EditorGUILayout.PropertyField(explodingProjectile);
+        if (bullet.explodingProjectile)
+        {
+            EditorGUILayout.PropertyField(explosionRadius);
+            EditorGUILayout.PropertyField(explosionDamage);
+        }
+
         serializedObject.ApplyModifiedProperties();
     }
 }

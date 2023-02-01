@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Bullet", menuName = "New Bullet")]
 public class BulletSO : ScriptableObject
 {
-    public float damage;
     public bool hasRigidBody;
 
     [Header("Split Options")]
@@ -16,7 +15,13 @@ public class BulletSO : ScriptableObject
 
     [Header("Homing Options")]
     public bool homingProjectile;
+    public float maxHomingDistance;
     public float homingSpeed;
     public float maxSpeed;
     public float findTargetWaitTime;
+
+    [Header("Explosive Options")]
+    public bool explodingProjectile;
+    public float explosionRadius;
+    public float explosionDamage;
 }

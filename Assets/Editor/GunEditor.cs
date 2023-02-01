@@ -5,6 +5,7 @@ public class GunEditor : Editor
 {
     #region SerializedProperties
     SerializedProperty bulletToFire;
+    SerializedProperty damage;
 
     SerializedProperty shootForce;
     SerializedProperty timeBetweenShots;
@@ -23,21 +24,22 @@ public class GunEditor : Editor
 
     private void OnEnable()
     {
-        bulletToFire = serializedObject.FindProperty("bulletToFire");
+        bulletToFire = serializedObject.FindProperty(nameof(bulletToFire));
+        damage = serializedObject.FindProperty(nameof(damage));
 
-        shootForce = serializedObject.FindProperty("shootForce");
-        timeBetweenShots = serializedObject.FindProperty("timeBetweenShots");
-        holdToFire = serializedObject.FindProperty("holdToFire");
+        shootForce = serializedObject.FindProperty(nameof(shootForce));
+        timeBetweenShots = serializedObject.FindProperty(nameof(timeBetweenShots));
+        holdToFire = serializedObject.FindProperty(nameof(holdToFire));
 
-        useSpread = serializedObject.FindProperty("useSpread");
-        spreadAmount = serializedObject.FindProperty("spreadAmount");
+        useSpread = serializedObject.FindProperty(nameof(useSpread));
+        spreadAmount = serializedObject.FindProperty(nameof(spreadAmount));
 
-        shotgunFire = serializedObject.FindProperty("shotgunFire");
-        shotsInShotgunFire = serializedObject.FindProperty("shotsInShotgunFire");
+        shotgunFire = serializedObject.FindProperty(nameof(shotgunFire));
+        shotsInShotgunFire = serializedObject.FindProperty(nameof(shotsInShotgunFire));
 
-        burstFire = serializedObject.FindProperty("burstFire");
-        bulletsInBurst = serializedObject.FindProperty("bulletsInBurst");
-        timeBetweenBurstShots = serializedObject.FindProperty("timeBetweenBurstShots");
+        burstFire = serializedObject.FindProperty(nameof(burstFire));
+        bulletsInBurst = serializedObject.FindProperty(nameof(bulletsInBurst));
+        timeBetweenBurstShots = serializedObject.FindProperty(nameof(timeBetweenBurstShots));
     }
     public override void OnInspectorGUI()
     {
@@ -46,6 +48,7 @@ public class GunEditor : Editor
         serializedObject.Update();
 
         EditorGUILayout.PropertyField(bulletToFire);
+        EditorGUILayout.PropertyField(damage);
 
         EditorGUILayout.PropertyField(shootForce);
         EditorGUILayout.PropertyField(timeBetweenShots);

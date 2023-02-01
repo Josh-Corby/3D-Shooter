@@ -10,15 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b2d7d0fbb51300469aa2df44d9e4ee7, type: 3}
-  m_Name: SemiAutomaticBullet
+  m_Name: HomingBullet
   m_EditorClassIdentifier: 
-  damage: 2
   hasRigidBody: 1
   splittingProjectile: 0
   splitBullet: {fileID: 0}
   splitForce: 10
   splitSpread: 5
-  homingProjectile: 0
-  homingSpeed: 0
-  maxSpeed: 0
-  findTargetWaitTime: 0
+  homingProjectile: 1
+  maxHomingDistance: 60
+  homingSpeed: 60
+  maxSpeed: 60
+  findTargetWaitTime: 0.05
+  explodingProjectile: 0
+  explosionRadius: 0
+  explosionDamage: 0

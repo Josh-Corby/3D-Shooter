@@ -23,6 +23,7 @@ public class GunBase : GameBehaviour
     public float distanceToTarget;
 
     #region GunStats
+    private float damage;
     private GameObject bulletToFire;
     [Header("Firing Options")]
     private float shootForce;
@@ -87,6 +88,7 @@ public class GunBase : GameBehaviour
         bulletsInBurst = gun.bulletsInBurst;
         timeBetweenBurstShots = gun.timeBetweenBurstShots;
         readyToFire = true;
+        damage = gun.damage;
     }
     protected virtual void CheckForShootCondition()
     {
@@ -176,6 +178,7 @@ public class GunBase : GameBehaviour
                 Vector3 directionWithoutSpread = (targetPoint - firePointTransform.position).normalized;
                 GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePoint.transform.position,Vector3.up));
                 bulletGO.GetComponent<Rigidbody>().AddForce(directionWithoutSpread * shootForce, ForceMode.Impulse);
+                bulletGO.GetComponent<BulletBase>().damage = damage;
                 bulletGO.transform.forward = directionWithoutSpread;
             }
             if (useSpread)
