@@ -77,6 +77,7 @@ public class GunBase : GameBehaviour
     protected void AssignValues()
     {
         bulletToFire = gun.bulletToFire;
+        damage = gun.damage;
         shootForce = gun.shootForce;
         timeBetweenShots = gun.timeBetweenShots;
         holdToFire = gun.holdToFire;
@@ -88,7 +89,6 @@ public class GunBase : GameBehaviour
         bulletsInBurst = gun.bulletsInBurst;
         timeBetweenBurstShots = gun.timeBetweenBurstShots;
         readyToFire = true;
-        damage = gun.damage;
     }
     protected virtual void CheckForShootCondition()
     {
@@ -177,9 +177,9 @@ public class GunBase : GameBehaviour
             {
                 Vector3 directionWithoutSpread = (targetPoint - firePointTransform.position).normalized;
                 GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePoint.transform.position,Vector3.up));
-                bulletGO.GetComponent<Rigidbody>().AddForce(directionWithoutSpread * shootForce, ForceMode.Impulse);
-                bulletGO.GetComponent<BulletBase>().damage = damage;
+                bulletGO.GetComponent<Rigidbody>().AddForce(directionWithoutSpread * shootForce, ForceMode.Impulse);              
                 bulletGO.transform.forward = directionWithoutSpread;
+                bulletGO.GetComponent<BulletBase>().damage = damage;
             }
             if (useSpread)
             {
@@ -202,11 +202,13 @@ public class GunBase : GameBehaviour
                 //add random rotation
                 GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, firePointTransform.rotation * spreadRotation);
                 bulletGO.GetComponent<Rigidbody>().AddForce(directionWithSpread * shootForce, ForceMode.Impulse);
+                bulletGO.GetComponent<BulletBase>().damage = damage;
             }
         }
         else
         {
             GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePointTransform.position,Vector3.up));
+            bulletGO.GetComponent<BulletBase>().damage = damage;
         }
         firePointTransform.DetachChildren();
     }
