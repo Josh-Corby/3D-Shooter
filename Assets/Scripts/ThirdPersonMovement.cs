@@ -111,9 +111,6 @@ public class ThirdPersonMovement : MonoBehaviour
         coyoteTimeCounter = 0f;
         velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);   
     }
-
-
-
     private void ResetMidairJumps()
     {
         midAirJumpsLeft = midAirJumpCount;    

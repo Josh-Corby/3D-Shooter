@@ -1,12 +1,9 @@
 using System.Collections;
 using UnityEngine;
-
 public class GunBase : GameBehaviour
 {
-
     public bool playerWeapon;
-    [SerializeField]
-    protected GunSO gun;
+    [SerializeField] protected GunSO gun;
     private Camera cam;
     protected GameObject firePoint;
     protected Transform firePointTransform;
@@ -23,10 +20,11 @@ public class GunBase : GameBehaviour
     private float damage;
     private GameObject bulletToFire;
 
-    private int maxAmmo;
+    [HideInInspector] public int maxAmmo;
     [HideInInspector] public int ammoLeft;
     [HideInInspector] public int clipSize;
     [HideInInspector] public int bulletsRemainingInClip;
+    [HideInInspector] public float reloadTime;
 
     [Header("Firing Options")]
     private float shootForce;
@@ -61,8 +59,8 @@ public class GunBase : GameBehaviour
         {
             InputManager.Fire += RecieveFireInput;
             InputManager.StopFiring += CancelFireInput;
-
-            UI.ChangeGunsText(this);
+            UIManager.OnReloadAnimationDone += Reload;
+            InputManager.Reload += CheckClipForReload;
         }
     }
 
@@ -72,6 +70,8 @@ public class GunBase : GameBehaviour
         {
             InputManager.Fire -= RecieveFireInput;
             InputManager.StopFiring -= CancelFireInput;
+            UIManager.OnReloadAnimationDone -= Reload;
+            InputManager.Reload -= CheckClipForReload;
         }
     }
 
@@ -102,6 +102,7 @@ public class GunBase : GameBehaviour
         damage = gun.damage;
         maxAmmo = gun.maxAmmo;
         clipSize = gun.clipSize;
+        reloadTime = gun.reloadTime;
 
         shootForce = gun.shootForce;
         timeBetweenShots = gun.timeBetweenShots;
@@ -118,35 +119,6 @@ public class GunBase : GameBehaviour
         timeBetweenBurstShots = gun.timeBetweenBurstShots;
 
         ammoLeft = maxAmmo;
-    }
-    public void LoadGun()
-    {
-        if (ammoLeft > 0)
-        {
-            if (bulletsRemainingInClip > 0)
-            {
-                ammoLeft -= (clipSize - bulletsRemainingInClip);
-            }
-            else
-            {
-                ammoLeft -= clipSize;
-            }
-
-            if (ammoLeft > clipSize)
-            {
-                bulletsRemainingInClip = clipSize;
-            }
-            else
-            {
-                bulletsRemainingInClip = ammoLeft;
-            }
-
-            UI.UpdateGunAmmoText(this);
-        }
-        //if ammo left is greater than 0
-        //take clip size amount of bullets from ammo left
-        //if clip size is larget than ammo left load ammo left bullets
-        //subtract bullets loaded from ammo left
     }
     protected virtual void CheckForShootCondition()
     {
@@ -289,5 +261,55 @@ public class GunBase : GameBehaviour
         {
             UI.UpdateGunAmmoText(this);
         }
+
+        if (bulletsRemainingInClip == 0)
+        {
+            Reload();
+        }
+    }
+    private void CheckClipForReload()
+    {
+        if(bulletsRemainingInClip < clipSize)
+        {
+            UI.StartReloading();
+        }
+    }
+    private void Reload()
+    {
+        if (ammoLeft > 0)
+        {
+            if (bulletsRemainingInClip > 0)
+            {
+                ammoLeft -= (clipSize - bulletsRemainingInClip);
+            }
+            else
+            {
+                ammoLeft -= clipSize;
+            }
+
+            if (ammoLeft > clipSize)
+            {
+                bulletsRemainingInClip = clipSize;
+            }
+            else
+            {
+                bulletsRemainingInClip = ammoLeft;
+            }
+
+            UI.UpdateGunAmmoText(this);
+        }
+        //if ammo left is greater than 0
+        //take clip size amount of bullets from ammo left
+        //if clip size is larget than ammo left load ammo left bullets
+        //subtract bullets loaded from ammo left
+    }
+    public void AddAmmo(int amount)
+    {
+        ammoLeft += amount;
+        if (ammoLeft > maxAmmo)
+        {
+            ammoLeft = maxAmmo;
+        }
+        UI.UpdateGunAmmoText(this);
     }
 }

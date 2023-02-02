@@ -10,6 +10,7 @@ public class GunSO : ScriptableObject
 
     public int maxAmmo;
     public int clipSize;
+    public float reloadTime;
 
     [Header("Firing Options")]
     public float shootForce;

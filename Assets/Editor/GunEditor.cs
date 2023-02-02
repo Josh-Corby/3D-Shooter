@@ -9,6 +9,7 @@ public class GunEditor : Editor
 
     SerializedProperty maxAmmo;
     SerializedProperty clipSize;
+    SerializedProperty reloadTime;
 
     SerializedProperty shootForce;
     SerializedProperty timeBetweenShots;
@@ -32,6 +33,7 @@ public class GunEditor : Editor
 
         maxAmmo = serializedObject.FindProperty(nameof(maxAmmo));
         clipSize = serializedObject.FindProperty(nameof(clipSize));
+        reloadTime = serializedObject.FindProperty(nameof(reloadTime));
 
         shootForce = serializedObject.FindProperty(nameof(shootForce));
         timeBetweenShots = serializedObject.FindProperty(nameof(timeBetweenShots));
@@ -58,6 +60,7 @@ public class GunEditor : Editor
 
         EditorGUILayout.PropertyField(maxAmmo);
         EditorGUILayout.PropertyField(clipSize);
+        EditorGUILayout.PropertyField(reloadTime);
 
         EditorGUILayout.PropertyField(shootForce);
         EditorGUILayout.PropertyField(timeBetweenShots);

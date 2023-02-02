@@ -15,7 +15,8 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
 
     public Grid lastGrid;
 
-    private GameObject currentWeapon;
+    [SerializeField] private GameObject currentWeaponObject;
+    [HideInInspector] public GunBase currentWeapon;
     public GameObject[] playerWeapons;
     private int currentWeaponIndex;
 
@@ -48,9 +49,10 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
         {
             playerWeapons[i].SetActive(false);
         }
-        currentWeapon = playerWeapons[0];
-        currentWeapon.SetActive(true);
-        UI.ChangeGunsText(currentWeapon.GetComponent<GunBase>());
+        currentWeaponObject = playerWeapons[0];
+        currentWeapon = currentWeaponObject.GetComponent<GunBase>();
+        currentWeaponObject.SetActive(true);
+        UI.ChangeGunsText(currentWeaponObject.GetComponent<GunBase>());
     }
 
     private void OnTriggerEnter(Collider other)
@@ -98,10 +100,10 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
             }
         }
 
-        currentWeapon.SetActive(false);
-        currentWeapon = playerWeapons[currentWeaponIndex];
-        currentWeapon.SetActive(true);
+        currentWeaponObject.SetActive(false);
+        currentWeaponObject = playerWeapons[currentWeaponIndex];
+        currentWeaponObject.SetActive(true);
 
-        UI.ChangeGunsText(currentWeapon.GetComponent<GunBase>());
+        UI.ChangeGunsText(currentWeaponObject.GetComponent<GunBase>());
     }
 }

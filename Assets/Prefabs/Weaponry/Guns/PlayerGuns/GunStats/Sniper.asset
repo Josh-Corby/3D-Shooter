@@ -16,6 +16,7 @@ MonoBehaviour:
   damage: 10
   maxAmmo: 50
   clipSize: 50
+  reloadTime: 1
   shootForce: 350
   timeBetweenShots: 1.5
   holdToFire: 0
