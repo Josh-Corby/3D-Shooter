@@ -43,8 +43,9 @@ public class UIManager : GameBehaviour<UIManager>
     private void OnEnable()
     {
         GunBase.OnReloadDone += ReloadUI;
-        GunBase.OnBulletFired += UpdateGunAmmoText;
+        GunBase.OnBulletFired += UpdateBulletsRemainingUI;
         GunBase.OnReloadStart += StartReloading;
+        GunBase.OnAmmoAdded += UpdateAmmoLeftUI;
 
         PlayerManager.OnWeaponChange += ChangeGunUI;
         PlayerManager.OnCurrentHealthChange += UpdatePlayerCurrentHealth;
@@ -53,8 +54,9 @@ public class UIManager : GameBehaviour<UIManager>
     private void OnDisable()
     {
         GunBase.OnReloadDone -= ReloadUI;
-        GunBase.OnBulletFired -= UpdateGunAmmoText;
+        GunBase.OnBulletFired -= UpdateBulletsRemainingUI;
         GunBase.OnReloadStart -= StartReloading;
+        GunBase.OnAmmoAdded -= UpdateAmmoLeftUI;
 
         PlayerManager.OnWeaponChange -= ChangeGunUI;
         PlayerManager.OnCurrentHealthChange -= UpdatePlayerCurrentHealth;
@@ -102,35 +104,34 @@ public class UIManager : GameBehaviour<UIManager>
 
     private void ChangeGunUI(GunBase gun)
     {
-        UpdateAmmoUI(gun);
-        gunBulletsRemainingText.text = gun.bulletsRemainingInClip.ToString();
+        UpdateAmmoLeftUI(gun.ammoLeft);
+        UpdateBulletsRemainingUI(gun.bulletsRemainingInClip);
+        UpdateWeaponMaxAmmoText(gun.maxAmmo);
         gunNameText.text = gun.gameObject.name;
-        gunMaxAmmoText.text = gun.maxAmmo.ToString();
         reloadSlider.maxValue = gun.reloadTime;
         reloadSlider.value = reloadSlider.maxValue;
     }
 
     private void ReloadUI(GunBase gun)
     {
-        UpdateAmmoUI(gun);
-        UpdateGunAmmoText(gun.bulletsRemainingInClip);
+        UpdateAmmoLeftUI(gun.ammoLeft);
+        UpdateBulletsRemainingUI(gun.bulletsRemainingInClip);
     }
 
-    public void UpdateGunAmmoText(int value)
+    public void UpdateBulletsRemainingUI(int value)
     {
         gunBulletsRemainingText.text = value.ToString();
     }
 
   
-    private void UpdateAmmoUI(GunBase gun)
+    private void UpdateAmmoLeftUI(int value)
     {
-        gunAmmoLeftText.text = "/" + gun.ammoLeft.ToString();
+        gunAmmoLeftText.text = "/" + value.ToString();
     }
 
-
-    private void UpdateWeaponMaxAmmo(GunBase gun)
+    private void UpdateWeaponMaxAmmoText(int value)
     {
-        gunMaxAmmoText.text = gun.maxAmmo.ToString();
+        gunMaxAmmoText.text = value.ToString();
     }
 
     public void StartReloading()

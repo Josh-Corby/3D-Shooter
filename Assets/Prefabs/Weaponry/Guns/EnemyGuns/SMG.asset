@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65a998cd2b631a94baf00f143d308369, type: 3}
+  m_Name: SMG
+  m_EditorClassIdentifier: 
+  user: 1
+  bulletToFire: {fileID: 4634416032413322246, guid: 13933afab28d43440b854b31714ef1b9, type: 3}
+  damage: 0.1
+  swapInTime: 0
+  maxAmmo: 100
+  clipSize: 10
+  reloadTime: 1
+  shootForce: 75
+  timeBetweenShots: 0.5
+  holdToFire: 0
+  useSpread: 1
+  spreadAmount: 0.04
+  shotgunFire: 0
+  shotsInShotgunFire: 0
+  burstFire: 1
+  bulletsInBurst: 5
+  timeBetweenBurstShots: 0.08

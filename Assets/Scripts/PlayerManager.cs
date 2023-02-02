@@ -33,6 +33,7 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
     private void OnEnable()
     {
         InputManager.Scroll += ChangeWeapons;
+        AmmoPickup.OnAmmoPickup += RestoreAmmo;
     }
     private void OnDisable()
     {
@@ -118,5 +119,9 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
         currentWeaponObject.SetActive(true);
         currentWeapon = currentWeaponObject.GetComponent<GunBase>();
         OnWeaponChange(currentWeapon);
+    }
+    private void RestoreAmmo(int ammoAmount)
+    {
+        currentWeapon.AddAmmo(ammoAmount);
     }
 }

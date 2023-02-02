@@ -5,9 +5,12 @@ using Random = UnityEngine.Random;
 
 public class GunBase : GameBehaviour
 {
-    public static event Action<GunBase> OnReloadDone = null;
-    public static event Action<int> OnBulletFired = null;
     public static event Action OnReloadStart = null;
+    public static event Action<GunBase> OnReloadDone = null;
+
+    public static event Action<int> OnBulletFired = null;
+    public static event Action<int> OnAmmoAdded = null;
+
 
 
     [SerializeField] protected GunSO gun;
@@ -111,7 +114,7 @@ public class GunBase : GameBehaviour
     {
         bulletToFire = gun.bulletToFire;
         damage = gun.damage;
-       
+
 
         user = gun.user;
         if (user == User.Player)
@@ -120,7 +123,7 @@ public class GunBase : GameBehaviour
             clipSize = gun.clipSize;
             reloadTime = gun.reloadTime;
             swapInTime = gun.swapInTime;
-        }  
+        }
 
         shootForce = gun.shootForce;
         timeBetweenShots = gun.timeBetweenShots;
@@ -216,11 +219,17 @@ public class GunBase : GameBehaviour
     {
         for (int i = 0; i < bulletsInBurst; i++)
         {
-            if (bulletsRemainingInClip > 0)
+            if (user == User.Player)
             {
-                CheckFireType();
-                yield return new WaitForSeconds(timeBetweenBurstShots);
+                if (bulletsRemainingInClip < 0)
+                {
+                    break;
+                }
             }
+
+            CheckFireType();
+            yield return new WaitForSeconds(timeBetweenBurstShots);
+
         }
         StartCoroutine(ResetShooting());
     }
@@ -293,7 +302,7 @@ public class GunBase : GameBehaviour
     }
     private void CheckClipForReload()
     {
-        if(bulletsRemainingInClip < clipSize)
+        if (bulletsRemainingInClip < clipSize)
         {
             OnReloadStart?.Invoke();
         }
@@ -302,22 +311,29 @@ public class GunBase : GameBehaviour
     {
         if (ammoLeft > 0)
         {
+            //check for manual reload
             if (bulletsRemainingInClip > 0)
             {
                 ammoLeft -= (clipSize - bulletsRemainingInClip);
             }
+            //forced reload
             else
             {
                 ammoLeft -= clipSize;
             }
 
-            if (ammoLeft > clipSize)
+            if (ammoLeft < 0)
             {
-                bulletsRemainingInClip = clipSize;
+                ammoLeft = 0;
+            }
+
+            if (ammoLeft < clipSize)
+            {
+                bulletsRemainingInClip = ammoLeft;
             }
             else
             {
-                bulletsRemainingInClip = ammoLeft;
+                bulletsRemainingInClip = clipSize;
             }
 
             OnReloadDone(this);
@@ -330,5 +346,7 @@ public class GunBase : GameBehaviour
         {
             ammoLeft = maxAmmo;
         }
+
+        OnAmmoAdded(ammoLeft);
     }
 }
