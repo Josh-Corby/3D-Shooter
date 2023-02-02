@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65a998cd2b631a94baf00f143d308369, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
+  user: 0
   bulletToFire: {fileID: 4634416032413322246, guid: e39652e178838184b8d6854111654751, type: 3}
   damage: 1.5
-  maxAmmo: 50
-  clipSize: 50
+  swapInTime: 0.2
+  maxAmmo: 25
+  clipSize: 5
   reloadTime: 1
   shootForce: 350
   timeBetweenShots: 0.8

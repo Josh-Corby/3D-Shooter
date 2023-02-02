@@ -1,8 +1,15 @@
 using System.Collections;
 using UnityEngine;
+using System;
+using Random = UnityEngine.Random;
+
 public class GunBase : GameBehaviour
 {
-    public bool playerWeapon;
+    public static event Action<GunBase> OnReloadDone = null;
+    public static event Action<int> OnBulletFired = null;
+    public static event Action OnReloadStart = null;
+
+
     [SerializeField] protected GunSO gun;
     private Camera cam;
     protected GameObject firePoint;
@@ -17,29 +24,33 @@ public class GunBase : GameBehaviour
     public float distanceToTarget;
 
     #region GunStats
-    private float damage;
-    private GameObject bulletToFire;
 
+
+    [Header("Gun Stats")]
+    private GameObject bulletToFire;
+    private float damage;
+    private float swapInTime;
+    private User user;
     [HideInInspector] public int maxAmmo;
     [HideInInspector] public int ammoLeft;
     [HideInInspector] public int clipSize;
     [HideInInspector] public int bulletsRemainingInClip;
     [HideInInspector] public float reloadTime;
 
-    [Header("Firing Options")]
+    [Header("Firing Stats")]
     private float shootForce;
     private float timeBetweenShots;
     private bool holdToFire;
 
-    [Header("Spread Options")]
+    [Header("Spread Stats")]
     private bool useSpread;
     private float spreadAmount;
 
-    [Header("Shotgun Options")]
+    [Header("Shotgun Stats")]
     private bool shotgunFire;
     private int shotsInShotgunFire;
 
-    [Header("BurstFire Options")]
+    [Header("BurstFire Stats")]
     protected bool burstFire;
     private int bulletsInBurst;
     private float timeBetweenBurstShots;
@@ -55,18 +66,23 @@ public class GunBase : GameBehaviour
     }
     private void OnEnable()
     {
-        if (playerWeapon)
+        if (user == User.Player)
         {
             InputManager.Fire += RecieveFireInput;
             InputManager.StopFiring += CancelFireInput;
             UIManager.OnReloadAnimationDone += Reload;
             InputManager.Reload += CheckClipForReload;
+
+            StartCoroutine(SwapInTimer());
+        }
+        else
+        {
+            readyToFire = true;
         }
     }
-
     private void OnDisable()
     {
-        if (playerWeapon)
+        if (user == User.Player)
         {
             InputManager.Fire -= RecieveFireInput;
             InputManager.StopFiring -= CancelFireInput;
@@ -74,7 +90,6 @@ public class GunBase : GameBehaviour
             InputManager.Reload -= CheckClipForReload;
         }
     }
-
     private void Start()
     {
         if (ammoLeft < clipSize)
@@ -87,22 +102,25 @@ public class GunBase : GameBehaviour
 
         }
     }
-
     protected virtual void Update()
     {
         FindTarget();
         CheckForShootCondition();
     }
-
     protected void AssignValues()
     {
-        readyToFire = true;
-
         bulletToFire = gun.bulletToFire;
         damage = gun.damage;
-        maxAmmo = gun.maxAmmo;
-        clipSize = gun.clipSize;
-        reloadTime = gun.reloadTime;
+       
+
+        user = gun.user;
+        if (user == User.Player)
+        {
+            maxAmmo = gun.maxAmmo;
+            clipSize = gun.clipSize;
+            reloadTime = gun.reloadTime;
+            swapInTime = gun.swapInTime;
+        }  
 
         shootForce = gun.shootForce;
         timeBetweenShots = gun.timeBetweenShots;
@@ -118,7 +136,13 @@ public class GunBase : GameBehaviour
         bulletsInBurst = gun.bulletsInBurst;
         timeBetweenBurstShots = gun.timeBetweenBurstShots;
 
-        ammoLeft = maxAmmo;
+        ammoLeft = maxAmmo - clipSize;
+    }
+    private IEnumerator SwapInTimer()
+    {
+        readyToFire = false;
+        yield return new WaitForSeconds(swapInTime);
+        readyToFire = true;
     }
     protected virtual void CheckForShootCondition()
     {
@@ -188,7 +212,7 @@ public class GunBase : GameBehaviour
             Shoot();
         }
     }
-    public IEnumerator BurstFire()
+    protected IEnumerator BurstFire()
     {
         for (int i = 0; i < bulletsInBurst; i++)
         {
@@ -257,21 +281,21 @@ public class GunBase : GameBehaviour
     {
         bulletsRemainingInClip -= 1;
 
-        if (playerWeapon)
+        if (user == User.Player)
         {
-            UI.UpdateGunAmmoText(this);
+            OnBulletFired(bulletsRemainingInClip);
         }
 
         if (bulletsRemainingInClip == 0)
         {
-            Reload();
+            OnReloadStart?.Invoke();
         }
     }
     private void CheckClipForReload()
     {
         if(bulletsRemainingInClip < clipSize)
         {
-            UI.StartReloading();
+            OnReloadStart?.Invoke();
         }
     }
     private void Reload()
@@ -296,12 +320,8 @@ public class GunBase : GameBehaviour
                 bulletsRemainingInClip = ammoLeft;
             }
 
-            UI.UpdateGunAmmoText(this);
+            OnReloadDone(this);
         }
-        //if ammo left is greater than 0
-        //take clip size amount of bullets from ammo left
-        //if clip size is larget than ammo left load ammo left bullets
-        //subtract bullets loaded from ammo left
     }
     public void AddAmmo(int amount)
     {
@@ -310,6 +330,5 @@ public class GunBase : GameBehaviour
         {
             ammoLeft = maxAmmo;
         }
-        UI.UpdateGunAmmoText(this);
     }
 }

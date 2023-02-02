@@ -11,10 +11,9 @@ public class EnemyBase : GameBehaviour, IDamagable
     [SerializeField] private float fireRange;
     private float sqrFireRange;
     [SerializeField] private float detectionRange;
-    [HideInInspector]
-    public float sqrDetectionRange;
-    public bool playerDetected;
-    public bool playerInFireRange;
+    [HideInInspector] public float sqrDetectionRange;
+    [HideInInspector] public bool playerDetected;
+    [HideInInspector] public bool playerInFireRange;
     [SerializeField] private bool lookAtPlayer;
     public float moveSpeed;
     public float verticalMoveSpeed;

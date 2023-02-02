@@ -8,6 +8,7 @@ public class GameBehaviour : Utilities
     protected static PlayerManager PM { get { return PlayerManager.INSTANCE; } }
     protected static InputManager IM { get { return InputManager.INSTANCE; } }
     protected static UIManager UI { get { return UIManager.INSTANCE; } }
+    protected static GameManager GM { get { return GameManager.INSTANCE; } }
 }
 public class GameBehaviour<T> : GameBehaviour where T : GameBehaviour
 {

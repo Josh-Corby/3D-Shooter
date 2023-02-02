@@ -23,7 +23,6 @@ public class BulletEditor : Editor
     SerializedProperty explosionDamage;
     #endregion
 
-    private int UISpace = 7;
     private void OnEnable()
     {
         hasRigidBody = serializedObject.FindProperty(nameof(hasRigidBody));
@@ -52,8 +51,6 @@ public class BulletEditor : Editor
 
         EditorGUILayout.PropertyField(hasRigidBody);
 
-        EditorGUILayout.Space(UISpace);
-
         EditorGUILayout.PropertyField(splittingProjectile);
         if (bullet.splittingProjectile)
         {
@@ -61,8 +58,6 @@ public class BulletEditor : Editor
             EditorGUILayout.PropertyField(splitForce);
             EditorGUILayout.PropertyField(splitSpread);
         }
-
-        EditorGUILayout.Space(UISpace);
 
         EditorGUILayout.PropertyField(homingProjectile);
         if (bullet.homingProjectile)
@@ -73,8 +68,6 @@ public class BulletEditor : Editor
             EditorGUILayout.PropertyField(maxSpeed);
             EditorGUILayout.PropertyField(findTargetWaitTime);
         }
-
-        EditorGUILayout.Space(UISpace);
 
         EditorGUILayout.PropertyField(explodingProjectile);
         if (bullet.explodingProjectile)

@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65a998cd2b631a94baf00f143d308369, type: 3}
   m_Name: EnemyBaseGun
   m_EditorClassIdentifier: 
+  user: 1
   bulletToFire: {fileID: 4634416032413322246, guid: 13933afab28d43440b854b31714ef1b9, type: 3}
-  damage: 1
+  damage: 2
   maxAmmo: 100
   clipSize: 10
   reloadTime: 1

@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
 {
+    public static event Action<GunBase> OnWeaponChange;
+    public static event Action<float> OnCurrentHealthChange;
+    public static event Action<float> OnMaxHealthChange;
+
     public float maxHealth;
     public float currentHealth;
     private bool canTakeDamage;
-    private CapsuleCollider col;
     [SerializeField]
     private float iFramesTime;
     new private MeshRenderer renderer;
@@ -22,7 +26,6 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
 
     new private void Awake()
     {
-        col = GetComponent<CapsuleCollider>();
         renderer = GetComponentInParent<MeshRenderer>();
         baseColor = renderer.material.color;
     }
@@ -41,6 +44,9 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
 
         currentHealth = maxHealth;
         canTakeDamage = true;
+
+        OnMaxHealthChange(maxHealth);
+        OnCurrentHealthChange(currentHealth);
     }
 
     private void InitializeWeapons()
@@ -53,7 +59,8 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
         currentWeaponObject = playerWeapons[0];
         currentWeapon = currentWeaponObject.GetComponent<GunBase>();
         currentWeaponObject.SetActive(true);
-        UI.ChangeGunsText(currentWeaponObject.GetComponent<GunBase>());
+
+        OnWeaponChange(currentWeapon);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -71,7 +78,7 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
             currentHealth -= damage;
             StartCoroutine(IFrames());
 
-            UI.UpdatePlayerCurrentHealth(currentHealth);
+            OnCurrentHealthChange(currentHealth);
         }       
     }
 
@@ -109,7 +116,7 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
         currentWeaponObject.SetActive(false);
         currentWeaponObject = playerWeapons[currentWeaponIndex];
         currentWeaponObject.SetActive(true);
-
-        UI.ChangeGunsText(currentWeaponObject.GetComponent<GunBase>());
+        currentWeapon = currentWeaponObject.GetComponent<GunBase>();
+        OnWeaponChange(currentWeapon);
     }
 }

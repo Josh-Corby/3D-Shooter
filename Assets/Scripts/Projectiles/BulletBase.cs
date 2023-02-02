@@ -225,7 +225,7 @@ public class BulletBase : GameBehaviour
 
     private void ProcessCollision(GameObject collider)
     {
-        Debug.Log(collider);
+        //Debug.Log(collider);
         if (!explodingProjectile)
         {
             if (!collider.TryGetComponent<IDamagable>(out var interactable))

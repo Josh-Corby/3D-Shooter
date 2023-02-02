@@ -5,9 +5,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Gun",menuName = "New Gun")]
 public class GunSO : ScriptableObject
 {
+    public User user;
+
+    [Header("Gun Options")]
     public GameObject bulletToFire;
     public float damage;
+    public float swapInTime;
 
+    [Header("Ammo Options")]
     public int maxAmmo;
     public int clipSize;
     public float reloadTime;
@@ -29,3 +34,4 @@ public class GunSO : ScriptableObject
     public int bulletsInBurst;
     public float timeBetweenBurstShots;
 }
+public enum User { Player, Enemy }

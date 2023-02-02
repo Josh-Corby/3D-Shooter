@@ -40,9 +40,36 @@ public class UIManager : GameBehaviour<UIManager>
         reloadSlider = reloadSliderObject.GetComponent<Slider>();
     }
 
+    private void OnEnable()
+    {
+        GunBase.OnReloadDone += ReloadUI;
+        GunBase.OnBulletFired += UpdateGunAmmoText;
+        GunBase.OnReloadStart += StartReloading;
+
+        PlayerManager.OnWeaponChange += ChangeGunUI;
+        PlayerManager.OnCurrentHealthChange += UpdatePlayerCurrentHealth;
+        PlayerManager.OnMaxHealthChange += UpdatePlayerMaxHealth;
+    }
+    private void OnDisable()
+    {
+        GunBase.OnReloadDone -= ReloadUI;
+        GunBase.OnBulletFired -= UpdateGunAmmoText;
+        GunBase.OnReloadStart -= StartReloading;
+
+        PlayerManager.OnWeaponChange -= ChangeGunUI;
+        PlayerManager.OnCurrentHealthChange -= UpdatePlayerCurrentHealth;
+        PlayerManager.OnMaxHealthChange -= UpdatePlayerMaxHealth;
+    }
     private void Start()
     {
         InitializeUI();
+    }
+    private void InitializeUI()
+    {
+
+        isReloading = false;
+        reloadSliderObject.SetActive(false);
+        reloadSlider.value = reloadSlider.maxValue;
     }
 
     private void Update()
@@ -60,19 +87,6 @@ public class UIManager : GameBehaviour<UIManager>
         }
     }
 
-    private void InitializeUI()
-    {
-        UpdatePlayerCurrentHealth(PM.currentHealth);
-        UpdatePlayerMaxHealth(PM.maxHealth);
-
-        playerHealthSlider.maxValue = PM.maxHealth;
-        playerHealthSlider.value = PM.currentHealth;
-
-        isReloading = false;
-        reloadSliderObject.SetActive(false);
-        reloadSlider.value = reloadSlider.maxValue;
-    }
-
     public void UpdatePlayerCurrentHealth(float value)
     {
         playerCurrentHealthText.text = value.ToString();
@@ -85,23 +99,43 @@ public class UIManager : GameBehaviour<UIManager>
         playerHealthSlider.maxValue = value;
     }
 
-    public void ChangeGunsText(GunBase gun)
-    {
-        gunNameText.text = gun.gameObject.name;
-        UpdateGunAmmoText(gun);
-    }
 
-    public void UpdateGunAmmoText(GunBase gun)
+    private void ChangeGunUI(GunBase gun)
     {
+        UpdateAmmoUI(gun);
         gunBulletsRemainingText.text = gun.bulletsRemainingInClip.ToString();
-        gunAmmoLeftText.text = "/" + gun.ammoLeft.ToString();
+        gunNameText.text = gun.gameObject.name;
         gunMaxAmmoText.text = gun.maxAmmo.ToString();
         reloadSlider.maxValue = gun.reloadTime;
         reloadSlider.value = reloadSlider.maxValue;
     }
-    
+
+    private void ReloadUI(GunBase gun)
+    {
+        UpdateAmmoUI(gun);
+        UpdateGunAmmoText(gun.bulletsRemainingInClip);
+    }
+
+    public void UpdateGunAmmoText(int value)
+    {
+        gunBulletsRemainingText.text = value.ToString();
+    }
+
+  
+    private void UpdateAmmoUI(GunBase gun)
+    {
+        gunAmmoLeftText.text = "/" + gun.ammoLeft.ToString();
+    }
+
+
+    private void UpdateWeaponMaxAmmo(GunBase gun)
+    {
+        gunMaxAmmoText.text = gun.maxAmmo.ToString();
+    }
+
     public void StartReloading()
     {
+        reloadSlider.value = reloadSlider.maxValue;
         reloadSliderObject.SetActive(true);
         isReloading = true;
     }

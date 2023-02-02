@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65a998cd2b631a94baf00f143d308369, type: 3}
-  m_Name: RocketLauncher
+  m_Name: EnemyMiniGun
   m_EditorClassIdentifier: 
-  user: 0
-  bulletToFire: {fileID: 4634416032413322246, guid: f174350b0dc0fb44b93fe725b69322ea, type: 3}
-  damage: 0
-  swapInTime: 0.2
-  maxAmmo: 50
-  clipSize: 50
+  user: 1
+  bulletToFire: {fileID: 4634416032413322246, guid: 13933afab28d43440b854b31714ef1b9, type: 3}
+  damage: 0.1
+  swapInTime: 0
+  maxAmmo: 100
+  clipSize: 10
   reloadTime: 1
-  shootForce: 150
-  timeBetweenShots: 3
-  holdToFire: 1
-  useSpread: 0
-  spreadAmount: 0
+  shootForce: 50
+  timeBetweenShots: 0.1
+  holdToFire: 0
+  useSpread: 1
+  spreadAmount: 0.02
   shotgunFire: 0
   shotsInShotgunFire: 0
   burstFire: 0
-  bulletsInBurst: 3
-  timeBetweenBurstShots: 0.1
+  bulletsInBurst: 0
+  timeBetweenBurstShots: 0

@@ -4,8 +4,10 @@ using UnityEditor;
 public class GunEditor : Editor
 {
     #region SerializedProperties
+    SerializedProperty user;
     SerializedProperty bulletToFire;
     SerializedProperty damage;
+    SerializedProperty swapInTime;
 
     SerializedProperty maxAmmo;
     SerializedProperty clipSize;
@@ -28,8 +30,10 @@ public class GunEditor : Editor
 
     private void OnEnable()
     {
+        user = serializedObject.FindProperty(nameof(user));
         bulletToFire = serializedObject.FindProperty(nameof(bulletToFire));
         damage = serializedObject.FindProperty(nameof(damage));
+        swapInTime = serializedObject.FindProperty(nameof(swapInTime));
 
         maxAmmo = serializedObject.FindProperty(nameof(maxAmmo));
         clipSize = serializedObject.FindProperty(nameof(clipSize));
@@ -54,19 +58,29 @@ public class GunEditor : Editor
         GunSO gun = (GunSO)target;
 
         serializedObject.Update();
-
+        EditorGUILayout.PropertyField(user);
         EditorGUILayout.PropertyField(bulletToFire);
         EditorGUILayout.PropertyField(damage);
 
-        EditorGUILayout.PropertyField(maxAmmo);
-        EditorGUILayout.PropertyField(clipSize);
-        EditorGUILayout.PropertyField(reloadTime);
+
+        switch (gun.user)
+        {
+            case User.Player:
+                EditorGUILayout.PropertyField(maxAmmo);
+                EditorGUILayout.PropertyField(clipSize);
+                EditorGUILayout.PropertyField(reloadTime);
+                EditorGUILayout.PropertyField(swapInTime);
+                break;
+        }
 
         EditorGUILayout.PropertyField(shootForce);
         EditorGUILayout.PropertyField(timeBetweenShots);
-        EditorGUILayout.PropertyField(holdToFire);
-
-        EditorGUILayout.Space(7);
+        switch (gun.user)
+        {
+            case User.Player:
+                EditorGUILayout.PropertyField(holdToFire);
+                break;
+        }
 
         EditorGUILayout.PropertyField(burstFire);
         if (gun.burstFire)
@@ -75,7 +89,6 @@ public class GunEditor : Editor
             EditorGUILayout.PropertyField(timeBetweenBurstShots);
         }
 
-        EditorGUILayout.Space(7);
 
         EditorGUILayout.PropertyField(shotgunFire);
         if (gun.shotgunFire)
@@ -84,7 +97,6 @@ public class GunEditor : Editor
             EditorGUILayout.PropertyField(shotsInShotgunFire);
         }
 
-        EditorGUILayout.Space(7);
 
         EditorGUILayout.PropertyField(useSpread);
         if (gun.useSpread)
