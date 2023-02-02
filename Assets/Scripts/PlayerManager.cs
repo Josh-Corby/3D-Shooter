@@ -6,7 +6,7 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
 {
     public float maxHealth;
     public float currentHealth;
-
+    private bool canTakeDamage;
     private CapsuleCollider col;
     [SerializeField]
     private float iFramesTime;
@@ -40,6 +40,7 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
         InitializeWeapons();
 
         currentHealth = maxHealth;
+        canTakeDamage = true;
     }
 
     private void InitializeWeapons()
@@ -65,16 +66,21 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
 
     public void Damage(float damage)
     {
-        currentHealth -= damage;
-        StartCoroutine(IFrames());
+        if (canTakeDamage)
+        {
+            currentHealth -= damage;
+            StartCoroutine(IFrames());
+
+            UI.UpdatePlayerCurrentHealth(currentHealth);
+        }       
     }
 
     private IEnumerator IFrames()
     {
-        col.enabled = false;
+        canTakeDamage = false;
         renderer.material.color = Color.cyan;
         yield return new WaitForSeconds(iFramesTime);
-        col.enabled = true;
+        canTakeDamage = true;
         renderer.material.color = baseColor;
     }
 
