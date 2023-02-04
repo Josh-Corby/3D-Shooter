@@ -17,9 +17,12 @@ public class EnemyGun : GunBase
 
     protected override void Update()
     {
-        if (enemy.playerInFireRange && readyToFire)
+        if (enemy.playerInFireRange)
         {
             FindTarget();
+        }
+        if (enemy.playerInFireRange && readyToFire)
+        {         
             CheckForFireInput();         
         }
     }
