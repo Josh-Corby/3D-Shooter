@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EnemyBase : GameBehaviour, IDamagable
 {
+    public static event Action<EnemyBase> OnEnemyDied = null;
     public float maxHealth = 10;
     [SerializeField] private float currentHealth;
     [SerializeField] private EnemyHealthBar healthBar;
@@ -108,9 +108,11 @@ public class EnemyBase : GameBehaviour, IDamagable
     }
     public void Die()
     {
-        if (SM.enemiesAlive.Contains(gameObject))
+        OnEnemyDied(this);
+
+        if (WM.enemiesAlive.Contains(gameObject))
         {
-            SM.enemiesAlive.Remove(gameObject);
+            WM.enemiesAlive.Remove(gameObject);
         }
         Destroy(gameObject);
     }

@@ -44,6 +44,7 @@ public class BulletBase : GameBehaviour
     private Vector3 lastPosition;
 
     [SerializeField] private LayerMask collisionMask;
+    [SerializeField] private LayerMask homingMask;
 
     private void Awake()
     {
@@ -160,11 +161,21 @@ public class BulletBase : GameBehaviour
         homingtarget = null;
         float minDist = maxHomingDistance;
 
-        if (SM.enemiesAlive.Count > 0)
+        Collider[] colliders = Physics.OverlapSphere(transform.position, maxHomingDistance, homingMask);
+
+        if (colliders.Length <= 0) return;
+
+        if (colliders.Length == 1)
         {
-            for (int i = 0; i < SM.enemiesAlive.Count; i++)
+            homingtarget = colliders[0].gameObject;
+            return;
+        }
+
+        if (colliders.Length > 1)
+        {
+            foreach (Collider collider in colliders)
             {
-                GameObject enemy = SM.enemiesAlive[i];
+                GameObject enemy = collider.gameObject;
                 float dist = Vector3.Distance(enemy.transform.position, transform.position);
                 if (dist < minDist)
                 {

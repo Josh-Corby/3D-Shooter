@@ -78,7 +78,7 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
         if (canTakeDamage)
         {
             currentHealth -= damage;
-            StartCoroutine(IFrames());
+            //StartCoroutine(IFrames());
 
             OnCurrentHealthChange(currentHealth);
         }       

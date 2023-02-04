@@ -1,35 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnManager : GameBehaviour<SpawnManager>
+public class EnemySpawnController : GameBehaviour
 {
-    public Transform spawnCentre;
-    public Vector3 spawnSize;
-
-    public bool spawnEnemies;
-    public int enemiesToSpawn;
-    public GameObject[] enemyPrefabs;
-
-    public List<GameObject> enemiesAlive = new List<GameObject>();
-
+    [SerializeField] private Transform spawnCentre;
+    [SerializeField] private Vector3 spawnSize;
+    [SerializeField] private int enemiesToSpawn;
+    [SerializeField] private GameObject[] enemyPrefabs;
     [SerializeField] private LayerMask groundMask;
 
-    private void Start()
-    {
-        if (spawnEnemies)
-        {
-            SpawnWave();
-        }
-    }
-
-    private void SpawnWave()
+    public void SpawnWave()
     {
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             GameObject randomEnemyType = GetRandomEnemyType(); 
             GameObject enemy = Instantiate(randomEnemyType, GetRandomSpawnPosition(randomEnemyType.GetComponent<EnemyBase>()), Quaternion.identity);
-            enemiesAlive.Add(enemy);
+            WM.enemiesAlive.Add(enemy);
         }
     }
 
@@ -57,6 +42,7 @@ public class SpawnManager : GameBehaviour<SpawnManager>
         }
         return spawnPosition;
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;

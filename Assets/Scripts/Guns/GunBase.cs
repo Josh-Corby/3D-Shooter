@@ -29,10 +29,10 @@ public class GunBase : GameBehaviour
     private float damage;
     private float swapInTime;
     private User user;
-    public int maxAmmo;
-    public int ammoLeft;
-    public int clipSize;
-    public int bulletsRemainingInClip;
+    [HideInInspector] public int maxAmmo;
+    [HideInInspector] public int ammoLeft;
+    [HideInInspector] public int clipSize;
+    [HideInInspector] public int bulletsRemainingInClip;
     [HideInInspector] public float reloadTime;
 
     [Header("Firing Stats")]
