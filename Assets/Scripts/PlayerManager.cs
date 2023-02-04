@@ -28,6 +28,7 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
     {
         renderer = GetComponentInParent<MeshRenderer>();
         baseColor = renderer.material.color;
+
     }
 
     private void OnEnable()
@@ -41,13 +42,13 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
     }
     private void Start()
     {
-        InitializeWeapons();
-
         currentHealth = maxHealth;
         canTakeDamage = true;
 
         OnMaxHealthChange(maxHealth);
         OnCurrentHealthChange(currentHealth);
+
+        InitializeWeapons();
     }
 
     private void InitializeWeapons()
@@ -123,5 +124,11 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
     private void RestoreAmmo(int ammoAmount)
     {
         currentWeapon.AddAmmo(ammoAmount);
+    }
+
+    public bool CheckIfCurrentWeapon(GunBase gun)
+    {
+        bool isCurrentWeapon = gun == currentWeapon;
+        return isCurrentWeapon;
     }
 }

@@ -7,7 +7,7 @@ public class UIManager : GameBehaviour<UIManager>
 {
     public static event Action OnReloadAnimationDone;
 
-    #region panels
+    #region Panels
     [Header("Panels")]
     [SerializeField] private GameObject gameplayPanel;
     [SerializeField] private GameObject crosshairPanel;
@@ -16,14 +16,14 @@ public class UIManager : GameBehaviour<UIManager>
     [SerializeField] private GameObject gunInfoPanel;
     #endregion
 
-    #region playerInfoUI
+    #region PlayerInfoUI
     [Header("Player Info UI")]  
     [SerializeField] private Slider playerHealthSlider;
     [SerializeField] private TMP_Text playerCurrentHealthText;
     [SerializeField] private TMP_Text playerMaxHealthText;
     #endregion
 
-    #region gunInfoUI
+    #region GunInfoUI
     [Header("Gun Info UI")]  
     [SerializeField] private TMP_Text gunNameText;
     [SerializeField] private TMP_Text gunBulletsRemainingText;

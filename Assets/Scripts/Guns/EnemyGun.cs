@@ -20,7 +20,7 @@ public class EnemyGun : GunBase
         if (enemy.playerInFireRange && readyToFire)
         {
             FindTarget();
-            CheckForShootCondition();         
+            CheckForFireInput();         
         }
     }
 
@@ -46,7 +46,7 @@ public class EnemyGun : GunBase
             }
         }
     }
-    protected override void CheckForShootCondition()
+    protected override void CheckForFireInput()
     {
         if (readyToFire && burstFire)
         {
@@ -55,7 +55,7 @@ public class EnemyGun : GunBase
 
         else if (readyToFire)
         {
-            CheckFireType();
+            CheckForShotgunFire();
             StartCoroutine(ResetShooting());
         }
     }

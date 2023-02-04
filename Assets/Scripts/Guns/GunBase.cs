@@ -11,8 +11,6 @@ public class GunBase : GameBehaviour
     public static event Action<int> OnBulletFired = null;
     public static event Action<int> OnAmmoAdded = null;
 
-
-
     [SerializeField] protected GunSO gun;
     private Camera cam;
     protected GameObject firePoint;
@@ -20,24 +18,21 @@ public class GunBase : GameBehaviour
     protected bool readyToFire;
     private bool fireInput;
 
-    [HideInInspector]
-    public Vector3 targetPoint;
+    [HideInInspector] public Vector3 targetPoint;
     public LayerMask mask;
     [HideInInspector]
     public float distanceToTarget;
 
     #region GunStats
-
-
     [Header("Gun Stats")]
     private GameObject bulletToFire;
     private float damage;
     private float swapInTime;
     private User user;
-    [HideInInspector] public int maxAmmo;
-    [HideInInspector] public int ammoLeft;
-    [HideInInspector] public int clipSize;
-    [HideInInspector] public int bulletsRemainingInClip;
+    public int maxAmmo;
+    public int ammoLeft;
+    public int clipSize;
+    public int bulletsRemainingInClip;
     [HideInInspector] public float reloadTime;
 
     [Header("Firing Stats")]
@@ -67,49 +62,6 @@ public class GunBase : GameBehaviour
 
         AssignValues();
     }
-    private void OnEnable()
-    {
-        if (user == User.Player)
-        {
-            InputManager.Fire += RecieveFireInput;
-            InputManager.StopFiring += CancelFireInput;
-            UIManager.OnReloadAnimationDone += Reload;
-            InputManager.Reload += CheckClipForReload;
-
-            StartCoroutine(SwapInTimer());
-        }
-        else
-        {
-            readyToFire = true;
-        }
-    }
-    private void OnDisable()
-    {
-        if (user == User.Player)
-        {
-            InputManager.Fire -= RecieveFireInput;
-            InputManager.StopFiring -= CancelFireInput;
-            UIManager.OnReloadAnimationDone -= Reload;
-            InputManager.Reload -= CheckClipForReload;
-        }
-    }
-    private void Start()
-    {
-        if (ammoLeft < clipSize)
-        {
-            bulletsRemainingInClip = ammoLeft;
-        }
-        else
-        {
-            bulletsRemainingInClip = clipSize;
-
-        }
-    }
-    protected virtual void Update()
-    {
-        FindTarget();
-        CheckForShootCondition();
-    }
     protected void AssignValues()
     {
         bulletToFire = gun.bulletToFire;
@@ -123,6 +75,10 @@ public class GunBase : GameBehaviour
             clipSize = gun.clipSize;
             reloadTime = gun.reloadTime;
             swapInTime = gun.swapInTime;
+            ammoLeft = maxAmmo;
+            bulletsRemainingInClip = 0;
+
+            CheckBulletsToReload();            
         }
 
         shootForce = gun.shootForce;
@@ -138,39 +94,39 @@ public class GunBase : GameBehaviour
         burstFire = gun.burstFire;
         bulletsInBurst = gun.bulletsInBurst;
         timeBetweenBurstShots = gun.timeBetweenBurstShots;
-
-        ammoLeft = maxAmmo - clipSize;
     }
-    private IEnumerator SwapInTimer()
+    private void OnEnable()
     {
-        readyToFire = false;
-        yield return new WaitForSeconds(swapInTime);
-        readyToFire = true;
-    }
-    protected virtual void CheckForShootCondition()
-    {
-        if (bulletsRemainingInClip > 0)
+        if (user == User.Player)
         {
-            if (fireInput && readyToFire && burstFire)
-            {
-                StartCoroutine(BurstFire());
-            }
+            InputManager.Fire += RecieveFireInput;
+            InputManager.StopFiring += CancelFireInput;
+            UIManager.OnReloadAnimationDone += CheckBulletsToReload;
+            InputManager.Reload += CheckClipForReload;
 
-            else if (fireInput && readyToFire)
-            {
-                CheckFireType();
-                StartCoroutine(ResetShooting());
-
-                if (!holdToFire)
-                {
-                    CancelFireInput();
-                }
-            }
+            StartCoroutine(SwapInTimer());
         }
         else
         {
-            return;
+            readyToFire = true;
         }
+    }
+    private void OnDisable()
+    {
+        if (user == User.Player)
+        {
+            InputManager.Fire -= RecieveFireInput;
+            InputManager.StopFiring -= CancelFireInput;
+            UIManager.OnReloadAnimationDone -= CheckBulletsToReload;
+            InputManager.Reload -= CheckClipForReload;
+        }
+        StopAllCoroutines();
+    }
+
+    protected virtual void Update()
+    {
+        FindTarget();
+        CheckForFireInput();
     }
     protected virtual void FindTarget()
     {
@@ -190,6 +146,12 @@ public class GunBase : GameBehaviour
 
         transform.LookAt(targetPoint);
     }
+    private IEnumerator SwapInTimer()
+    {
+        readyToFire = false;
+        yield return new WaitForSeconds(swapInTime);
+        readyToFire = true;
+    }
     private void RecieveFireInput()
     {
         fireInput = true;
@@ -198,7 +160,50 @@ public class GunBase : GameBehaviour
     {
         fireInput = false;
     }
-    protected void CheckFireType()
+    protected virtual void CheckForFireInput()
+    {
+        if (bulletsRemainingInClip > 0)
+        {
+            if (fireInput && readyToFire && burstFire)
+            {
+                StartCoroutine(BurstFire());
+            }
+
+            else if (fireInput && readyToFire)
+            {
+                CheckForShotgunFire();
+                StartCoroutine(ResetShooting());
+
+                if (!holdToFire)
+                {
+                    CancelFireInput();
+                }
+            }
+        }
+        else
+        {
+            return;
+        }
+    }
+    protected IEnumerator BurstFire()
+    {
+        for (int i = 0; i < bulletsInBurst; i++)
+        {
+            if (user == User.Player)
+            {
+                if (bulletsRemainingInClip < 0)
+                {
+                    break;
+                }
+            }
+
+            CheckForShotgunFire();
+            yield return new WaitForSeconds(timeBetweenBurstShots);
+
+        }
+        StartCoroutine(ResetShooting());
+    }
+    protected void CheckForShotgunFire()
     {
         readyToFire = false;
         ReduceAmmo();
@@ -215,40 +220,22 @@ public class GunBase : GameBehaviour
             Shoot();
         }
     }
-    protected IEnumerator BurstFire()
-    {
-        for (int i = 0; i < bulletsInBurst; i++)
-        {
-            if (user == User.Player)
-            {
-                if (bulletsRemainingInClip < 0)
-                {
-                    break;
-                }
-            }
-
-            CheckFireType();
-            yield return new WaitForSeconds(timeBetweenBurstShots);
-
-        }
-        StartCoroutine(ResetShooting());
-    }
     public virtual void Shoot()
     {
         if (bulletToFire == null)
         {
             return;
         }
-
+        GameObject bulletGO = null;
         if (bulletToFire.GetComponent<BulletBase>().hasRigidbody)
         {
+           
             if (!useSpread)
             {
                 Vector3 directionWithoutSpread = (targetPoint - firePointTransform.position).normalized;
-                GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePoint.transform.position, Vector3.up));
+                bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePoint.transform.position, Vector3.up));
                 bulletGO.GetComponent<Rigidbody>().AddForce(directionWithoutSpread * shootForce, ForceMode.Impulse);
                 bulletGO.transform.forward = directionWithoutSpread;
-                bulletGO.GetComponent<BulletBase>().damage = damage;
             }
             if (useSpread)
             {
@@ -269,16 +256,16 @@ public class GunBase : GameBehaviour
                 Vector3 directionWithSpread = (targetSpreadOffset - firePointTransform.position).normalized;
 
                 //add random rotation
-                GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, firePointTransform.rotation * spreadRotation);
+                bulletGO = Instantiate(bulletToFire, firePointTransform.position, firePointTransform.rotation * spreadRotation);
                 bulletGO.GetComponent<Rigidbody>().AddForce(directionWithSpread * shootForce, ForceMode.Impulse);
-                bulletGO.GetComponent<BulletBase>().damage = damage;
             }
         }
         else
         {
-            GameObject bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePointTransform.position, Vector3.up));
-            bulletGO.GetComponent<BulletBase>().damage = damage;
+            bulletGO = Instantiate(bulletToFire, firePointTransform.position, Quaternion.LookRotation(firePointTransform.position, Vector3.up));
+            
         }
+        bulletGO.GetComponent<BulletBase>().damage = damage;
         firePointTransform.DetachChildren();
     }
     protected IEnumerator ResetShooting()
@@ -297,7 +284,11 @@ public class GunBase : GameBehaviour
 
         if (bulletsRemainingInClip == 0)
         {
-            OnReloadStart?.Invoke();
+            if (ammoLeft > 0)
+            {
+                //start UI animation for reloading
+                OnReloadStart?.Invoke();
+            }
         }
     }
     private void CheckClipForReload()
@@ -307,35 +298,28 @@ public class GunBase : GameBehaviour
             OnReloadStart?.Invoke();
         }
     }
-    private void Reload()
+
+    private void CheckBulletsToReload()
     {
-        if (ammoLeft > 0)
+        if (ammoLeft == 0) return;
+
+        //check how many bullets are left in current clip
+        int bulletsToReload = clipSize - bulletsRemainingInClip;
+
+        //check if there is enough ammo left for reload
+        if (ammoLeft < bulletsToReload)
         {
-            //check for manual reload
-            if (bulletsRemainingInClip > 0)
-            {
-                ammoLeft -= (clipSize - bulletsRemainingInClip);
-            }
-            //forced reload
-            else
-            {
-                ammoLeft -= clipSize;
-            }
+            bulletsToReload = ammoLeft;
+        }
+        LoadBullets(bulletsToReload);
+    }
+    private void LoadBullets(int bulletsToReload)
+    {
+        bulletsRemainingInClip += bulletsToReload;
+        ammoLeft -= bulletsToReload;
 
-            if (ammoLeft < 0)
-            {
-                ammoLeft = 0;
-            }
-
-            if (ammoLeft < clipSize)
-            {
-                bulletsRemainingInClip = ammoLeft;
-            }
-            else
-            {
-                bulletsRemainingInClip = clipSize;
-            }
-
+        if (PM.CheckIfCurrentWeapon(this))
+        {
             OnReloadDone(this);
         }
     }
