@@ -7,12 +7,13 @@ public class Door : MonoBehaviour
     [SerializeField] private Vector3 openPosition;
     [SerializeField] private Vector3 closePosition;
 
-    private DoorTrigger trigger;
+    [HideInInspector] public DoorTrigger trigger;
     [SerializeField] private float moveDuration;
 
     private void Awake()
     {
         openPosition = transform.position;
+        transform.position = openPosition;
         closePosition = new Vector3(openPosition.x, transform.position.y - transform.localScale.y, openPosition.z);
         trigger = GetComponentInChildren<DoorTrigger>();
     }

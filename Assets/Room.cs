@@ -17,18 +17,19 @@ public class Room : GameBehaviour
     private void OnEnable()
     {
         WaveManager.OnCombatStart += StartCombat;
-        WaveManager.OnCombatEnd += OpenDoors;
+        WaveManager.OnCombatEnd += EndCombat;
     }
 
     private void OnDisable()
     {
         WaveManager.OnCombatStart -= StartCombat;
-        WaveManager.OnCombatEnd -= OpenDoors;
+        WaveManager.OnCombatEnd -= EndCombat;
     }
 
     private void Start()
     {
-        CloseDoors();
+        EnableCombatTriggers();
+        combatCleared = false;
     }
 
     private void StartCombat()
@@ -36,6 +37,7 @@ public class Room : GameBehaviour
         CloseDoors();
         spawnController.SpawnWave();
     }
+
     public void CheckCombatCleared()
     {
         if (combatCleared == true) return;
@@ -43,16 +45,20 @@ public class Room : GameBehaviour
         OnCombatRoomEntered(this);
     }
 
+    public void EndCombat()
+    {
+        OpenDoors();
+        DisableCombatTriggers();
+    }
+
     private void CloseDoors()
     {
-        //if (this !=WM.currentRoom) return;
+        if (this !=WM.currentRoom) return;
 
         foreach (Door door in doors)
         {
             door.Close();
         }
-
-        //OnCombatRoomEntered(this);
     }
 
     public void OpenDoors()
@@ -62,6 +68,22 @@ public class Room : GameBehaviour
         foreach (Door door in doors)
         {
             door.Open();
+        }
+    }
+
+    private void DisableCombatTriggers()
+    {
+        foreach (Door door in doors)
+        {
+            door.trigger.enabled = false;
+        }
+    }
+
+    private void EnableCombatTriggers()
+    {
+        foreach (Door door in doors)
+        {
+            door.trigger.enabled = true;
         }
     }
 }
