@@ -78,7 +78,11 @@ public class UIManager : GameBehaviour<UIManager>
     }
     private void InitializeUI()
     {
-
+        gunNameText.text = "";
+        gunBulletsRemainingText.text = "";
+        gunAmmoLeftText.text = "";
+        gunMaxAmmoText.text = "";
+        interactText.enabled = false;
         isReloading = false;
         reloadSliderObject.SetActive(false);
         reloadSlider.value = reloadSlider.maxValue;
@@ -149,13 +153,14 @@ public class UIManager : GameBehaviour<UIManager>
         isReloading = true;
     }
 
-    private void EnableWeaponPickupUI()
+    private void EnableWeaponPickupUI(GameObject gunToPickup)
     {
-
+        interactText.text = "Pickup " + gunToPickup.name;
+        interactText.enabled = true;
     }
 
     private void DisableWeaponPickupUI()
     {
-
+        interactText.enabled = false;
     }
 }

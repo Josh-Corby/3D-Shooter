@@ -9,17 +9,20 @@ public class PlayerWeaponManager : GameBehaviour<PlayerWeaponManager>
 
     [SerializeField] private GameObject currentWeaponObject;
     [HideInInspector] public GunBase currentWeapon;
-    public GameObject[] playerWeapons;
+    public List<GameObject> playerWeapons = new List<GameObject>();
     private int currentWeaponIndex;
 
     private void OnEnable()
     {
         InputManager.OnScroll += ChangeWeapons;
         AmmoPickup.OnAmmoPickup += RestoreAmmo;
+        WeaponPickup.OnWeaponPickup += AddWeapon;
     }
     private void OnDisable()
     {
         InputManager.OnScroll -= ChangeWeapons;
+        AmmoPickup.OnAmmoPickup -= RestoreAmmo;
+        WeaponPickup.OnWeaponPickup -= AddWeapon;
     }
 
     private void Start()
@@ -29,8 +32,10 @@ public class PlayerWeaponManager : GameBehaviour<PlayerWeaponManager>
 
     private void InitializeWeapons()
     {
+        if (playerWeapons.Count <= 0) return;
+
         currentWeaponIndex = 0;
-        for (int i = 0; i < playerWeapons.Length; i++)
+        for (int i = 0; i < playerWeapons.Count; i++)
         {
             playerWeapons[i].SetActive(false);
         }
@@ -43,13 +48,18 @@ public class PlayerWeaponManager : GameBehaviour<PlayerWeaponManager>
 
     private void ChangeWeapons(float _input)
     {
+        if(playerWeapons.Count < 2)
+        {
+            return;
+        }
+
         if (_input > 0)
         {
             currentWeaponIndex -= 1;
 
             if (currentWeaponIndex < 0)
             {
-                currentWeaponIndex = playerWeapons.Length - 1;
+                currentWeaponIndex = playerWeapons.Count - 1;
             }
         }
 
@@ -57,7 +67,7 @@ public class PlayerWeaponManager : GameBehaviour<PlayerWeaponManager>
         {
             currentWeaponIndex += 1;
 
-            if (currentWeaponIndex > playerWeapons.Length - 1)
+            if (currentWeaponIndex > playerWeapons.Count - 1)
             {
                 currentWeaponIndex = 0;
             }
@@ -69,6 +79,14 @@ public class PlayerWeaponManager : GameBehaviour<PlayerWeaponManager>
         currentWeapon = currentWeaponObject.GetComponent<GunBase>();
         OnWeaponChange(currentWeapon);
     }
+
+    private void EquipWeapon(GameObject weapon)
+    {
+        currentWeaponObject = weapon;
+        currentWeapon = weapon.GetComponent<GunBase>();
+        OnWeaponChange(currentWeapon);
+    }
+
     private void RestoreAmmo(int ammoAmount)
     {
         currentWeapon.AddAmmo(ammoAmount);
@@ -78,5 +96,25 @@ public class PlayerWeaponManager : GameBehaviour<PlayerWeaponManager>
     {
         bool isCurrentWeapon = gun == currentWeapon;
         return isCurrentWeapon;
+    }
+
+    private void AddWeapon(GameObject weaponToAdd)
+    {
+        if (playerWeapons.Contains(weaponToAdd))
+        {
+            return;
+        }
+        playerWeapons.Add(weaponToAdd);
+        GameObject gun = Instantiate(weaponToAdd, PWM.transform);
+
+        if(playerWeapons.Count == 1)
+        {
+            EquipWeapon(weaponToAdd);
+        }
+
+        else
+        {
+            gun.SetActive(false);
+        }
     }
 }

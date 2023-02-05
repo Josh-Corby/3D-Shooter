@@ -3,8 +3,9 @@ using System;
 
 public class WeaponPickup : GameBehaviour
 {
-    public static event Action OnWeaponPickupTriggerEnter = null;
+    public static event Action<GameObject> OnWeaponPickupTriggerEnter = null;
     public static event Action OnWeaponPickupTriggerExit = null;
+    public static event Action<GameObject> OnWeaponPickup = null;
 
     [SerializeField] private GameObject weaponToPickUp;
 
@@ -12,7 +13,8 @@ public class WeaponPickup : GameBehaviour
     {
         if (other.gameObject == PM.player)
         {
-            OnWeaponPickupTriggerEnter?.Invoke();
+            Debug.Log("Player collision");
+            OnWeaponPickupTriggerEnter(weaponToPickUp);
             InputManager.OnInteract += PickupWeapon;
         }
     }
@@ -28,6 +30,8 @@ public class WeaponPickup : GameBehaviour
 
     private void PickupWeapon()
     {
-
+        OnWeaponPickup(weaponToPickUp);
+        OnWeaponPickupTriggerExit?.Invoke();
+        Destroy(gameObject);
     }
 }
