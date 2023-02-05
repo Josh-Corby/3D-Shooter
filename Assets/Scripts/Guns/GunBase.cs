@@ -99,10 +99,10 @@ public class GunBase : GameBehaviour
     {
         if (user == User.Player)
         {
-            InputManager.Fire += RecieveFireInput;
-            InputManager.StopFiring += CancelFireInput;
+            InputManager.OnFire += RecieveFireInput;
+            InputManager.OnStopFiring += CancelFireInput;
             UIManager.OnReloadAnimationDone += CheckBulletsToReload;
-            InputManager.Reload += CheckClipForReload;
+            InputManager.OnReload += CheckClipForReload;
 
             StartCoroutine(SwapInTimer());
         }
@@ -115,10 +115,10 @@ public class GunBase : GameBehaviour
     {
         if (user == User.Player)
         {
-            InputManager.Fire -= RecieveFireInput;
-            InputManager.StopFiring -= CancelFireInput;
+            InputManager.OnFire -= RecieveFireInput;
+            InputManager.OnStopFiring -= CancelFireInput;
             UIManager.OnReloadAnimationDone -= CheckBulletsToReload;
-            InputManager.Reload -= CheckClipForReload;
+            InputManager.OnReload -= CheckClipForReload;
         }
         StopAllCoroutines();
     }
@@ -313,16 +313,18 @@ public class GunBase : GameBehaviour
         }
         LoadBullets(bulletsToReload);
     }
+
     private void LoadBullets(int bulletsToReload)
     {
         bulletsRemainingInClip += bulletsToReload;
         ammoLeft -= bulletsToReload;
 
-        if (PM.CheckIfCurrentWeapon(this))
+        if (PWM.CheckIfCurrentWeapon(this))
         {
             OnReloadDone(this);
         }
     }
+
     public void AddAmmo(int amount)
     {
         ammoLeft += amount;

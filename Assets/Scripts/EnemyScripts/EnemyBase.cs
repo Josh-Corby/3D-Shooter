@@ -75,7 +75,7 @@ public class EnemyBase : GameBehaviour, IDamagable
 
     public bool CanSeePlayer()
     {
-        Vector3 dirToPlayer = PM.gameObject.transform.position - transform.position;
+        Vector3 dirToPlayer = PM.playerTransform.position - transform.position;
         Ray ray = new Ray(transform.position, dirToPlayer);
         if (Physics.SphereCast(transform.position, 1, dirToPlayer, out RaycastHit hit, detectionMask, detectionMask))
         {

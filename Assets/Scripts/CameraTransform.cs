@@ -37,12 +37,12 @@ public class CameraTransform : GameBehaviour
 
     private void OnEnable()
     {
-        InputManager.Look += RecieveInput;
+        InputManager.OnLook += RecieveInput;
     }
 
     private void OnDisable()
     {
-        InputManager.Look -= RecieveInput;
+        InputManager.OnLook -= RecieveInput;
     }
 
     private void Start()

@@ -4,14 +4,15 @@ using System;
 
 public class InputManager : GameBehaviour<InputManager>
 {
-    public static event Action Jump = null;
-    public static event Action Fire = null;
-    public static event Action StopFiring = null;
-    public static event Action Reload = null;
-    public static event Action ToggleSprint = null;
-    public static event Action<Vector2> Move = null;
-    public static event Action<Vector2> Look = null;
-    public static event Action<float> Scroll = null;
+    public static event Action OnJump = null;
+    public static event Action OnFire = null;
+    public static event Action OnStopFiring = null;
+    public static event Action OnReload = null;
+    public static event Action OnToggleSprint = null;
+    public static event Action<Vector2> OnMove = null;
+    public static event Action<Vector2> OnLook = null;
+    public static event Action<float> OnScroll = null;
+    public static event Action OnInteract = null;
 
 
     PlayerInput controls;
@@ -26,16 +27,17 @@ public class InputManager : GameBehaviour<InputManager>
         {
             controls = new PlayerInput();
 
-            controls.Input.Movement.performed += i => Move(i.ReadValue<Vector2>());
-            controls.Input.Look.performed += i => Look(i.ReadValue<Vector2>());
-            controls.Input.Jump.performed += i => Jump?.Invoke();
-            controls.Input.Sprint.performed += i => ToggleSprint?.Invoke();
-            controls.Input.Sprint.canceled += i => ToggleSprint?.Invoke();
+            controls.Input.Movement.performed += i => OnMove(i.ReadValue<Vector2>());
+            controls.Input.Look.performed += i => OnLook(i.ReadValue<Vector2>());
+            controls.Input.Jump.performed += i => OnJump?.Invoke();
+            controls.Input.Sprint.performed += i => OnToggleSprint?.Invoke();
+            controls.Input.Sprint.canceled += i => OnToggleSprint?.Invoke();
 
-            controls.Input.Fire.performed += i => Fire?.Invoke();
-            controls.Input.Fire.canceled += i => StopFiring?.Invoke();
-            controls.Input.Reload.performed += i => Reload?.Invoke();
-            controls.Input.ChangeWeapon.performed += i => Scroll(i.ReadValue<float>());;
+            controls.Input.Fire.performed += i => OnFire?.Invoke();
+            controls.Input.Fire.canceled += i => OnStopFiring?.Invoke();
+            controls.Input.Reload.performed += i => OnReload?.Invoke();
+            controls.Input.ChangeWeapon.performed += i => OnScroll(i.ReadValue<float>());
+            controls.Input.Interact.performed += i => OnInteract?.Invoke();
 
             EnableControls();
             Cursor.lockState = CursorLockMode.Locked;

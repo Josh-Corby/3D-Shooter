@@ -31,7 +31,7 @@ public class EnemyGun : GunBase
     {
         if (shootAtPlayer)
         {
-            targetPoint = PM.gameObject.transform.position;
+            targetPoint = PM.playerTransform.position;
         }
 
         if (!shootAtPlayer)

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ThirdPersonMovement : MonoBehaviour
 {
     public CharacterController controller;
-    public Transform cam;
+    public Transform camTransform;
     private bool isSprinting;
     public float currentMoveSpeed;
     public float walkSpeed = 6f;
@@ -24,6 +24,11 @@ public class ThirdPersonMovement : MonoBehaviour
     public LayerMask groundMask;
     private Vector3 velocity;
     private Vector2 movementVector;
+
+    private void Awake()
+    {
+        camTransform = Camera.main.transform;
+    }
     private void Start()
     {
         currentMoveSpeed = walkSpeed;      
@@ -31,16 +36,16 @@ public class ThirdPersonMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        InputManager.Jump += Jump;
-        InputManager.ToggleSprint += ToggleSprint;
-        InputManager.Move += RecieveInput;
+        InputManager.OnJump += Jump;
+        InputManager.OnToggleSprint += ToggleSprint;
+        InputManager.OnMove += RecieveInput;
     }
 
     private void OnDisable()
     {
-        InputManager.Jump -= Jump;
-        InputManager.ToggleSprint -= ToggleSprint;
-        InputManager.Move -= RecieveInput;
+        InputManager.OnJump -= Jump;
+        InputManager.OnToggleSprint -= ToggleSprint;
+        InputManager.OnMove -= RecieveInput;
     }
     private void Update()
     {
@@ -67,7 +72,7 @@ public class ThirdPersonMovement : MonoBehaviour
 
         if (movementVector.magnitude >= 0.1f)
         {
-            float targetAngle = Mathf.Atan2(movementVector.x, movementVector.y) * Mathf.Rad2Deg + cam.eulerAngles.y;           
+            float targetAngle = Mathf.Atan2(movementVector.x, movementVector.y) * Mathf.Rad2Deg + camTransform.eulerAngles.y;           
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             controller.Move(moveDir.normalized * currentMoveSpeed * Time.deltaTime);
         }

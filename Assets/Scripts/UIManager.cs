@@ -34,6 +34,8 @@ public class UIManager : GameBehaviour<UIManager>
     private bool isReloading;
     #endregion
 
+    [SerializeField] private TMP_Text interactText;
+
 
     new private void Awake()
     {
@@ -47,7 +49,11 @@ public class UIManager : GameBehaviour<UIManager>
         GunBase.OnReloadStart += StartReloading;
         GunBase.OnAmmoAdded += UpdateAmmoLeftUI;
 
-        PlayerManager.OnWeaponChange += ChangeGunUI;
+        WeaponPickup.OnWeaponPickupTriggerEnter += EnableWeaponPickupUI;
+        WeaponPickup.OnWeaponPickupTriggerExit += DisableWeaponPickupUI;
+
+        PlayerWeaponManager.OnWeaponChange += ChangeGunUI;
+
         PlayerManager.OnCurrentHealthChange += UpdatePlayerCurrentHealth;
         PlayerManager.OnMaxHealthChange += UpdatePlayerMaxHealth;
     }
@@ -58,7 +64,11 @@ public class UIManager : GameBehaviour<UIManager>
         GunBase.OnReloadStart -= StartReloading;
         GunBase.OnAmmoAdded -= UpdateAmmoLeftUI;
 
-        PlayerManager.OnWeaponChange -= ChangeGunUI;
+        WeaponPickup.OnWeaponPickupTriggerEnter -= EnableWeaponPickupUI;
+        WeaponPickup.OnWeaponPickupTriggerExit -= DisableWeaponPickupUI;
+
+        PlayerWeaponManager.OnWeaponChange -= ChangeGunUI;
+
         PlayerManager.OnCurrentHealthChange -= UpdatePlayerCurrentHealth;
         PlayerManager.OnMaxHealthChange -= UpdatePlayerMaxHealth;
     }
@@ -89,18 +99,17 @@ public class UIManager : GameBehaviour<UIManager>
         }
     }
 
-    public void UpdatePlayerCurrentHealth(float value)
+    private void UpdatePlayerCurrentHealth(float value)
     {
         playerCurrentHealthText.text = value.ToString();
         playerHealthSlider.value = value;
     }
 
-    public void UpdatePlayerMaxHealth(float value)
+    private void UpdatePlayerMaxHealth(float value)
     {
         playerMaxHealthText.text = value.ToString();
         playerHealthSlider.maxValue = value;
     }
-
 
     private void ChangeGunUI(GunBase gun)
     {
@@ -118,12 +127,11 @@ public class UIManager : GameBehaviour<UIManager>
         UpdateBulletsRemainingUI(gun.bulletsRemainingInClip);
     }
 
-    public void UpdateBulletsRemainingUI(int value)
+    private void UpdateBulletsRemainingUI(int value)
     {
         gunBulletsRemainingText.text = value.ToString();
     }
 
-  
     private void UpdateAmmoLeftUI(int value)
     {
         gunAmmoLeftText.text = "/" + value.ToString();
@@ -134,10 +142,20 @@ public class UIManager : GameBehaviour<UIManager>
         gunMaxAmmoText.text = value.ToString();
     }
 
-    public void StartReloading()
+    private void StartReloading()
     {
         reloadSlider.value = reloadSlider.maxValue;
         reloadSliderObject.SetActive(true);
         isReloading = true;
+    }
+
+    private void EnableWeaponPickupUI()
+    {
+
+    }
+
+    private void DisableWeaponPickupUI()
+    {
+
     }
 }

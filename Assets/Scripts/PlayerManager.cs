@@ -1,13 +1,15 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
 {
-    public static event Action<GunBase> OnWeaponChange;
-    public static event Action<float> OnCurrentHealthChange;
-    public static event Action<float> OnMaxHealthChange;
+
+    public static event Action<float> OnCurrentHealthChange = null;
+    public static event Action<float> OnMaxHealthChange = null;
+
+    [HideInInspector] public GameObject player;
+    [HideInInspector] public Transform playerTransform;
 
     public float maxHealth;
     public float currentHealth;
@@ -19,27 +21,14 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
 
     public Grid lastGrid;
 
-    [SerializeField] private GameObject currentWeaponObject;
-    [HideInInspector] public GunBase currentWeapon;
-    public GameObject[] playerWeapons;
-    private int currentWeaponIndex;
-
     new private void Awake()
     {
+        player = transform.parent.gameObject;
+        playerTransform = player.transform;
         renderer = GetComponentInParent<MeshRenderer>();
         baseColor = renderer.material.color;
-
     }
 
-    private void OnEnable()
-    {
-        InputManager.Scroll += ChangeWeapons;
-        AmmoPickup.OnAmmoPickup += RestoreAmmo;
-    }
-    private void OnDisable()
-    {
-        InputManager.Scroll -= ChangeWeapons;
-    }
     private void Start()
     {
         currentHealth = maxHealth;
@@ -47,22 +36,6 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
 
         OnMaxHealthChange(maxHealth);
         OnCurrentHealthChange(currentHealth);
-
-        InitializeWeapons();
-    }
-
-    private void InitializeWeapons()
-    {
-        currentWeaponIndex = 0;
-        for (int i = 0; i < playerWeapons.Length; i++)
-        {
-            playerWeapons[i].SetActive(false);
-        }
-        currentWeaponObject = playerWeapons[0];
-        currentWeapon = currentWeaponObject.GetComponent<GunBase>();
-        currentWeaponObject.SetActive(true);
-
-        OnWeaponChange(currentWeapon);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -81,7 +54,7 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
             //StartCoroutine(IFrames());
 
             OnCurrentHealthChange(currentHealth);
-        }       
+        }
     }
 
     private IEnumerator IFrames()
@@ -93,42 +66,5 @@ public class PlayerManager : GameBehaviour<PlayerManager>, IDamagable
         renderer.material.color = baseColor;
     }
 
-    private void ChangeWeapons(float _input)
-    {
-        if (_input > 0)
-        {
-            currentWeaponIndex -= 1;
 
-            if (currentWeaponIndex < 0)
-            {
-                currentWeaponIndex = playerWeapons.Length - 1;
-            }
-        }
-
-        if (_input < 0)
-        {
-            currentWeaponIndex += 1;
-
-            if (currentWeaponIndex > playerWeapons.Length - 1)
-            {
-                currentWeaponIndex = 0;
-            }
-        }
-
-        currentWeaponObject.SetActive(false);
-        currentWeaponObject = playerWeapons[currentWeaponIndex];
-        currentWeaponObject.SetActive(true);
-        currentWeapon = currentWeaponObject.GetComponent<GunBase>();
-        OnWeaponChange(currentWeapon);
-    }
-    private void RestoreAmmo(int ammoAmount)
-    {
-        currentWeapon.AddAmmo(ammoAmount);
-    }
-
-    public bool CheckIfCurrentWeapon(GunBase gun)
-    {
-        bool isCurrentWeapon = gun == currentWeapon;
-        return isCurrentWeapon;
-    }
 }

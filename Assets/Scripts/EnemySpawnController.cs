@@ -8,6 +8,7 @@ public class EnemySpawnController : GameBehaviour
     [SerializeField] private GameObject[] enemyPrefabs;
     [SerializeField] private LayerMask groundMask;
 
+
     public void SpawnWave()
     {
         for (int i = 0; i < enemiesToSpawn; i++)

@@ -36,7 +36,7 @@ public class PathfindingUnit : GameBehaviour
 
     private void Awake()
     {
-        target = PM.gameObject.transform;
+        target = PM.playerTransform;
     }
     public void StartUpdatingPath()
     {
@@ -152,7 +152,7 @@ public class PathfindingUnit : GameBehaviour
     {
         wallsToPlayer.Clear();
 
-        Ray ray = new Ray(transform.position, PM.gameObject.transform.position);
+        Ray ray = new Ray(transform.position, PM.playerTransform.position);
         if (Physics.Raycast(ray, out RaycastHit hit, unit.sqrDetectionRange, groundMask))
         {
             wallsToPlayer.Add(hit.collider.gameObject);
@@ -217,7 +217,7 @@ public class PathfindingUnit : GameBehaviour
                     //movetowards player
                     if (unit.sqrLenToPlayer > unit.sqrDstToMaintain)
                     {
-                        unit.transform.position = Vector3.MoveTowards(transform.position, new Vector3(PM.transform.position.x, transform.position.y, PM.transform.position.z), Time.deltaTime * unit.moveSpeed);
+                        unit.transform.position = Vector3.MoveTowards(transform.position, new Vector3(PM.playerTransform.position.x, transform.position.y, PM.playerTransform.position.z), Time.deltaTime * unit.moveSpeed);
                     }
                 }
                 else
@@ -229,7 +229,7 @@ public class PathfindingUnit : GameBehaviour
                     //movetowards player
                     if (unit.sqrLenToPlayer > unit.sqrDstToMaintain)
                     {
-                        unit.transform.position = Vector3.MoveTowards(transform.position, new Vector3(PM.transform.position.x, transform.position.y, PM.transform.position.z), Time.deltaTime * unit.moveSpeed);
+                        unit.transform.position = Vector3.MoveTowards(transform.position, new Vector3(PM.playerTransform.position.x, transform.position.y, PM.playerTransform.position.z), Time.deltaTime * unit.moveSpeed);
                     }
                 }
 
