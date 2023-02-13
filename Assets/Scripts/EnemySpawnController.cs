@@ -48,15 +48,27 @@ public class EnemySpawnController : GameBehaviour
         {
             //if not flying then it is a navmesh unit
             //find the closest navmesh point to random point found
-            NavMesh.SamplePosition(spawnPosition, out NavMeshHit navHit, spawnBufferSize, groundMask);
-            return navHit.position;
+
             //Ray ray = new Ray(spawnPosition, Vector3.down);
-            //if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundMask))
+            //if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundMask))
             //{
             //    spawnPosition = hit.point + new Vector3(0, 1, 0);
+            //    return spawnPosition;
             //}
-        }
 
+            //check if random point is on navmesh
+            if(NavMesh.SamplePosition(spawnPosition,out NavMeshHit navHit, 0, groundMask))
+            {
+                return navHit.position;
+            }
+
+            //else find a new random position
+            else
+            {
+                NavMesh.SamplePosition(spawnPosition, out navHit, spawnBufferSize, groundMask);
+                return navHit.position;
+            }
+        }
         return spawnPosition;
     }
 
