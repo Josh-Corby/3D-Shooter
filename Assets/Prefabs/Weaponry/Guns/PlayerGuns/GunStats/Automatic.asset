@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Automatic
   m_EditorClassIdentifier: 
   user: 0
+  gunName: Gun
   bulletToFire: {fileID: 4634416032413322246, guid: e39652e178838184b8d6854111654751, type: 3}
   damage: 1
   swapInTime: 0.2

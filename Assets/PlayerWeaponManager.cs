@@ -7,10 +7,10 @@ public class PlayerWeaponManager : GameBehaviour<PlayerWeaponManager>
 {
     public static event Action<GunBase> OnWeaponChange = null;
 
-    [SerializeField] private GameObject currentWeaponObject;
+    [SerializeField] private GameObject currentWeaponObject = null;
     [HideInInspector] public GunBase currentWeapon;
     public List<GameObject> playerWeapons = new List<GameObject>();
-    private int currentWeaponIndex;
+    private int currentWeaponIndex = 0;
 
     private void OnEnable()
     {
@@ -104,12 +104,14 @@ public class PlayerWeaponManager : GameBehaviour<PlayerWeaponManager>
         {
             return;
         }
-        playerWeapons.Add(weaponToAdd);
+        
         GameObject gun = Instantiate(weaponToAdd, PWM.transform);
-
-        if(playerWeapons.Count == 1)
+        gun.name = gun.GetComponent<GunBase>().gunName;
+        playerWeapons.Add(gun);
+        if (playerWeapons.Count == 1)
         {
-            EquipWeapon(weaponToAdd);
+            Debug.Log("First weapon picked up");
+            EquipWeapon(gun);
         }
 
         else

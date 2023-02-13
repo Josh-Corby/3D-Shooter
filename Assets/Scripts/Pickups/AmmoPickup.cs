@@ -15,6 +15,8 @@ public class AmmoPickup : GameBehaviour
     {
         if(collider == PM.gameObject)
         {
+            if (PWM.currentWeapon == null) return;
+
             OnAmmoPickup(ammoAmount);
             PWM.currentWeapon.AddAmmo(ammoAmount);
 

@@ -7,7 +7,7 @@ public class Room : GameBehaviour
 
     [SerializeField] private Door[] doors;
     [HideInInspector] public EnemySpawnController spawnController;
-    private bool combatCleared = false;
+    [SerializeField] private bool combatCleared = false;
 
     private void Awake()
     {

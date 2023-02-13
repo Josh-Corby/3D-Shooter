@@ -7,6 +7,7 @@ public class GunSO : ScriptableObject
 {
     public User user;
 
+    public string gunName;
     [Header("Gun Options")]
     public GameObject bulletToFire;
     public float damage;

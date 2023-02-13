@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.Collections;
 
 public class UIManager : GameBehaviour<UIManager>
 {
@@ -34,6 +35,8 @@ public class UIManager : GameBehaviour<UIManager>
     private bool isReloading;
     #endregion
 
+    [Header("Interact UI")]
+    [SerializeField] private GameObject interactPanel;
     [SerializeField] private TMP_Text interactText;
 
 
@@ -82,6 +85,7 @@ public class UIManager : GameBehaviour<UIManager>
         gunBulletsRemainingText.text = "";
         gunAmmoLeftText.text = "";
         gunMaxAmmoText.text = "";
+        interactPanel.SetActive(false);
         interactText.enabled = false;
         isReloading = false;
         reloadSliderObject.SetActive(false);
@@ -123,7 +127,7 @@ public class UIManager : GameBehaviour<UIManager>
         gunNameText.text = gun.gameObject.name;
         reloadSlider.maxValue = gun.reloadTime;
         reloadSlider.value = reloadSlider.maxValue;
-    }
+    }    
 
     private void ReloadUI(GunBase gun)
     {
@@ -153,14 +157,16 @@ public class UIManager : GameBehaviour<UIManager>
         isReloading = true;
     }
 
-    private void EnableWeaponPickupUI(GameObject gunToPickup)
+    private void EnableWeaponPickupUI(GunBase gunToPickup)
     {
-        interactText.text = "Pickup " + gunToPickup.name;
+        interactText.text = "Pickup " + gunToPickup.gunName;
         interactText.enabled = true;
+        interactPanel.SetActive(true);
     }
 
     private void DisableWeaponPickupUI()
     {
+        interactPanel.SetActive(false);
         interactText.enabled = false;
     }
 }

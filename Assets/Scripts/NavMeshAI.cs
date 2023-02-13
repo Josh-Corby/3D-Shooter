@@ -10,9 +10,6 @@ public class NavMeshAI : GameBehaviour
     private float wanderRadius = 20;
     public float timer;
 
-
-    
-
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -68,8 +65,4 @@ public class NavMeshAI : GameBehaviour
         }
     }
 
-    private void GetWanderPosition()
-    {
-
-    }
 }

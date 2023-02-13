@@ -5,6 +5,7 @@ public class GunEditor : Editor
 {
     #region SerializedProperties
     SerializedProperty user;
+    SerializedProperty gunName;
     SerializedProperty bulletToFire;
     SerializedProperty damage;
     SerializedProperty swapInTime;
@@ -31,6 +32,7 @@ public class GunEditor : Editor
     private void OnEnable()
     {
         user = serializedObject.FindProperty(nameof(user));
+        gunName = serializedObject.FindProperty(nameof(gunName));
         bulletToFire = serializedObject.FindProperty(nameof(bulletToFire));
         damage = serializedObject.FindProperty(nameof(damage));
         swapInTime = serializedObject.FindProperty(nameof(swapInTime));
@@ -59,6 +61,7 @@ public class GunEditor : Editor
 
         serializedObject.Update();
         EditorGUILayout.PropertyField(user);
+        EditorGUILayout.PropertyField(gunName);
         EditorGUILayout.PropertyField(bulletToFire);
         EditorGUILayout.PropertyField(damage);
 

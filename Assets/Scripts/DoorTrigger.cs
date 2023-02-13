@@ -13,7 +13,7 @@ public class DoorTrigger : GameBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject == PM.gameObject)
+        if(other.gameObject == PM.player)
         {
             parentRoom.CheckCombatCleared();
         }

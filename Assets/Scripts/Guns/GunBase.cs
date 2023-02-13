@@ -23,6 +23,7 @@ public class GunBase : GameBehaviour
     [HideInInspector]
     public float distanceToTarget;
 
+    [HideInInspector] public string gunName;
     #region GunStats
     [Header("Gun Stats")]
     private GameObject bulletToFire;
@@ -64,6 +65,8 @@ public class GunBase : GameBehaviour
     }
     protected void AssignValues()
     {
+        gunName = gun.gunName;
+
         bulletToFire = gun.bulletToFire;
         damage = gun.damage;
 
@@ -125,8 +128,12 @@ public class GunBase : GameBehaviour
 
     protected virtual void Update()
     {
-        FindTarget();
-        CheckForFireInput();
+        if (PWM.CheckIfCurrentWeapon(this))
+        {
+            FindTarget();
+            CheckForFireInput();
+        }
+       
     }
     protected virtual void FindTarget()
     {
