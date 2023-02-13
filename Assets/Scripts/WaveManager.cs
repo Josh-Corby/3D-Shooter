@@ -9,8 +9,6 @@ public class WaveManager : GameBehaviour<WaveManager>
 
     public List<GameObject> enemiesAlive = new List<GameObject>();
     public Room currentRoom;
-    public EnemySpawnController currentSpawner;
-
 
     private void OnEnable()
     {
@@ -27,7 +25,6 @@ public class WaveManager : GameBehaviour<WaveManager>
     public void SetRoom(Room room)
     {
         currentRoom = room;
-        currentSpawner = room.spawnController;
         StartCombat();
     }
 

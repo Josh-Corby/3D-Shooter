@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.AI;
+using System.Collections;
 
 public class EnemySpawnController : GameBehaviour
 {
@@ -8,14 +10,23 @@ public class EnemySpawnController : GameBehaviour
     [SerializeField] private GameObject[] enemyPrefabs;
     [SerializeField] private LayerMask groundMask;
 
+    private float spawnBufferTime = 0.5f;
+    private int spawnBufferSize = 20;
 
-    public void SpawnWave()
+    public void StartSpawningWave()
     {
+        StartCoroutine(SpawnWave());
+    }
+
+    private IEnumerator SpawnWave()
+    {
+        yield return new WaitForSeconds(spawnBufferTime);
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             GameObject randomEnemyType = GetRandomEnemyType(); 
             GameObject enemy = Instantiate(randomEnemyType, GetRandomSpawnPosition(randomEnemyType.GetComponent<EnemyBase>()), Quaternion.identity);
             WM.enemiesAlive.Add(enemy);
+            yield return new WaitForSeconds(spawnBufferTime);
         }
     }
 
@@ -35,12 +46,17 @@ public class EnemySpawnController : GameBehaviour
 
         if (enemy.flying == false)
         {
-            Ray ray = new Ray(spawnPosition, Vector3.down);
-            if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundMask))
-            {
-                spawnPosition = hit.point + new Vector3(0, 1, 0);
-            }
+            //if not flying then it is a navmesh unit
+            //find the closest navmesh point to random point found
+            NavMesh.SamplePosition(spawnPosition, out NavMeshHit navHit, spawnBufferSize, groundMask);
+            return navHit.position;
+            //Ray ray = new Ray(spawnPosition, Vector3.down);
+            //if(Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, groundMask))
+            //{
+            //    spawnPosition = hit.point + new Vector3(0, 1, 0);
+            //}
         }
+
         return spawnPosition;
     }
 

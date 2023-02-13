@@ -132,8 +132,7 @@ public class GunBase : GameBehaviour
         {
             FindTarget();
             CheckForFireInput();
-        }
-       
+        }    
     }
     protected virtual void FindTarget()
     {

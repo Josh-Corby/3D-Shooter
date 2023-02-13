@@ -34,8 +34,9 @@ public class Room : GameBehaviour
 
     private void StartCombat()
     {
+        if (!WM.CheckCurrentRoom(this)) return;
         CloseDoors();
-        spawnController.SpawnWave();
+        spawnController.StartSpawningWave();
     }
 
     public void CheckCombatCleared()
@@ -47,7 +48,7 @@ public class Room : GameBehaviour
 
     public void EndCombat()
     {
-        if (WM.CheckCurrentRoom(this)) return;
+
         OpenDoors();
         DisableCombatTriggers();
     }

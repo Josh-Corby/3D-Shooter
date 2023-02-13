@@ -25,14 +25,14 @@ public class NavMeshAI : GameBehaviour
 
     private void Update()
     {
-        timer += Time.deltaTime;
+        //timer += Time.deltaTime;
 
-        if(timer >= wanderTimer)
-        {
-            Vector3 newPos = RandomNavSphere(transform.position, wanderRadius, -1);
-            agent.SetDestination(newPos);
-            timer = 0;
-        }
+        //if(timer >= wanderTimer)
+        //{
+        //    Vector3 newPos = RandomNavSphere(transform.position, wanderRadius, -1);
+        //    agent.SetDestination(newPos);
+        //    timer = 0;
+        //}
 
         //CheckDistance();
         //agent.destination = goal.position;
